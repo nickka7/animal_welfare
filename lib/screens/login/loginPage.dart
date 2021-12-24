@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../haxColor.dart';
 import '../../navigatorBar.dart';
 import 'package:http/http.dart' as http;
+import 'package:animal_welfare/api/loginApi.dart';
 
 class MyLoginHome extends StatefulWidget {
   const MyLoginHome({Key? key}) : super(key: key);
@@ -15,9 +16,29 @@ class MyLoginHome extends StatefulWidget {
 
 class _MyLoginHomeState extends State<MyLoginHome> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController userIDController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _userIDController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
+  LoginApi loginAPI = LoginApi();
+
+  Future doLogin() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        var response = await loginAPI.doLogin(_userIDController.text, _passwordController.text);
+        if(response.statusCode == 200){
+          var jsonResponse = json.decode(response.body);
+          if(jsonResponse['message'] == 'Login Success') {
+            String token = jsonResponse['token'];
+          } else {
+            print()
+          }
+
+        }
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,21 +72,19 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                       ),
                       //TextForm username
                       TextFormField(
-                        controller: userIDController,
+                        controller: _userIDController,
                         validator: (String? input) {
                           if (input!.isEmpty) {
                             return "กรุณากรอก username";
                           }
                           return null;
                         },
-                        obscureText: true,
-                      
                         decoration: InputDecoration(hintText: 'Username'),
                       ),
 
                       //TextForm password
                       TextFormField(
-                        controller: passwordController,
+                        controller: _passwordController,
                         validator: (String? input) {
                           if (input!.isEmpty) {
                             return "กรุณากรอก password";
@@ -111,18 +130,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                           color: Colors.white,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500)),
-                  onPressed: () => {
-                    if (_formKey.currentState!.validate())
-                      {
-                        print(userIDController.text),
-                        print(passwordController.text),
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NavigatorBar()),
-                        ),
-                      }
-                  },
+                  onPressed: () => doLogin(),
                 ),
               ),
               Center(

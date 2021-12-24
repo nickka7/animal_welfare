@@ -18,7 +18,6 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   TextEditingController userIDController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +58,6 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                           return null;
                         },
                         obscureText: true,
-                      
                         decoration: InputDecoration(hintText: 'Username'),
                       ),
 
@@ -112,16 +110,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500)),
                   onPressed: () => {
-                    if (_formKey.currentState!.validate())
-                      {
-                        print(userIDController.text),
-                        print(passwordController.text),
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NavigatorBar()),
-                        ),
-                      }
+                    login()
                   },
                 ),
               ),
@@ -160,5 +149,26 @@ class _MyLoginHomeState extends State<MyLoginHome> {
         ),
       ),
     );
+  }
+
+  Future<void> login() async {
+    if (_formKey.currentState!.validate()) {
+      var response = await http.post(Uri.parse("localhost:3000/api/login"),
+          body: ({
+            "userID": userIDController.text,
+            "password": passwordController.text,
+          }));
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NavigatorBar()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("ข้อมูลไม่ถูกต้อง"),
+        ));
+      }
+    } 
+    
   }
 }

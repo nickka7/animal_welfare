@@ -1,7 +1,6 @@
 
 class ImageList {
   final String images;
-
   ImageList({
     required this.images,
   });

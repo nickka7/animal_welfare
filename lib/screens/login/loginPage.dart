@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:animal_welfare/model/login.dart';
+import 'package:animal_welfare/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
 import '../../navigatorBar.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/api/loginApi.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyLoginHome extends StatefulWidget {
   const MyLoginHome({Key? key}) : super(key: key);
@@ -21,18 +23,28 @@ class _MyLoginHomeState extends State<MyLoginHome> {
 
   LoginApi loginAPI = LoginApi();
 
+  final storage = new FlutterSecureStorage();
+
   Future doLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
-        var response = await loginAPI.doLogin(_userIDController.text, _passwordController.text);
-        if(response.statusCode == 200){
+        var response = await loginAPI.doLogin(
+            _userIDController.text, _passwordController.text);
+        if (response.statusCode == 200) {
           var jsonResponse = json.decode(response.body);
-          if(jsonResponse['message'] == 'Login Success') {
+          print(jsonResponse);
+          if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
+            print(token);
+            storage.write(key: 'token', value: token);
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePage()));
           } else {
-            print()
+            //userID or password incorrect
+            print(jsonResponse['message']);
           }
-
+        } else {
+          print('Server error');
         }
       } catch (error) {
         print(error);

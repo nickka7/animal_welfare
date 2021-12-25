@@ -25,6 +25,15 @@ class _MyLoginHomeState extends State<MyLoginHome> {
 
   final storage = new FlutterSecureStorage();
 
+  void displayDialog(context, title, text) => showDialog(
+    context: context,
+    builder: (context) =>
+        AlertDialog(
+            title: Text(title),
+            content: Text(text)
+        ),
+  );
+
   Future doLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -38,10 +47,12 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             print(token);
             storage.write(key: 'token', value: token);
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomePage()));
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
           } else {
-            //userID or password incorrect
-            print(jsonResponse['message']);
+            displayDialog(context, "An Error Occurred", "No account was found matching that username and password");
           }
         } else {
           print('Server error');

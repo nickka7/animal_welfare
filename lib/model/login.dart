@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 Logindata logindataFromJson(String str) => Logindata.fromJson(json.decode(str));

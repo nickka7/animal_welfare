@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:animal_welfare/model/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:animal_welfare/constant.dart';
 
 // class LoginApi {
 //
@@ -22,11 +23,10 @@ import 'package:http/http.dart' as http;
 
 class LoginApi {
   LoginApi();
-
-  String endPoint = 'http://192.168.1.111:3000';
+  String endPoints = Constant().endPoint;
 
   Future<http.Response> doLogin(String userID, String password) async {
-    String _url = '$endPoint/api/login';
+    String _url = '$endPoints/api/login';
     var body = {"userID": userID, "password": password};
     return http.post(Uri.parse(_url), body: body);
   }

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../haxColor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:animal_welfare/constant.dart';
 
 
 class RepairNotice extends StatefulWidget {
@@ -21,6 +22,8 @@ class _RepairNoticeState extends State<RepairNotice> {
   TextEditingController repairController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
+
+
   Future<Null> chooseImage(ImageSource source) async {
     try {
       var object = await ImagePicker().pickImage(
@@ -35,13 +38,19 @@ class _RepairNoticeState extends State<RepairNotice> {
 
   }
   final storage = new FlutterSecureStorage();
+  
   Future<String?> uploadImageAndData(filepath, url, data) async {
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
-    request.fields['maintenanceDetail'] = data['maintenanceDetail'];
+    request.fields['requestMessage'] = data['maintenanceDetail'];
     request.fields['location'] = data['location'];
-    request.headers['Authorization'] = data['Bearer $token'];
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+      "Content-Disposition": "attachment;filename=1.png",
+      "Content-Type": "image/png"
+    };
+    request.headers.addAll(headers);//['authorization'] = data['Bearer $token'];
     var res = await request.send();
     print('${res.reasonPhrase}test');
     return res.reasonPhrase;
@@ -193,7 +202,7 @@ class _RepairNoticeState extends State<RepairNotice> {
                           print('before upload image');
                           uploadImageAndData(
                               file!.path,
-                              'http://192.168.1.111:3000/api/postMaintenance',
+                              '${Constant().endPoint}/api/postMaintenance',
                               data);
                         }
                       },

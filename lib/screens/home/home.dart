@@ -31,15 +31,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     MovieApi.getMovie();
-    getProfile();
+    // getProfile();
     super.initState();
   }
 
-  Future getProfile() async {
-    String? token = await storage.read(key: 'token');
-    print('can get token: $token');
-    print('${widget.firstName}');
-  }
+  // Future getProfile() async {
+  //   String? token = await storage.read(key: 'token');
+  //   print('can get token: $token');
+  //   print('${widget.firstName}');
+  // }
 
   @override
   Widget build(BuildContext context) {

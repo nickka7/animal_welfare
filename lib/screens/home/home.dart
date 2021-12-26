@@ -14,6 +14,7 @@ import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_welfare/haxColor.dart';
 import '../../api/movieApi.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,10 +24,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final storage = new FlutterSecureStorage();
+
+
   @override
   void initState() {
     MovieApi.getMovie();
+    getProfile();
     super.initState();
+  }
+
+  Future getProfile() async{
+    String? token = await storage.read(key: 'token');
+    print('can get token: $token');
   }
 
   @override

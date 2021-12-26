@@ -17,7 +17,9 @@ import '../../api/movieApi.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String? firstName;
+
+  const HomePage({Key? key, this.firstName}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -26,7 +28,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final storage = new FlutterSecureStorage();
 
-
   @override
   void initState() {
     MovieApi.getMovie();
@@ -34,9 +35,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  Future getProfile() async{
+  Future getProfile() async {
     String? token = await storage.read(key: 'token');
     print('can get token: $token');
+    print('${widget.firstName}');
   }
 
   @override
@@ -98,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                                   TextStyle(fontSize: 30, color: Colors.white),
                             ),
                             Text(
-                              'บงกชกร',
+                              '${widget.firstName}',
                               style:
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
@@ -138,7 +140,7 @@ class _HomePageState extends State<HomePage> {
               _buildButton(
                   Icons.work_outline, 'ผู้ดูแลสัตว์', CaretakerFirstPage()),
               _buildButton(Icons.work_outline, 'ผู้บริหาร', FilterAnimalData()),
-             // _buildButton(Icons.work_outline, 'ว่าง', Scaffold()),
+              // _buildButton(Icons.work_outline, 'ว่าง', Scaffold()),
             ],
           ),
         ]),

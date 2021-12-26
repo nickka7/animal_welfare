@@ -42,11 +42,13 @@ class _MyLoginHomeState extends State<MyLoginHome> {
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
             print(token);
+            String firstName = jsonResponse['user']['firstName'];
+            print(firstName.runtimeType);
             await storage.write(key: 'token', value: token);
-            Navigator.pushReplacement(
+            Navigator.push( //ตอนใช้งานจริงเปลี่ยนไปใช้ Navigator.pushReplacement ตอนนี้ใช้ push เพื่อง่ายต่อการเทส
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(),
+                builder: (context) => HomePage(firstName: firstName,),
               ),
             );
           } else {

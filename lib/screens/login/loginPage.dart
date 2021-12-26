@@ -49,7 +49,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             Navigator.push( //ตอนใช้งานจริงเปลี่ยนไปใช้ Navigator.pushReplacement ตอนนี้ใช้ push เพื่อง่ายต่อการเทส
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(firstName: firstName,),
+                builder: (context) => NavigatorBar(firstName: firstName,),
               ),
             );
           } else {

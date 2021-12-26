@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:animal_welfare/model/login.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:animal_welfare/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
 import '../../navigatorBar.dart';
 import 'package:http/http.dart' as http;
+import 'package:animal_welfare/api/loginApi.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyLoginHome extends StatefulWidget {
   const MyLoginHome({Key? key}) : super(key: key);
@@ -16,8 +19,51 @@ class MyLoginHome extends StatefulWidget {
 
 class _MyLoginHomeState extends State<MyLoginHome> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController userIDController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _userIDController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  LoginApi loginAPI = LoginApi();
+
+  final storage = new FlutterSecureStorage();
+
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
+
+  Future doLogin() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        var response = await loginAPI.doLogin(
+            _userIDController.text, _passwordController.text);
+        if (response.statusCode == 200) {
+          var jsonResponse = json.decode(response.body);
+          print(jsonResponse);
+          if (jsonResponse['message'] == 'Login Success') {
+            String token = jsonResponse['token'];
+            print(token);
+            String firstName = jsonResponse['user']['firstName'];
+            print(firstName.runtimeType);
+            await storage.write(key: 'token', value: token);
+            Navigator.push( //ตอนใช้งานจริงเปลี่ยนไปใช้ Navigator.pushReplacement ตอนนี้ใช้ push เพื่อง่ายต่อการเทส
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(firstName: firstName,),
+              ),
+            );
+          } else {
+            displayDialog(context, "An Error Occurred",
+                "No account was found matching that username and password");
+          }
+        } else {
+          print('Server error');
+        }
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +97,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                       ),
                       //TextForm username
                       TextFormField(
-                        controller: userIDController,
+                        controller: _userIDController,
                         validator: (String? input) {
                           if (input!.isEmpty) {
                             return "กรุณากรอก username";
@@ -64,7 +110,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
 
                       //TextForm password
                       TextFormField(
-                        controller: passwordController,
+                        controller: _passwordController,
                         validator: (String? input) {
                           if (input!.isEmpty) {
                             return "กรุณากรอก password";
@@ -110,7 +156,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                           color: Colors.white,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500)),
-                  onPressed: () => {/*login()*/},
+                  onPressed: () => doLogin(),
                 ),
               ),
               Center(

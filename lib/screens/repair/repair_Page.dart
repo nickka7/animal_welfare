@@ -1,4 +1,3 @@
-
 import 'package:animal_welfare/screens/repair/repair_history.dart';
 import 'package:animal_welfare/screens/repair/repair_notice.dart';
 import 'package:flutter/material.dart';
@@ -28,25 +27,25 @@ class _RepairPageState extends State<RepairPage> {
         ),
       ),
       body: Container(
-         color: HexColor('#F2F2F2'),
+        color: HexColor('#F2F2F2'),
         child: Column(
           children: [
             Container(
-              constraints: BoxConstraints(maxWidth: double.infinity, minHeight: 50.0),           
+              constraints:
+                  BoxConstraints(maxWidth: double.infinity, minHeight: 50.0),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white
-                ),
+                style: ElevatedButton.styleFrom(primary: Colors.white),
                 onPressed: () {
                   Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const RepairNotice()),
-                              );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RepairNotice()),
+                  );
                 },
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: Container(
-                   // width: double.infinity,
+                    // width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -72,21 +71,20 @@ class _RepairPageState extends State<RepairPage> {
               child: Divider(
                 height: 5,
                 color: Colors.grey,
-                ),
+              ),
             ),
-             Container(
-              constraints: BoxConstraints(maxWidth: double.infinity, minHeight: 50.0),           
+            Container(
+              constraints:
+                  BoxConstraints(maxWidth: double.infinity, minHeight: 50.0),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white
-                ),
+                style: ElevatedButton.styleFrom(primary: Colors.white),
                 onPressed: () {
-                   Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const RepairHistory()),
-                              );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RepairHistory()),
+                  );
                 },
-               
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: Container(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:animal_welfare/model/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
 import '../../navigatorBar.dart';
@@ -109,9 +110,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                           color: Colors.white,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500)),
-                  onPressed: () => {
-                    login()
-                  },
+                  onPressed: () => {/*login()*/},
                 ),
               ),
               Center(
@@ -151,24 +150,54 @@ class _MyLoginHomeState extends State<MyLoginHome> {
     );
   }
 
-  Future<void> login() async {
+  /* Future<void> login() async {
     if (_formKey.currentState!.validate()) {
-      var response = await http.post(Uri.parse("localhost:3000/api/login"),
-          body: ({
-            "userID": userIDController.text,
-            "password": passwordController.text,
-          }));
+      var response =
+          await http.post(Uri.parse("http://10.0.2.2:3000/api/login"),
+              body: ({
+                "userID": userIDController.text,
+                "password": passwordController.text,
+              }));
       if (response.statusCode == 200) {
+        print(response.body);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const NavigatorBar()),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        print('ข้อมูลไม่ถูกต้อง');
+        showDialog(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.lightGreen[400],
+                  child: Icon(
+                    Icons.announcement_outlined,
+                    color: Colors.white,
+                  ),
+                ),
+                content: Text(
+                  'username หรือ password ไม่ถูกต้อง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text(
+                      'ยืนยัน',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              );
+            });
+        /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("ข้อมูลไม่ถูกต้อง"),
-        ));
+        ));*/
+
       }
     } 
-    
-  }
+  }*/
 }

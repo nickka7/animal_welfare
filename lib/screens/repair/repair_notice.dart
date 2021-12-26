@@ -43,7 +43,6 @@ class _RepairNoticeState extends State<RepairNotice> {
     return res.reasonPhrase;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,9 +133,7 @@ class _RepairNoticeState extends State<RepairNotice> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black45, blurRadius: 5)
-                        ]),
+                      ),
                     child: ElevatedButton(
                       onPressed: () {
                         bool pass = _formKey.currentState!.validate();
@@ -195,10 +192,10 @@ class _RepairNoticeState extends State<RepairNotice> {
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
- style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      primary: HexColor('#697825')),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          primary: HexColor('#697825')),
                     ),
                   ),
                 ],

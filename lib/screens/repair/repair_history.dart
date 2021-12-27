@@ -197,7 +197,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                             content: Text('ลบข้อมูลแล้ว'));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         setState(() {
-                          entries.removeAt(index);
+                          snapshot.data!.data!.removeAt(index);
                         });
                       },
                     ),

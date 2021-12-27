@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/repair/repair_notice.dart';
 import 'package:flutter/material.dart';
@@ -16,20 +18,29 @@ class RepairHistory extends StatefulWidget {
 }
 
 class _RepairHistoryState extends State<RepairHistory> {
+
+  @override
+  void initState() {
+    // getMaintenance();
+    super.initState();
+  }
+
   late final SlidableController slidableController;
   final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
   final storage = new FlutterSecureStorage();
 
 
-  // Future<http.Response> getMaintenance() async {
-  //   String? token = await storage.read(key: 'token');
-  //   String endPoint = Constant().endPoint;
-  //   var response = http.get(Uri.parse('$endPoint/api/getMaintenance'),
-  //       headers: {
-  //         "Authorization": 'Bearer $token'});
-  //   return
-  // }
+  Future<Repair> getMaintenance() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getMaintenance'),
+        headers: {
+          "authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = Repair.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
+  }
 
 
   @override
@@ -51,10 +62,10 @@ class _RepairHistoryState extends State<RepairHistory> {
 
   Widget _buildListView() {
     return FutureBuilder(
-      // future:,
-      builder: (BuildContext context, AsyncSnapshot snapshot) =>
+      future: getMaintenance(),
+      builder: (BuildContext context, AsyncSnapshot<Repair> snapshot) =>
           ListView.builder(
-              itemCount: entries.length,
+              itemCount: snapshot.data!.data!.length,
               itemBuilder: (context, index) {
                 return Slidable(
                   actionPane: SlidableDrawerActionPane(),
@@ -76,13 +87,17 @@ class _RepairHistoryState extends State<RepairHistory> {
                           children: [
                             Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8),
-                                  child: Image.network(
-                                    'https://image.makewebeasy.net/makeweb/0/V3VB7eir4/DefaultData/%E0%B8%9A%E0%B8%B1%E0%B8%99%E0%B9%84%E0%B8%94%E0%B9%84%E0%B8%A1%E0%B9%89%E0%B8%A2%E0%B8%B2%E0%B8%87%E0%B8%9E%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%AA%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%B3%E0%B8%AA%E0%B8%B5%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%A3%E0%B9%87%E0%B8%88%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%81%E0%B8%B1%E0%B8%9A%E0%B8%9E%E0%B8%B7%E0%B9%89%E0%B8%99%E0%B8%A5%E0%B8%B2%E0%B8%A1%E0%B8%B4%E0%B9%80%E0%B8%99%E0%B8%951.jpg',
-                                    height: 113,
-                                    width: 120,
+                                Container(
+                                  height: 150,
+                                  width: 80,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8),
+                                    child: Image.network(
+                                      '${snapshot.data!.data![index].image}',
+                                      height: 113,
+                                      width: 120,
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -97,7 +112,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                "ปัญหาที่ชำรุด : Title which may be long, very very long",
+                                                "ปัญหาที่ชำรุด : ${snapshot.data!.data![index].requestMessage}",
                                                 overflow: TextOverflow
                                                     .ellipsis,
                                                 style: TextStyle(
@@ -113,7 +128,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                "สถานที่ : อาคาร A",
+                                                "สถานที่ : ${snapshot.data!.data![index].location}",
                                                 overflow: TextOverflow
                                                     .ellipsis,
                                                 style: TextStyle(
@@ -129,7 +144,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                "สถานะ : รอดำเนินการ",
+                                                "สถานะ : ${snapshot.data!.data![index].status}",
                                                 overflow: TextOverflow
                                                     .ellipsis,
                                                 style: TextStyle(
@@ -149,7 +164,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                               alignment: Alignment.bottomRight,
                               child: Container(
                                   child: Text(
-                                    '12 ตุลาคม 2564 15:54',
+                                    '${snapshot.data!.data![index].createDtm}',
                                     style: TextStyle(fontSize: 12),
                                   )),
                             ),

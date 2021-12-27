@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:animal_welfare/screens/repair/repair_history.dart';
 import 'package:animal_welfare/screens/repair/successful.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +9,16 @@ import '../../haxColor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:animal_welfare/constant.dart';
 
+class RepairNoticeUpdate extends StatefulWidget {
+  final String? maintenanceID;
 
-class RepairNotice extends StatefulWidget {
-  const RepairNotice({Key? key}) : super(key: key);
+  RepairNoticeUpdate({Key? key, this.maintenanceID}) : super(key: key);
 
   @override
-  _RepairNoticeState createState() => _RepairNoticeState();
+  State<RepairNoticeUpdate> createState() => _RepairNoticeUpdateState();
 }
 
-class _RepairNoticeState extends State<RepairNotice> {
+class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
   File? file; //dart.io
   final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
@@ -33,25 +35,27 @@ class _RepairNoticeState extends State<RepairNotice> {
     } catch (e) {
       print('${e}123');
     }
-
   }
+
   final storage = new FlutterSecureStorage();
-  
+
   Future<String?> uploadImageAndData(filepath, url, data) async {
     String? token = await storage.read(key: 'token');
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+    var request = http.MultipartRequest('PUT', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
     request.fields['requestMessage'] = data['maintenanceDetail'];
     request.fields['location'] = data['location'];
     Map<String, String> headers = {
       "authorization": "Bearer $token",
+      // "Content-Disposition": "attachment;filename=1.png",
+      // "Content-Type": "image/png"
     };
-    request.headers.addAll(headers);//['authorization'] = data['Bearer $token'];
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
     var res = await request.send();
     print('${res.reasonPhrase}test');
     return res.reasonPhrase;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +63,7 @@ class _RepairNoticeState extends State<RepairNotice> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'แจ้งซ่อม',
+          'maintenanceID: ${widget.maintenanceID}',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -72,7 +76,7 @@ class _RepairNoticeState extends State<RepairNotice> {
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
             child: Form(
-              key: _formKey,
+              // key: _formKey,
               child: Column(
                 children: [
                   Align(
@@ -83,12 +87,12 @@ class _RepairNoticeState extends State<RepairNotice> {
                       )),
                   TextFormField(
                     controller: repairController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกปัญหาที่ชำรุด";
-                      }
-                      return null;
-                    },
+                    // validator: (String? input) {
+                    //   if (input!.isEmpty) {
+                    //     return "กรุณากรอกปัญหาที่ชำรุด";
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
@@ -103,12 +107,12 @@ class _RepairNoticeState extends State<RepairNotice> {
                       )),
                   TextFormField(
                     controller: locationController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกสถานที่";
-                      }
-                      return null;
-                    },
+                    // validator: (String? input) {
+                    //   if (input!.isEmpty) {
+                    //     return "กรุณากรอกสถานที่";
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
@@ -136,7 +140,7 @@ class _RepairNoticeState extends State<RepairNotice> {
                                   )
                                 : Image.file(file!),
                           ),
-                          onPressed: () => _onButtonPress())),
+                          onPressed: () => _getPhoto())),
                   SizedBox(height: 70),
                   Container(
                     height: 50,
@@ -148,64 +152,71 @@ class _RepairNoticeState extends State<RepairNotice> {
                         ]),
                     child: ElevatedButton(
                       onPressed: () {
-                        bool pass = _formKey.currentState!.validate();
-                        if (pass) {
-                          Map<String, String> data = {
-                            "maintenanceDetail": repairController.text,
-                            "location": locationController.text,
-                          };
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: Colors.lightGreen[400],
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
+                        // bool pass = _formKey.currentState!.validate();
+                        // if (pass) {
+                        Map<String, String> data = {
+                          "maintenanceDetail": repairController.text,
+                          "location": locationController.text,
+                        };
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.lightGreen[400],
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: Text(
+                                  'ยืนยันการแก้ไข',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                      'ยกเลิก',
+                                      style: TextStyle(color: Colors.red),
                                     ),
+                                    onPressed: () => Navigator.pop(context),
                                   ),
-                                  content: Text(
-                                    'ยืนยันการแจ้งซ่อม',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  actions: [
-                                    CupertinoDialogAction(
+                                  CupertinoDialogAction(
                                       child: Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(color: Colors.red),
+                                        'ยืนยัน',
+                                        style: TextStyle(color: Colors.green),
                                       ),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    CupertinoDialogAction(
-                                        child: Text(
-                                          'ยืนยัน',
-                                          style: TextStyle(color: Colors.green),
-                                        ),
-                                        onPressed: () {
-                                          print('before upload image');
-                                          uploadImageAndData(
-                                              file!.path,
-                                              '${Constant().endPoint}/api/postMaintenance',
-                                              data);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                const RepairSuccessful()),
-                                          );
-                                        })                                  ],
-                                );
-                              });
-                        }
+                                      onPressed: () {
+                                        print('before upload image');
+                                        uploadImageAndData(
+                                                file!.path,
+                                                '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',
+                                                data)
+                                            .then((value) =>
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RepairHistory()),
+                                                ));
+                                      })
+                                ],
+                              );
+                            });
+                        // print('before upload image');
+                        // uploadImageAndData(
+                        //     file!.path,
+                        //     '${Constant().endPoint}/api/postMaintenance',
+                        //     data);
+                        // }
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
- style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      primary: HexColor('#697825')),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          primary: HexColor('#697825')),
                     ),
                   ),
                 ],
@@ -217,7 +228,7 @@ class _RepairNoticeState extends State<RepairNotice> {
     );
   }
 
-  void _onButtonPress() {
+  void _getPhoto() {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(

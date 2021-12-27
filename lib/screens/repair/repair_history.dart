@@ -18,7 +18,6 @@ class RepairHistory extends StatefulWidget {
 class _RepairHistoryState extends State<RepairHistory> {
   late final SlidableController slidableController;
   final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
   final storage = new FlutterSecureStorage();
 
 
@@ -27,7 +26,7 @@ class _RepairHistoryState extends State<RepairHistory> {
   //   String endPoint = Constant().endPoint;
   //   var response = http.get(Uri.parse('$endPoint/api/getMaintenance'),
   //       headers: {
-  //         "Authorization": 'Bearer $token'});
+  //         "authorization": 'Bearer $token'});
   //   return
   // }
 

@@ -167,7 +167,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                                 )
                               ],
                             ),
-                            Align(
+                            Align(//TODO: format date
                               alignment: Alignment.bottomRight,
                               child: Container(
                                   child: Text(

@@ -40,9 +40,13 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadImageAndData(filepath, url, data) async {
+    print(filepath);
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('PUT', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    //ถ้าไม่ได้เลือกรูปก็ไม่ต้องอัพรูป
+    if (filepath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    }
     request.fields['requestMessage'] = data['maintenanceDetail'];
     request.fields['location'] = data['location'];
     Map<String, String> headers = {
@@ -190,7 +194,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                                       onPressed: () {
                                         print('before upload image');
                                         uploadImageAndData(
-                                                file!.path,
+                                                file?.path,
                                                 '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',
                                                 data)
                                             .then((value) =>

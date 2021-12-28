@@ -197,13 +197,11 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                                                 file?.path,
                                                 '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',
                                                 data)
-                                            .then((value) =>
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          RepairHistory()),
-                                                ));
+                                            .then((value) {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                            });
                                       })
                                 ],
                               );

@@ -9,6 +9,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/model/repair.dart';
+import 'package:intl/intl.dart';
 
 class RepairHistory extends StatefulWidget {
   const RepairHistory({Key? key}) : super(key: key);
@@ -23,6 +24,14 @@ class _RepairHistoryState extends State<RepairHistory> {
     // getMaintenance();
     super.initState();
   }
+
+  String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
+  }
+
 
   late final SlidableController slidableController;
   final storage = new FlutterSecureStorage();
@@ -167,11 +176,11 @@ class _RepairHistoryState extends State<RepairHistory> {
                                 )
                               ],
                             ),
-                            Align(
+                            Align( //TODO: date format
                               alignment: Alignment.bottomRight,
                               child: Container(
                                   child: Text(
-                                    '${snapshot.data!.data![index].createDtm}',
+                                    formatDateFromString('${snapshot.data!.data![index].createDtm}'),
                                     style: TextStyle(fontSize: 12),
                                   )),
                             ),

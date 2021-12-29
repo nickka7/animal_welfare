@@ -1,8 +1,12 @@
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:animal_welfare/model/calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../constant.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -12,6 +16,26 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+ 
+ final storage = new FlutterSecureStorage();
+    Future<CalendarData> getCalendar() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getCalendar'),
+        headers: {
+          "authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = CalendarData.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
+  }
+String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('yyyy-mm-dd');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
+}
+
   String _subjectText = '',
       _startTimeText = '',
       _endTimeText = '',
@@ -34,34 +58,37 @@ class _CalendarScreenState extends State<CalendarScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SfCalendar(
-        view: CalendarView.month,
-        viewHeaderHeight: 50,
-        showDatePickerButton: true,
-        initialSelectedDate: DateTime.now(),
-       showNavigationArrow: true,
-        dataSource: getCalendarDataSource(),
-        onTap: calendarTapped,
-        todayHighlightColor: Color(0xFFcc0066),
-        monthViewSettings: MonthViewSettings(
-          showAgenda: true,
-          agendaViewHeight: 300,
-          agendaItemHeight: 60,
-        ),
-        appointmentTimeTextFormat: 'HH:mm',
-        //วันหยุด
-        blackoutDates: <DateTime>[
-          DateTime(2021, 11, 10),
-          DateTime.parse("2021-11-11"),
-        ],
-        blackoutDatesTextStyle: TextStyle(
-          color: Colors.red,
-        ),
-      ),
+      body: buildCaladar()   
     );
   }
+    buildCaladar(){
+    return  SfCalendar(
+          view: CalendarView.month,
+          viewHeaderHeight: 50,
+          showDatePickerButton: true,
+          initialSelectedDate: DateTime.now(),
+          showNavigationArrow: true,
+          dataSource: getCalendarDataSource(),
+          onTap: calendarTapped,
+          todayHighlightColor: Color(0xFFcc0066),
+          monthViewSettings: MonthViewSettings(
+            showAgenda: true,
+            agendaViewHeight: 300,
+            agendaItemHeight: 60,
+          ),
+          appointmentTimeTextFormat: 'HH:mm',
+          //วันหยุด
+          blackoutDates: <DateTime>[
+            DateTime(2021, 11, 10),
+            DateTime.parse("2021-11-11T11:40:01.000Z"),
+          ],
+          blackoutDatesTextStyle: TextStyle(
+            color: Colors.red,
+          ),
+        );
+    }
 
-  void calendarTapped(CalendarTapDetails details) {
+   calendarTapped(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.appointment) {
       final Meeting appointmentDetails = details.appointments![0];
       _subjectText = appointmentDetails.eventName!;
@@ -126,10 +153,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   MeetingDataSource getCalendarDataSource() {
+    
     List<Meeting> appointments = <Meeting>[];
     appointments.add(Meeting(
-      from: DateTime(2021,11,27,13,30),
-       to: DateTime(2021,11,27,17,29),
+      from: DateTime.parse("2021-12-27"),
+      to: DateTime.parse("2021-12-30"),
       eventName: 'ประชุม',
       location: 'อาคาร B',
       background: Colors.pink,
@@ -171,6 +199,8 @@ class Meeting {
   bool? isAllDay;
   int? id;
 }
+
+
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Meeting> source) {

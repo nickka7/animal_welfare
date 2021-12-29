@@ -1,26 +1,26 @@
 class CalendarData {
-  late String calendarID;
-  late String calendarName;
-  late String startDate;
-  late String startTime;
-  late String endDate;
-  late String endTime;
-  late String location;
-  late String createDtm;
+  String? calendarID;
+  String? calendarName;
+  String? startDate;
+  String? startTime;
+  String? endDate;
+  String? endTime;
+  String? location;
+  String? createDtm;
   Null updateDtm;
 
   CalendarData(
-      {required this.calendarID,
-      required this.calendarName,
-      required this.startDate,
-      required this.startTime,
-      required this.endDate,
-      required this.endTime,
-      required this.location,
-      required this.createDtm,
+      {this.calendarID,
+      this.calendarName,
+      this.startDate,
+      this.startTime,
+      this.endDate,
+      this.endTime,
+      this.location,
+      this.createDtm,
       this.updateDtm});
 
-   CalendarData.fromJson(Map<String, dynamic> json) {
+  CalendarData.fromJson(Map<String, dynamic> json) {
     calendarID = json['calendarID'];
     calendarName = json['calendarName'];
     startDate = json['startDate'];

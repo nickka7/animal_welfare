@@ -14,8 +14,8 @@ class ResearchHistoryDetail extends StatefulWidget {
 
 class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
   //แปลง String เป็น DateFormat
-  String formatDateFromString(String date) {
-    var parseDate = DateTime.parse(date);
+  String formatDateFromString(String? date) {
+    var parseDate = DateTime.parse(date!);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formattedDate = formatter.format(parseDate);
     return formattedDate;

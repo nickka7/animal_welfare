@@ -1,8 +1,11 @@
-import 'package:animal_welfare/api/hotNewsapi.dart';
-import 'package:animal_welfare/model/hotNews.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:animal_welfare/constant.dart';
+import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/home/hotnewsdetail.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:http/http.dart' as http;
 //import 'dart:convert';
 
@@ -12,12 +15,18 @@ class HotnewsSlider extends StatefulWidget {
 }
 
 class _HotnewsSliderState extends State<HotnewsSlider> {
-  @override
-  void initState() {
-    HotNewsApi.getimage();
-    super.initState();
-  }
+  final storage = new FlutterSecureStorage();
 
+Future<NewsData> getNews() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getNews?isHightlight=1'),
+        headers: {"authorization": 'Bearer $token'});
+    //print(response.body);
+    var jsonData = NewsData.fromJson(jsonDecode(response.body));
+    //print(jsonData);
+    return jsonData;
+  }
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
@@ -27,10 +36,10 @@ class _HotnewsSliderState extends State<HotnewsSlider> {
       body: Container(
         height: 200,
         width: double.infinity,
-        child: FutureBuilder<List<ImageList>>(
-          future: HotNewsApi.getimage(),
+        child: FutureBuilder<NewsData>(
+          future: getNews(),
           builder:
-              (BuildContext context, AsyncSnapshot<List<ImageList>> snapshot) {
+              (BuildContext context, AsyncSnapshot<NewsData> snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData) {
               return Container(
@@ -50,7 +59,7 @@ class _HotnewsSliderState extends State<HotnewsSlider> {
                         autoPlayInterval: Duration(seconds: 5),
                         reverse: false,
                       ),
-                      items: snapshot.data!.toList().map((imageUrl) {
+                      items: snapshot.data!.data!.toList().map((imageUrl) {
                         return Builder(builder: (BuildContext context) {
                           return Container(
                             width: MediaQuery.of(context).size.width,
@@ -58,7 +67,7 @@ class _HotnewsSliderState extends State<HotnewsSlider> {
                               color: Colors.green,
                             ),
                             child: Image.network(
-                              imageUrl.images,
+                              imageUrl.image.toString(),
                               fit: BoxFit.cover,
                               width: 1000,
                             ),
@@ -74,10 +83,10 @@ class _HotnewsSliderState extends State<HotnewsSlider> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HotNewsDetail(
-                                      getimage: snapshot.data!
-                                          .toList()
-                                          .elementAt(_current),
+                                builder: (context) =>  HotNewsDetail(
+                                      getNews: snapshot.data!.data!.toList().elementAt(_current), 
+                                          
+                                          
                                     )),
                           );
                         },
@@ -87,7 +96,7 @@ class _HotnewsSliderState extends State<HotnewsSlider> {
                       alignment: Alignment.bottomCenter,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: snapshot.data!.toList().asMap().entries.map((entry) {
+                        children: snapshot.data!.data!.toList().asMap().entries.map((entry) {
                           return GestureDetector(
                             onTap: () => _controller.animateToPage(entry.key),
                             child: Container(

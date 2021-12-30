@@ -20,8 +20,9 @@ class _SearchAnimalTypeState extends State<SearchAnimalType> {
     {"type": "เสือ", "number": "3"},
     {"type": "สิงโต", "number": "3"},
   ];
+  
 
-  List<Map<String, dynamic>> _foundAnimals = [];
+  List _foundAnimals = [];
 
   @override
   initState() {

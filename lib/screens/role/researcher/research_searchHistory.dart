@@ -56,7 +56,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
        appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'ประวัติงานวิจัยสัตว์แต่ละชนิด',
+          'ข้อมูลงานวิจัยสัตว์แต่ละชนิด',
           style: TextStyle(color: Colors.white),
         ),
           leading: IconButton(

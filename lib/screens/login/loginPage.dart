@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:animal_welfare/model/login.dart';
-import 'package:animal_welfare/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
 import '../../navigatorBar.dart';
-import 'package:http/http.dart' as http;
 import 'package:animal_welfare/api/loginApi.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -53,7 +50,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             );
           } else {
             displayDialog(context, "An Error Occurred",
-                "No account was found matching that username and password");
+                "username หรือ password ไม่ถูกต้อง");
           }
         } else {
           print('Server error');

@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   Future<NewsData> getNews() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getNews?isHightlight=0'),
+    var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));

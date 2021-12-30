@@ -19,17 +19,16 @@ class _HotNewsDetailState extends State<HotNewsDetail> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'หัวข้อ',
-          style: TextStyle(color: Colors.white),
+          '${widget.getNews.title}',
+          style: TextStyle(color: Colors.white,fontSize: 16),
         ),
         leading: IconButton(
           icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Container(
-        child: Column(
-          children: [
+      body: ListView(
+        children:  [
             Container(
               height: 200,
               width: double.infinity,
@@ -43,16 +42,18 @@ class _HotNewsDetailState extends State<HotNewsDetail> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('    ${widget.getNews.title}',style: TextStyle(fontSize: 20),),
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                '    ${widget.getNews.title}',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('    ${widget.getNews.detail}'),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text('   ${widget.getNews.detail}'),
             )
           ],
         ),
-      ),
     );
   }
 }

@@ -20,7 +20,7 @@ class _HotnewsSliderState extends State<HotnewsSlider> {
 Future<NewsData> getNews() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getNews?isHightlight=1'),
+    var response = await http.get(Uri.parse('$endPoint/api/getNews/1'),
         headers: {"authorization": 'Bearer $token'});
     //print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));

@@ -1,40 +1,51 @@
+import 'package:animal_welfare/model/breeding.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../haxColor.dart';
 
 class BreederHistoryDetail extends StatefulWidget {
-  const BreederHistoryDetail({ Key? key }) : super(key: key);
+  final Data getBreeding;
+  const BreederHistoryDetail({Key? key, required this.getBreeding})
+      : super(key: key);
 
   @override
   _BreederHistoryDetailState createState() => _BreederHistoryDetailState();
 }
 
 class _BreederHistoryDetailState extends State<BreederHistoryDetail> {
+  //แปลง String เป็น DateFormat
+  String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          '123456',
+          '${widget.getBreeding.breedingID}',
           style: TextStyle(color: Colors.white),
         ),
-          leading: IconButton(
+        leading: IconButton(
           icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Container(
-         decoration: BoxDecoration(
+        decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor('#697825'),
-                Colors.white,
-              ],
-            )
-          ),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -50,7 +61,8 @@ class _BreederHistoryDetailState extends State<BreederHistoryDetail> {
       ),
     );
   }
-    Widget _information() {
+
+  Widget _information() {
     return Card(
       elevation: 5,
       child: Padding(
@@ -68,19 +80,19 @@ class _BreederHistoryDetailState extends State<BreederHistoryDetail> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('รหัสการเพาะพันธุ์ : ', '123456'),
-              _buildfont('ชื่อการเพาะพันธุ์ : ', 'การวิจัย'),
-              _buildfont('ชนิดสัตว์ : ', 'ช้าง'),
-              _buildfont('สถานะการเพาะพันธุ์ : ', 'สำเร็จ'),
-              _buildfont('อัพเดทล่าสุด : ', '18 ตุลาคม 2564'),
-
+              _buildfont('รหัสการเพาะพันธุ์ : ', '${widget.getBreeding.breedingID}'),
+              _buildfont('ชื่อการเพาะพันธุ์ : ', '${widget.getBreeding.breedingName}'),
+              _buildfont('ชนิดสัตว์ : ', '${widget.getBreeding.typeName}'),
+              _buildfont('สถานะการเพาะพันธุ์ : ', '${widget.getBreeding.status}'),
+              _buildfont('อัพเดทล่าสุด : ', '${formatDateFromString(widget.getBreeding.date)}'),
             ],
           ),
         ),
       ),
     );
   }
- Widget _detail() {
+
+  Widget _detail() {
     return Card(
       elevation: 5,
       child: Padding(
@@ -101,8 +113,12 @@ class _BreederHistoryDetailState extends State<BreederHistoryDetail> {
               Wrap(
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
-                    child: Text('รายละเอียด',style: TextStyle(fontSize: 16),)),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        '${widget.getBreeding.breedingDetail}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16),
+                      )),
                 ],
               )
             ],
@@ -111,7 +127,6 @@ class _BreederHistoryDetailState extends State<BreederHistoryDetail> {
       ),
     );
   }
-
 
   Widget _buildfont(var title, var data) {
     return Container(

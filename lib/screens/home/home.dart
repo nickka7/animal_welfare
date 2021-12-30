@@ -8,6 +8,7 @@ import 'package:animal_welfare/screens/FilterAllAnimal.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_fristpage.dart';
+import 'package:animal_welfare/screens/role/Executive/searchAnimalType.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
 import 'package:animal_welfare/screens/role/showMan/schedule.dart';

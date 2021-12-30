@@ -7,8 +7,8 @@ import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import '../../../haxColor.dart';
-
 class BreederSearchHistory extends StatefulWidget {
   const BreederSearchHistory({Key? key}) : super(key: key);
 
@@ -17,44 +17,25 @@ class BreederSearchHistory extends StatefulWidget {
 }
 
 class _BreederSearchHistoryState extends State<BreederSearchHistory> {
-
   final storage = new FlutterSecureStorage();
 
-  Future<List<Data>> getBreeding(String query) async {
+  Future<BreedingData> getBreeding() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getBreedingData'),
         headers: {"authorization": 'Bearer $token'});
 
-    if (response.statusCode == 200) {
-      final List data = json.decode(response.body) ;
-
-      return data.map((json) => Data.fromJson(json)).where((breeding) {
-        final breedingNameLower = breeding.breedingName.toLowerCase();
-        final typeNameLower = breeding.typeName.toLowerCase();
-        final searchLower = query.toLowerCase();
-
-        return breedingNameLower.contains(searchLower) ||
-            typeNameLower.contains(searchLower);
-      }).toList();
-    } else {
-      throw Exception();
-    }
-  }
- List<Data> data = [];
-  String query = '';
-
-  @override
-  void initState() {
-    super.initState();
-    getBreeding(query);
-    setState(() => this.data = data);
+    print(response.body);
+    var jsonData = BreedingData.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
   }
 
-  Future init() async {
-    final data = await getBreeding(query);
-
-    setState(() => this.data = data);
+  String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
   }
 
   @override
@@ -79,14 +60,14 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
           )),
           child: ListView(
             children: [
-              buildSearch(),
+              // buildSearch(),
               buildBook(),
             ],
           ),
         ),
       );
 
-  Widget buildSearch() => SearchWidget(
+  /* Widget buildSearch() => SearchWidget(
         text: query,
         hintText: "รหัสการเพาะพันธุ์,ชื่อการเพาะพันธุ์,ชนิดของสัตว์",
         onChanged: searchBook,
@@ -101,73 +82,94 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
       this.query = query;
       this.data = books;
     });
-  }
+  }*/
 
-  Widget buildBook() => ListView.builder(
-      itemCount: data.length,
-      shrinkWrap: true,
-      physics: ScrollPhysics(),
-      itemBuilder: (context, index) {
-        //final data = data[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Card(
-            elevation: 5,
-            child: TextButton(
-                onPressed: () {
-              /*    Navigator.push(
+  Widget buildBook() => FutureBuilder<BreedingData>(
+      future: getBreeding(),
+      builder: (BuildContext context, AsyncSnapshot<BreedingData> snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        if (snapshot.hasData) {
+          return ListView.builder(
+              itemCount: snapshot.data!.data!.length,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemBuilder: (context, index) {
+                // final data = data[index];
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: Card(
+                    elevation: 5,
+                    child: TextButton(
+                        onPressed: () {
+                              Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AnimalData()),
-                  );*/
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 250,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Animal ID : ${(data[index].breedingID)}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+                    MaterialPageRoute(builder: (context) =>  BreederHistoryDetail(
+                      getBreeding: snapshot.data!.data![index])),
+                  );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: 90,
+                                width: 270,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'รหัสการเพาะพันธุ์ : ${snapshot.data!.data![index].breedingID}',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                        'ชื่อการเพาะพันธุ์ : ${snapshot.data!.data![index].breedingName}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'ชนิด : ${snapshot.data!.data![index].typeName}',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                        'อัพเดตล่าสุด  ${formatDateFromString(snapshot.data!.data![index].date)}',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'ชนิด : ${data[index].breedingID}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'ชื่อ : ${data[index].breedingID}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Colors.black,
-                        size: 40,
-                      )
-                    ],
+                              Icon(
+                                Icons.navigate_next,
+                                color: Colors.black,
+                                size: 40,
+                              )
+                            ],
+                          ),
+                        )),
                   ),
-                )),
-          ),
-        );
+                );
+              });
+        } else {
+          return new Center(child: new CircularProgressIndicator());
+        }
       });
 }
   /*Widget _buildListView() {

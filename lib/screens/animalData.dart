@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../haxColor.dart';
+import '../haxColor.dart';
 
 class AnimalData extends StatefulWidget {
   const AnimalData({Key? key}) : super(key: key);

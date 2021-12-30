@@ -9,16 +9,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 class ResearchHistory extends StatefulWidget {
-  const ResearchHistory({ Key? key}) : super(key: key);
+  const ResearchHistory({Key? key}) : super(key: key);
 
   @override
   _ResearchHistoryState createState() => _ResearchHistoryState();
 }
 
 class _ResearchHistoryState extends State<ResearchHistory> {
- final storage = new FlutterSecureStorage();
+  final storage = new FlutterSecureStorage();
 
-  Future<ResearchData> getBreeding() async {
+  Future<ResearchData> getresearch() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getResearchData'),
@@ -37,125 +37,123 @@ class _ResearchHistoryState extends State<ResearchHistory> {
     return formattedDate;
   }
 
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'ข้อมูลงานวิจัยสัตว์แต่ละชนิด',
-          style: TextStyle(color: Colors.white),
-        ),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('ข้อมูลงานวิจัยสัตว์'),
+          centerTitle: true,
           leading: IconButton(
-          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-            body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor('#697825'),
-                Colors.white,
-              ],
-            )
+            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
           ),
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              HexColor('#697825'),
+              Colors.white,
+            ],
+          )),
           child: ListView(
-        children: [
-          
-          _buildListView(),
-        ],
-      )),
-    );
-  }
- Widget _buildListView() => FutureBuilder<ResearchData>(
-      future: getBreeding(),
+            children: [
+              // buildSearch(),
+              _buildListView(),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildListView() {
+    return FutureBuilder<ResearchData>(
+      future: getresearch(),
       builder: (BuildContext context, AsyncSnapshot<ResearchData> snapshot) {
-        if (snapshot.hasError) print(snapshot.error);
         if (snapshot.hasData) {
           return ListView.builder(
-              itemCount: snapshot.data!.data!.length,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemBuilder: (context, index) {
-                // final data = data[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Card(
-                    elevation: 5,
-                    child: TextButton(
-                        onPressed: () {
-                              Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  ResearchHistoryDetail(
-                      getResearch: snapshot.data!.data![index])),
-                  );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 90,
-                                width: 270,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        'รหัสงานวิจัย : ${snapshot.data!.data![index].researchID}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
+            itemCount: snapshot.data!.data!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                child: Card(
+                  elevation: 5,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResearchHistoryDetail(
+                                  getResearch: snapshot.data!.data![index])),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 90,
+                              width: 270,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'รหัสการเพาะพันธุ์ : ${snapshot.data!.data![index].researchID}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
                                     ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'ชื่องานวิจัย : ${snapshot.data!.data![index].researchName}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      'ชื่อการเพาะพันธุ์ : ${snapshot.data!.data![index].researchName}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'ชนิด : ${snapshot.data!.data![index].typeName}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'ชนิด : ${snapshot.data!.data![index].typeName}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
                                     ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'อัพเดตล่าสุด  ${formatDateFromString(snapshot.data!.data![index].date)}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      'อัพเดตล่าสุด  ${formatDateFromString(snapshot.data!.data![index].date)}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
-                            ],
-                          ),
-                        )),
-                  ),
-                );
-              });
+                            ),
+                            Icon(
+                              Icons.navigate_next,
+                              color: Colors.black,
+                              size: 40,
+                            )
+                          ],
+                        ),
+                      )),
+                ),
+              );
+            },
+          );
         } else {
-          return new Center(child: new CircularProgressIndicator());
+          return Center(
+            child: //Text('no data')
+            CircularProgressIndicator(),
+          );
         }
-      });
+      },
+    );
+  }
 }

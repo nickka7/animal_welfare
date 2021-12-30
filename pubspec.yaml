@@ -43,7 +43,6 @@ dependencies:
   path_provider: ^2.0.7
   open_file: ^3.2.1
   dio: ^4.0.4
-  shared_preferences: ^2.0.6
   flutter_secure_storage: ^5.0.2
 
 

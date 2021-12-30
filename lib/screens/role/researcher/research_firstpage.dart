@@ -1,5 +1,6 @@
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/FilterAllAnimal.dart';
+import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +60,7 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  FilterAnimalData()),
+                          builder: (context) =>  SearchAllAnimal()),
                     );
                   },
                   child: Padding(

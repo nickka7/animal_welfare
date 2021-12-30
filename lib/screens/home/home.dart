@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:animal_welfare/api/movieApi.dart';
 import 'package:animal_welfare/model/movie.dart';
+import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/even.dart';
 import 'package:animal_welfare/screens/FilterAllAnimal.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
-
 import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_fristpage.dart';
+import 'package:animal_welfare/screens/role/Executive/searchAnimalType.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
 import 'package:animal_welfare/screens/role/showMan/schedule.dart';
@@ -15,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:animal_welfare/haxColor.dart';
 import '../../api/movieApi.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import '../../constant.dart';
 
 class HomePage extends StatefulWidget {
   final String? firstName;
@@ -40,6 +45,17 @@ class _HomePageState extends State<HomePage> {
   //   print('can get token: $token');
   //   print('${widget.firstName}');
   // }
+
+  Future<NewsData> getNews() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = NewsData.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,15 +204,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget listnews() {
-    return FutureBuilder<MovieData>(
-      builder: (BuildContext context, AsyncSnapshot<MovieData> snapshot) {
+    return FutureBuilder(
+      future: getNews(),
+      builder: (BuildContext context, AsyncSnapshot<NewsData> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return LinearProgressIndicator();
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
               physics: ScrollPhysics(),
-              itemCount: 4,
+              itemCount: snapshot.data!.data!.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return Padding(
@@ -206,13 +223,9 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         width: double.infinity,
                         height: 170,
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/bg1.png',
-                          image: '${snapshot.data?.search[index].poster}',
-                          fit: BoxFit.fill,
-                          imageErrorBuilder: (context, error, stackTrace) {
-                            return Image(image: AssetImage('assets/bg1.png'));
-                          },
+                        child: Image.network(
+                         '${snapshot.data!.data![index].image}',
+                         fit: BoxFit.fill,
                         ),
                       ),
                       Align(
@@ -221,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: buildSeeMore(
-                            ' ${snapshot.data?.search[index].title}',
+                            ' ${snapshot.data?.data![index].detail}',
                           ),
                         )),
                       ),
@@ -233,7 +246,7 @@ class _HomePageState extends State<HomePage> {
           return Text('ไม่สามารถโหลดข้อมูลได้');
         }
       },
-      future: MovieApi.getMovie(),
+      
     );
   }
 
@@ -242,4 +255,5 @@ class _HomePageState extends State<HomePage> {
       text: text,
     );
   }
+
 }

@@ -1,39 +1,50 @@
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/research.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ResearchHistoryDetail extends StatefulWidget {
-  const ResearchHistoryDetail({ Key? key }) : super(key: key);
+  final Data getResearch;
+  const ResearchHistoryDetail({Key? key, required this.getResearch})
+      : super(key: key);
 
   @override
   _ResearchHistoryDetailState createState() => _ResearchHistoryDetailState();
 }
 
 class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
+  //แปลง String เป็น DateFormat
+  String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          '123456',
+          '${widget.getResearch.researchID}',
           style: TextStyle(color: Colors.white),
         ),
-          leading: IconButton(
+        leading: IconButton(
           icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Container(
-         decoration: BoxDecoration(
+        decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor('#697825'),
-                Colors.white,
-              ],
-            )
-          ),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -49,7 +60,8 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
       ),
     );
   }
-    Widget _information() {
+
+  Widget _information() {
     return Card(
       elevation: 5,
       child: Padding(
@@ -67,18 +79,20 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('รหัสงานวิจัย : ', '123456'),
-              _buildfont('ชื่องานวิจัย : ', 'การวิจัย'),
-              _buildfont('ชนิดสัตว์ : ', 'ช้าง'),
-              _buildfont('อัพเดทล่าสุด : ', '18 ตุลาคม 2564'),
-
+              _buildfont('รหัสงานวิจัย : ', '${widget.getResearch.researchID}'),
+              _buildfont(
+                  'ชื่องานวิจัย : ', '${widget.getResearch.researchName}'),
+              _buildfont('ชนิดสัตว์ : ', '${widget.getResearch.typeName}'),
+              _buildfont('อัพเดทล่าสุด : ',
+                  '${formatDateFromString(widget.getResearch.date)}'),
             ],
           ),
         ),
       ),
     );
   }
- Widget _detail() {
+
+  Widget _detail() {
     return Card(
       elevation: 5,
       child: Padding(
@@ -99,8 +113,11 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
               Wrap(
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
-                    child: Text('รายละเอียด',style: TextStyle(fontSize: 16),)),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        '${widget.getResearch.researchDetail}',
+                        style: TextStyle(fontSize: 16),
+                      )),
                 ],
               )
             ],
@@ -109,7 +126,6 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
       ),
     );
   }
-
 
   Widget _buildfont(var title, var data) {
     return Container(

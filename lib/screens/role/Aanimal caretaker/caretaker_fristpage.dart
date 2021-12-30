@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/Schedule.dart';
+import 'package:animal_welfare/model/weather.dart';
 import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import '../../../constant.dart';
 
 class CaretakerFirstPage extends StatefulWidget {
   const CaretakerFirstPage({Key? key}) : super(key: key);
@@ -11,6 +18,31 @@ class CaretakerFirstPage extends StatefulWidget {
 }
 
 class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
+
+  final storage = new FlutterSecureStorage();
+
+  Future<WeatherData> getWeather() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getWeather'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = WeatherData.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
+  }
+
+
+  Future<ScheduleData> getSchedule() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getSchedule'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = ScheduleData.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
+  }
   DateTime today = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -37,7 +69,70 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: _temp(),
+                child: FutureBuilder(
+                  future: getWeather(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot <WeatherData> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var responseApi = snapshot.data;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              child: Text(
+                                'วันนี้, ${DateFormat("d MMMM ", 'th').format(today)}',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                '${responseApi!.data!.first.temperature}',
+                                style: TextStyle(
+                                    fontSize: 80,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.air_outlined, color: Colors.white),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  'ความกดอากาศ ${responseApi.data!.first.airpressure} km/hr',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.invert_colors, color: Colors.white),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  'ความชื้น ${responseApi.data!.first.moisture} %',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return CircularProgressIndicator();
+                  },
+                ),
               ),
               Expanded(
                 child: Container(
@@ -132,6 +227,11 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
   }
 
   Widget _workSchedule() {
+    return FutureBuilder(
+      future: getSchedule(),
+      builder: (BuildContext context, AsyncSnapshot<ScheduleData> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          var responseApi = snapshot.data;
     return Container(
       child: Column(
         children: [
@@ -139,7 +239,7 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
             padding: const EdgeInsets.only(top: 15, left: 8),
             child: Align(
               alignment: Alignment.topLeft,
-              child: Text('เวลาให้อาหารสัตว์',
+              child: Text('ตารางงาน',
                   style: TextStyle(fontSize: 18, color: Colors.black)),
             ),
           ),
@@ -158,12 +258,16 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: ListView(
-                    children: [
-                      Text('09.00 ให้อาหารช้าง ',
-                          style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
+                  child: ListView.builder(
+                          itemCount: responseApi!.data!.length,
+                          itemBuilder: (BuildContext context, int index) { 
+                            return  
+                            Text('${responseApi.data![index].startTime} ${responseApi.data![index].scheduleName} ',
+                                style: TextStyle(fontSize: 16));
+                          
+                           },
+                         
+                        ),
                 ),
               ),
             ),
@@ -171,60 +275,9 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
         ],
       ),
     );
-  }
-
-  Widget _temp() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            child: Text(
-              'วันนี้, ${DateFormat("d MMMM ", 'th').format(today)}',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-          ),
-          Container(
-            child: Text(
-              '29 ',
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.air_outlined, color: Colors.white),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                'ความกดอากาศ ',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.air),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                'ความชื้น ',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ],
-          ),
-        ],
-      ),
+    }
+        return CircularProgressIndicator();
+      },
     );
   }
 }

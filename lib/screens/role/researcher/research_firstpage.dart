@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/screens/FilterAllAnimal.dart';
+import 'package:animal_welfare/model/allanimal.dart';
 import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 class ResearcherFirstpage extends StatefulWidget {
   const ResearcherFirstpage({Key? key}) : super(key: key);
@@ -13,6 +17,19 @@ class ResearcherFirstpage extends StatefulWidget {
 }
 
 class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
+  final storage = new FlutterSecureStorage();
+
+  Future<Allanimals> getAnimal() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = Allanimals.fromJson(jsonDecode(response.body));
+    print(jsonData);
+    return jsonData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +56,11 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
   }
 
   Widget totalAnimal() {
+    return FutureBuilder<Allanimals>(
+        future: getAnimal(),
+        builder: (BuildContext context, AsyncSnapshot<Allanimals> snapshot) {
+          if (snapshot.hasError) print('${snapshot.error}');
+          if (snapshot.hasData) {
     return Container(
       child: Column(
         children: [
@@ -68,7 +90,7 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('จำนวนสัตว์ทั้งหมด : 300 ตัว',
+                        Text('จำนวนสัตว์ทั้งหมด : 100 ตัว',
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         Icon(
@@ -84,6 +106,13 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
         ],
       ),
     );
+    } else {
+            return new Center(
+              child: new CircularProgressIndicator(),
+            );
+          }
+        },
+      );
   }
 
   Widget researchData() {

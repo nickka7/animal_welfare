@@ -70,6 +70,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
   Widget buildListView() => FutureBuilder<Research>(
         future: getResearch(),
         builder: (BuildContext context, AsyncSnapshot<Research> snapshot) {
+          if (snapshot.hasError) print('${snapshot.error}');
           if (snapshot.hasData) {
             return ListView.builder(
               scrollDirection: Axis.vertical,
@@ -97,7 +98,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                             children: [
                               Container(
                                 height: 90,
-                                width: 270,
+                                width:300,
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -105,7 +106,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                                     Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        'รหัสการเพาะพันธุ์ : ${snapshot.data!.data![index].researchID}',
+                                        'รหัสงานวิจัย : ${snapshot.data!.data![index].researchID}',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
                                       ),
@@ -113,7 +114,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                                     Align(
                                       alignment: Alignment.bottomLeft,
                                       child: Text(
-                                        'ชื่อการเพาะพันธุ์ : ${snapshot.data!.data![index].researchName}',
+                                        'ชื่องานวิจัย : ${snapshot.data!.data![index].researchName}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),

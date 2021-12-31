@@ -19,13 +19,13 @@ class SearchAllAnimal extends StatefulWidget {
 class _SearchAllAnimalState extends State<SearchAllAnimal> {
 final storage = new FlutterSecureStorage();
 
-  Future<AllanimalData> getAnimal() async {
+  Future<Allanimals> getAnimal() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
-    var jsonData = AllanimalData.fromJson(jsonDecode(response.body));
+    var jsonData = Allanimals.fromJson(jsonDecode(response.body));
     print(jsonData);
     return jsonData;
   }
@@ -60,9 +60,9 @@ final storage = new FlutterSecureStorage();
       );
   }
   Widget buildListview(){
-    return FutureBuilder<AllanimalData>(
+    return FutureBuilder<Allanimals>(
       future: getAnimal(),
-      builder: (BuildContext context, AsyncSnapshot<AllanimalData> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<Allanimals> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
       itemCount: snapshot.data!.bio!.length,

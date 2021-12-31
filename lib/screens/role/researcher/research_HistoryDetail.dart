@@ -81,7 +81,7 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
               ),
               _buildfont('รหัสงานวิจัย : ', '${widget.getResearch.researchID}'),
               _buildfont(
-                  'ชื่องานวิจัย : ', '${widget.getResearch.researchName}'),
+                  'ชื่องานวิจัย : ', '${widget.getResearch.researchName}',),
               _buildfont('ชนิดสัตว์ : ', '${widget.getResearch.typeName}'),
               _buildfont('อัพเดทล่าสุด : ',
                   '${formatDateFromString(widget.getResearch.date)}'),
@@ -129,21 +129,30 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
 
   Widget _buildfont(var title, var data) {
     return Container(
+      width: 360,
       child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold),
+          Flexible(
+            child: Text(
+              title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
-          Text(
-            data,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.normal),
+          Flexible(
+            
+            child: Text(
+              data,
+              overflow: TextOverflow.ellipsis,
+  maxLines: 1,
+  softWrap: false,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.normal),
+            ),
           )
         ],
       ),

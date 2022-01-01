@@ -58,10 +58,10 @@ String formatDateFromString(String date) {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: buildCaladar()   
+      body: buildCalendar()
     );
   }
-    buildCaladar(){
+    buildCalendar(){
     return  SfCalendar(
           view: CalendarView.month,
           viewHeaderHeight: 50,

@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/allanimal.dart';
+
+// import 'package:animal_welfare/model/allanimal.dart';
+import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+
+import '../../allAnimalInZoo.dart';
 
 class ResearcherFirstpage extends StatefulWidget {
   const ResearcherFirstpage({Key? key}) : super(key: key);
@@ -17,16 +21,22 @@ class ResearcherFirstpage extends StatefulWidget {
 }
 
 class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
+  @override
+  void initState() {
+    getAnimal();
+    super.initState();
+  }
+
   final storage = new FlutterSecureStorage();
 
-  Future<Allanimals> getAnimal() async {
+  Future<AllAnimals> getAnimal() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
-    var jsonData = Allanimals.fromJson(jsonDecode(response.body));
-    print(jsonData);
+    var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
+    print('$jsonData');
     return jsonData;
   }
 
@@ -56,63 +66,62 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
   }
 
   Widget totalAnimal() {
-    return FutureBuilder<Allanimals>(
-        future: getAnimal(),
-        builder: (BuildContext context, AsyncSnapshot<Allanimals> snapshot) {
-          if (snapshot.hasError) print('${snapshot.error}');
-          if (snapshot.hasData) {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 8),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text('สัตว์ทั้งหมด',
-                  style: TextStyle(fontSize: 18, color: Colors.black)),
+    return FutureBuilder<AllAnimals>(
+      future: getAnimal(),
+      builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('สัตว์ทั้งหมด',
+                        style: TextStyle(fontSize: 18, color: Colors.black)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Card(
+                    elevation: 5,
+                    // ignore: deprecated_member_use
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchAllAnimal()),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('${snapshot.data?.data?.amount} ตัว' ,
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black)),
+                              Icon(
+                                Icons.navigate_next,
+                                color: Colors.black,
+                                size: 40,
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Card(
-              elevation: 5,
-              // ignore: deprecated_member_use
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  SearchAllAnimal()),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('จำนวนสัตว์ทั้งหมด : 100 ตัว',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
-                        Icon(
-                          Icons.navigate_next,
-                          color: Colors.black,
-                          size: 40,
-                        )
-                      ],
-                    ),
-                  )),
-            ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        }
+      },
     );
-    } else {
-            return new Center(
-              child: new CircularProgressIndicator(),
-            );
-          }
-        },
-      );
   }
 
   Widget researchData() {
@@ -123,11 +132,10 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
         elevation: 5,
         child: TextButton(
           onPressed: () {
-             Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  ResearchHistory()),
-                    );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ResearchHistory()),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

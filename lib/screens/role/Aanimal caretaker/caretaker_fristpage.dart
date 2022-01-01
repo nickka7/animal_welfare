@@ -91,7 +91,7 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
                             ),
                             Container(
                               child: Text(
-                                '${responseApi!.data!.first.temperature}',
+                                '${responseApi!.data![0].temperature}',
                                 style: TextStyle(
                                     fontSize: 80,
                                     fontWeight: FontWeight.w500,
@@ -106,7 +106,7 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
                                   width: 8,
                                 ),
                                 Text(
-                                  'ความกดอากาศ ${responseApi.data!.first.airpressure} km/hr',
+                                  'ความกดอากาศ ${responseApi.data![0].airpressure} km/hr',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.white),
                                 ),
@@ -120,7 +120,7 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
                                   width: 8,
                                 ),
                                 Text(
-                                  'ความชื้น ${responseApi.data!.first.moisture} %',
+                                  'ความชื้น ${responseApi.data![0].moisture} %',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.white),
                                 ),
@@ -230,7 +230,7 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
     return FutureBuilder(
       future: getSchedule(),
       builder: (BuildContext context, AsyncSnapshot<ScheduleData> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData) {
           var responseApi = snapshot.data;
     return Container(
       child: Column(

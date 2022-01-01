@@ -1,17 +1,21 @@
-class ResearchData {
-  ResearchData({
-    String? resultCode,
-    String? status,
-    dynamic errorMessage,
-    List<Data>? data,
-  }) {
+/// resultCode : "200"
+/// status : "SUCCESS"
+/// errorMessage : null
+/// data : [{"researchID":"R001","researchName":"การวิจัยการกินอาหารตอนกลางคืนของช้าง","typeName":"ช้าง","researchDetail":"วิจัยการกินอาหารตอนกลางคืนของช้าง ปรากฎว่าท้อเงสีย","date":"2021-11-04T17:00:00.000Z"},{"researchID":"R002","researchName":"การวิจัยการนอนของเสือ","typeName":"เสือ","researchDetail":"วิจัยการนอนของเสือช่วงกลางวัน ปรากฎว่านอนหลับไม่เพียงพอ","date":"2021-11-08T17:00:00.000Z"},{"researchID":"R003","researchName":"การวิจัยการนอนของม้าลาย","typeName":"ม้าลาย","researchDetail":"วิจัยการนอนของม้าลาย พบว่าการนอนหลับของม้าลายนั้นใช้เวลานานกว่าจะหลับ","date":"2021-12-01T17:00:00.000Z"},{"researchID":"R004","researchName":"การวิจัยการนอนของยีราฟ","typeName":"ยีราฟ","researchDetail":"วิจัยการนอนของยีราฟ พบว่าไม่สามารถนอนร่วมกับยีราฟตัวอื่นได้เพราะคอมันยาวเกินไป","date":"2021-12-12T17:00:00.000Z"}]
+
+class Research {
+  Research({
+      String? resultCode, 
+      String? status, 
+      dynamic errorMessage, 
+      List<Data>? data,}){
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
     _data = data;
-  }
+}
 
-  ResearchData.fromJson(dynamic json) {
+  Research.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
     _status = json['status'];
     _errorMessage = json['errorMessage'];
@@ -42,37 +46,56 @@ class ResearchData {
     }
     return map;
   }
+
 }
 
+/// researchID : "R001"
+/// researchName : "การวิจัยการกินอาหารตอนกลางคืนของช้าง"
+/// typeName : "ช้าง"
+/// researchDetail : "วิจัยการกินอาหารตอนกลางคืนของช้าง ปรากฎว่าท้อเงสีย"
+/// date : "2021-11-04T17:00:00.000Z"
+
 class Data {
-  final String researchID;
-  final String researchName;
-  final String typeName;
-  final String researchDetail;
-  final String date;
+  Data({
+      String? researchID, 
+      String? researchName, 
+      String? typeName, 
+      String? researchDetail, 
+      String? date,}){
+    _researchID = researchID;
+    _researchName = researchName;
+    _typeName = typeName;
+    _researchDetail = researchDetail;
+    _date = date;
+}
 
-  const Data(
-      {required this.researchID,
-      required this.researchName,
-      required this.typeName,
-      required this.researchDetail,
-      required this.date});
+  Data.fromJson(dynamic json) {
+    _researchID = json['researchID'];
+    _researchName = json['researchName'];
+    _typeName = json['typeName'];
+    _researchDetail = json['researchDetail'];
+    _date = json['date'];
+  }
+  String? _researchID;
+  String? _researchName;
+  String? _typeName;
+  String? _researchDetail;
+  String? _date;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        researchID: json['researchID'],
-        researchName: json['breedingName'],
-        typeName: json['typeName'],
-        researchDetail: json['researchDetail'],
-        date: json['date'],
-      );
+  String? get researchID => _researchID;
+  String? get researchName => _researchName;
+  String? get typeName => _typeName;
+  String? get researchDetail => _researchDetail;
+  String? get date => _date;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['researchID'] = this.researchID;
-    data['researchName'] = this.researchName;
-    data['typeName'] = this.typeName;
-    data['researchDetail'] = this.researchDetail;
-    data['date'] = this.date;
-    return data;
+    final map = <String, dynamic>{};
+    map['researchID'] = _researchID;
+    map['researchName'] = _researchName;
+    map['typeName'] = _typeName;
+    map['researchDetail'] = _researchDetail;
+    map['date'] = _date;
+    return map;
   }
+
 }

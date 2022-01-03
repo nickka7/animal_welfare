@@ -90,7 +90,7 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('จำนวนสัตว์ทั้งหมด : 100 ตัว',
+                        Text('จำนวนสัตว์ทั้งหมด : ${snapshot.data!.data!.amount} ตัว',
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         Icon(
@@ -106,12 +106,12 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
         ],
       ),
     );
-    } else {
+    } 
             return new Center(
               child: new CircularProgressIndicator(),
             );
           }
-        },
+        
       );
   }
 

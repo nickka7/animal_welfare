@@ -5,7 +5,7 @@ import 'package:animal_welfare/haxColor.dart';
 
 // import 'package:animal_welfare/model/allanimal.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
-import 'package:animal_welfare/screens/allAnimalInZoo.dart';
+// import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

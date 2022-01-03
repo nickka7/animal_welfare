@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 
-// import 'package:animal_welfare/model/allanimal.dart';
+// impo'../../SearchAllAnimal.dart'
 import 'package:animal_welfare/model/all_animals.dart.dart';
 // import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../../allAnimalInZoo.dart';
+import '../../SearchAllAnimal.dart';
 
 class ResearcherFirstpage extends StatefulWidget {
   const ResearcherFirstpage({Key? key}) : super(key: key);
@@ -46,7 +46,7 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'นักวิจัย',
+          'งาน',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -55,12 +55,16 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
         ),
       ),
       body: Container(
-        color: HexColor('#F2F2F2'),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [totalAnimal(), researchData()],
-          ),
-        ),
+         decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              HexColor('#697825'),
+              Colors.white,
+            ],
+          )),
+        child: totalAnimal(),
       ),
     );
   }
@@ -71,48 +75,44 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
       builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 8),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text('สัตว์ทั้งหมด',
-                        style: TextStyle(fontSize: 18, color: Colors.black)),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Card(
+                      elevation: 5,
+                      // ignore: deprecated_member_use
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchAllAnimal()),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('จำนวนสัตว์ทั้งหมด ${snapshot.data?.data?.amount} ตัว' ,
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black)),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.black,
+                                  size: 40,
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Card(
-                    elevation: 5,
-                    // ignore: deprecated_member_use
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchAllAnimal()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('${snapshot.data?.data?.amount} ตัว' ,
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black)),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
-                            ],
-                          ),
-                        )),
-                  ),
-                ),
-              ],
+                  researchData(),
+                ],
+              ),
             ),
           );
         } else {

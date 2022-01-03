@@ -18,7 +18,6 @@ class CaretakerFirstPage extends StatefulWidget {
 }
 
 class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
-
   final storage = new FlutterSecureStorage();
 
   Future<WeatherData> getWeather() async {
@@ -32,7 +31,6 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
     return jsonData;
   }
 
-
   Future<ScheduleData> getSchedule() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
@@ -43,6 +41,14 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
     print(jsonData);
     return jsonData;
   }
+
+  String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('hh:mm');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
+  }
+
   DateTime today = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -53,6 +59,10 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
             'ผู้ดูแลสัตว์',
             style: TextStyle(color: Colors.white),
           ),
+          leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         ),
         body: Container(
           // width: ,
@@ -65,90 +75,87 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
               Colors.blue.shade200,
             ],
           )),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: FutureBuilder(
-                  future: getWeather(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot <WeatherData> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      var responseApi = snapshot.data;
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              child: Text(
-                                'วันนี้, ${DateFormat("d MMMM ", 'th').format(today)}',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+          child: FutureBuilder(
+            future: getWeather(),
+            builder:
+                (BuildContext context, AsyncSnapshot<WeatherData> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var responseApi = snapshot.data;
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            child: Text(
+                              'วันนี้, ${DateFormat("d MMMM ", 'th').format(today)}',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              '${responseApi!.data![0].temperature}',
+                              style: TextStyle(
+                                  fontSize: 80,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.air_outlined, color: Colors.white),
+                              SizedBox(
+                                width: 8,
                               ),
-                            ),
-                            Container(
-                              child: Text(
-                                '${responseApi!.data![0].temperature}',
+                              Text(
+                                'ความกดอากาศ ${responseApi.data![0].airpressure} km/hr',
                                 style: TextStyle(
-                                    fontSize: 80,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
+                                    fontSize: 16, color: Colors.white),
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.air_outlined, color: Colors.white),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  'ความกดอากาศ ${responseApi.data![0].airpressure} km/hr',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.invert_colors, color: Colors.white),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  'ความชื้น ${responseApi.data![0].moisture} %',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return CircularProgressIndicator();
-                  },
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: HexColor("#F2F2F2"),
-                    borderRadius:
-                        BorderRadius.only(topRight: (Radius.circular(60))),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [totalAnimal(), _workSchedule()],
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.invert_colors, color: Colors.white),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                'ความชื้น ${responseApi.data![0].moisture} %',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              )
-            ],
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: HexColor("#F2F2F2"),
+                          borderRadius: BorderRadius.only(
+                              topRight: (Radius.circular(60))),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [totalAnimal(), _workSchedule()],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              }
+              return Center(child: CircularProgressIndicator());
+            },
           ),
         ));
   }
@@ -232,51 +239,49 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
       builder: (BuildContext context, AsyncSnapshot<ScheduleData> snapshot) {
         if (snapshot.hasData) {
           var responseApi = snapshot.data;
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 8),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text('ตารางงาน',
-                  style: TextStyle(fontSize: 18, color: Colors.black)),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-            child: Container(
-              height: 150,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: HexColor('#697825'), width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: ListView.builder(
-                          itemCount: responseApi!.data!.length,
-                          itemBuilder: (BuildContext context, int index) { 
-                            return  
-                            Text('${responseApi.data![index].startTime} ${responseApi.data![index].scheduleName} ',
-                                style: TextStyle(fontSize: 16));
-                          
-                           },
-                         
-                        ),
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('ตารางงาน',
+                        style: TextStyle(fontSize: 18, color: Colors.black)),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 10.0),
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: HexColor('#697825'), width: 1),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ListView.builder(
+                          itemCount: responseApi!.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Text(
+                                '${formatDateFromString(responseApi.data![index].startDate.toString())} ${responseApi.data![index].scheduleName} ${responseApi.data![index].location}',
+                                style: TextStyle(fontSize: 16));
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
-    );
-    }
-        return CircularProgressIndicator();
+          );
+        }
+        return Container();
       },
     );
   }

@@ -46,7 +46,7 @@ class ScheduleData {
 
 class Data {
   Data({
-    String? startDate,
+    required String startDate,
     String? startTime,
     String? endDate,
     String? endTime,

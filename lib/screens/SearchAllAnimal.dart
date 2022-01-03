@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/animalData.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
-import 'package:animal_welfare/model/allanimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -17,16 +17,22 @@ class SearchAllAnimal extends StatefulWidget {
 }
 
 class _SearchAllAnimalState extends State<SearchAllAnimal> {
-final storage = new FlutterSecureStorage();
+ @override
+  void initState() {
+    getAnimal();
+    super.initState();
+  }
 
-  Future<Allanimals> getAnimal() async {
+  final storage = new FlutterSecureStorage();
+
+  Future<AllAnimals> getAnimal() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
-    var jsonData = Allanimals.fromJson(jsonDecode(response.body));
-    print(jsonData);
+    var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
+    print('$jsonData');
     return jsonData;
   }
 
@@ -60,9 +66,9 @@ final storage = new FlutterSecureStorage();
       );
   }
   Widget buildListview(){
-    return FutureBuilder<Allanimals>(
+    return FutureBuilder<AllAnimals>(
       future: getAnimal(),
-      builder: (BuildContext context, AsyncSnapshot<Allanimals> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
       itemCount: snapshot.data!.bio!.length,
@@ -78,7 +84,8 @@ final storage = new FlutterSecureStorage();
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AnimalData()),
+                    MaterialPageRoute(builder: (context) =>  AnimalData(
+                      getBio: snapshot.data!.bio![index],)),
                   );
                 },
                 child: Padding(
@@ -92,15 +99,33 @@ final storage = new FlutterSecureStorage();
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Animal ID : ${animal.animalID}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                
+                           
+                 Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Animal ID : ${animal.animalID}',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                        'ชนิด : ${animal.typeName}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'ชื่อสัตว์ : ${animal.animalName}',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                  
                           ],
                         ),
                       ),
@@ -117,8 +142,8 @@ final storage = new FlutterSecureStorage();
       });
           } else {
           return Center(
-            child: Text('no data')
-           // CircularProgressIndicator(),
+            child: 
+            CircularProgressIndicator(),
           );
         }
       },

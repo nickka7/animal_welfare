@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class ScheduleScreen extends StatefulWidget {
+class ShowScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _ScheduleScreenState();
+    return _ShowScreenState();
   }
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _ShowScreenState extends State<ShowScreen> {
   List<Appointment> _appointmentDetails = <Appointment>[];
   @override
   Widget build(BuildContext context) {

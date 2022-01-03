@@ -1,16 +1,18 @@
+import 'package:animal_welfare/model/all_animals.dart.dart';
+
 import 'package:flutter/material.dart';
 
 import '../haxColor.dart';
 
 class AnimalData extends StatefulWidget {
-  const AnimalData({Key? key}) : super(key: key);
+  final Bio getBio;
+  const AnimalData({Key? key, required this.getBio}) : super(key: key);
 
   @override
   _AnimalDataState createState() => _AnimalDataState();
 }
 
 class _AnimalDataState extends State<AnimalData> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +20,7 @@ class _AnimalDataState extends State<AnimalData> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'ช้าง',
+          '${widget.getBio.typeName}',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -66,7 +68,7 @@ class _AnimalDataState extends State<AnimalData> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'สุขใจ',
+                '${widget.getBio.animalName}',
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
@@ -97,12 +99,12 @@ class _AnimalDataState extends State<AnimalData> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('ANIMAL ID : ', '123456'),
-              _buildfont('ชนิด : ', 'ช้าง'),
+              _buildfont('ANIMAL ID : ', '${widget.getBio.animalID}'),
+              _buildfont('ชนิด : ', '${widget.getBio.typeName}'),
               _buildfont('รหัสกรง : ', '123456'),
-              _buildfont('เพศ : ', 'เมีย'),
-              _buildfont('อายุ : ', '5 ปี'),
-              _buildfont('น้ำหนัก : ', '4,000 กิโลกรัม'),
+              _buildfont('เพศ : ', '${widget.getBio.gender}'),
+              _buildfont('อายุ : ', '${widget.getBio.age} ปี'),
+              _buildfont('น้ำหนัก : ', '${widget.getBio.weight} กิโลกรัม'),
             ],
           ),
         ),

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -11,7 +10,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../../constant.dart';
 
-
 class CalendarScreenTest extends StatefulWidget {
   const CalendarScreenTest({Key? key}) : super(key: key);
 
@@ -21,7 +19,7 @@ class CalendarScreenTest extends StatefulWidget {
 
 class _CalendarScreenTestState extends State<CalendarScreenTest> {
   final storage = new FlutterSecureStorage();
-  List<Color> _colorCollection=<Color>[];
+  List<Color> _colorCollection = <Color>[];
 
   // Future<CalendarTest> getAnimal() async {
   //   String? token = await storage.read(key: 'token');
@@ -105,6 +103,15 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
               child: Container(
                   child: SfCalendar(
                 view: CalendarView.month,
+                viewHeaderHeight: 50,
+                //  showDatePickerButton: true,
+                initialSelectedDate: DateTime.now(),
+                showNavigationArrow: true,
+                monthViewSettings: MonthViewSettings(
+                  showAgenda: true,
+                  agendaViewHeight: 300,
+                  agendaItemHeight: 60,
+                ),
                 // initialDisplayDate: DateTime(2017, 6, 01, 9, 0, 0),
                 // initialSelectedDate: DateTime.now(),
                 dataSource: MeetingDataSource(snapshot.data!),
@@ -152,10 +159,10 @@ class MeetingDataSource extends CalendarDataSource {
     return appointments![index].eventName;
   }
 
-@override
-Color getColor(int index) {
-  return appointments![index].background;
-}
+  @override
+  Color getColor(int index) {
+    return appointments![index].background;
+  }
 
 // @override
 // bool isAllDay(int index) {
@@ -188,6 +195,5 @@ class Meeting {
   DateTime? to;
   Color? background;
   // bool isAllDay;
-
 
 }

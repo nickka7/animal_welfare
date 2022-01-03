@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 class NavigatorBar extends StatefulWidget {
 
   final String? firstName;
-  const NavigatorBar({Key? key, this.firstName}) : super(key: key);
+  final String? role;
+  const NavigatorBar({Key? key, this.firstName, this.role}) : super(key: key);
 
   @override
   _NavigatorBarState createState() => _NavigatorBarState();
@@ -18,7 +19,7 @@ class NavigatorBar extends StatefulWidget {
 class _NavigatorBarState extends State<NavigatorBar> {
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions = <Widget>[
-    HomePage(firstName: '${widget.firstName}'),
+    HomePage(firstName: '${widget.firstName}',role: '${widget.role}',),
     DownloadFile(),
     Scaffold(),
     ResearcherFirstpage(),

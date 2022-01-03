@@ -1,18 +1,15 @@
 import 'dart:convert';
 
 import 'package:animal_welfare/api/movieApi.dart';
-import 'package:animal_welfare/model/movie.dart';
 import 'package:animal_welfare/model/news.dart';
-import 'package:animal_welfare/screens/calender/even.dart';
-import 'package:animal_welfare/screens/FilterAllAnimal.dart';
+import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_fristpage.dart';
-import 'package:animal_welfare/screens/role/Executive/searchAnimalType.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
-import 'package:animal_welfare/screens/role/showMan/schedule.dart';
+import 'package:animal_welfare/screens/role/showMan/show.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +21,8 @@ import '../../constant.dart';
 
 class HomePage extends StatefulWidget {
   final String? firstName;
-
-  const HomePage({Key? key, this.firstName}) : super(key: key);
+  final String? role;
+  const HomePage({Key? key, this.firstName, this.role}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -70,6 +67,7 @@ class _HomePageState extends State<HomePage> {
             Container(
                 width: double.infinity, height: 200, child: HotnewsSlider()),
             buttonSection(),
+            //buttonSection(),
             listnews()
           ],
         )),
@@ -147,20 +145,106 @@ class _HomePageState extends State<HomePage> {
                   Icons.assistant_photo_outlined, 'จองห้องประชุม', Scaffold()),
               _buildButton(Icons.settings, 'ตั้งค่า', Scaffold()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
-              _buildButton(Icons.work_outline, 'สัตวแพทย์', VetFirstpage()),
-              _buildButton(
-                  Icons.work_outline, 'นักวิจัย', ResearcherFirstpage()),
-              _buildButton(
-                  Icons.work_outline, 'นักเพาะพันธุ์', BreederFirstpage()),
-              _buildButton(
-                  Icons.work_outline, 'ผู้ดูแลการแสดง', ScheduleScreen()),
-              _buildButton(
-                  Icons.work_outline, 'ผู้ดูแลสัตว์', CaretakerFirstPage()),
-              _buildButton(Icons.work_outline, 'ผู้บริหาร', FilterAnimalData()),
-              // _buildButton(Icons.work_outline, 'ว่าง', Scaffold()),
+              buildButton(),
             ],
           ),
         ]),
+      ),
+    );
+  }
+
+  Widget buildButton() {
+    return Container(
+      width: 130,
+      height: 90,
+      child: TextButton(
+        onPressed: () {
+          setState(() {
+         /*   print('dada ${widget.role}');
+            if (widget.role == 'caretaker') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CaretakerFirstPage()),
+              );
+            } else if (widget.role == 'breeder') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BreederFirstpage()),
+              );
+            }*/
+            switch (widget.role) {
+              case 'ceo':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BreederFirstpage()),
+                  );
+                }
+                 break; 
+              case 'caretaker':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CaretakerFirstPage()),
+                  );
+                }
+                 break; 
+                  case 'veterinatian':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VetFirstpage()),
+                  );
+                }
+                 break; 
+              case 'reseacher':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ResearcherFirstpage()),
+                  );
+                }
+                 break; 
+                  case 'breeder':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BreederFirstpage()),
+                  );
+                }
+                 break; 
+              case 'showman':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ShowScreen()),
+                  );
+                }
+                 break; 
+            }
+          });
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                child: Icon(Icons.work_outline,
+                    size: 40, color: Colors.green[600]),
+              ),
+              Container(
+                //  margin: const EdgeInsets.only(top: 8),
+                child: Text(
+                  'งาน',
+                  style: Theme.of(context).textTheme.button,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -225,8 +309,8 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         height: 170,
                         child: Image.network(
-                         '${snapshot.data!.data![index].image}',
-                         fit: BoxFit.fill,
+                          '${snapshot.data!.data![index].image}',
+                          fit: BoxFit.fill,
                         ),
                       ),
                       Align(
@@ -247,7 +331,6 @@ class _HomePageState extends State<HomePage> {
           return Text('ไม่สามารถโหลดข้อมูลได้');
         }
       },
-      
     );
   }
 
@@ -256,5 +339,4 @@ class _HomePageState extends State<HomePage> {
       text: text,
     );
   }
-
 }

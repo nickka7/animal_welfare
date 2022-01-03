@@ -40,7 +40,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             String token = jsonResponse['token'];
             print(token);
             String firstName = jsonResponse['user']['firstName'];
-            print(firstName.runtimeType);
+            // print(firstName.runtimeType);
             await storage.write(key: 'token', value: token);
             Navigator.push( //ตอนใช้งานจริงเปลี่ยนไปใช้ Navigator.pushReplacement ตอนนี้ใช้ push เพื่อง่ายต่อการเทส
               context,

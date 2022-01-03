@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -18,6 +19,7 @@ class CalendarScreenTest extends StatefulWidget {
 
 class _CalendarScreenTestState extends State<CalendarScreenTest> {
   final storage = new FlutterSecureStorage();
+  List<Color> _colorCollection=<Color>[];
 
   // Future<CalendarTest> getAnimal() async {
   //   String? token = await storage.read(key: 'token');
@@ -34,6 +36,11 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
     return DateTime.parse(date!);
   }
 
+  void initState() {
+    _initializeEventColor();
+    // _checkNetworkStatus();
+    super.initState();
+  }
 
   Future<List<Meeting>> getDataFromWeb() async {
     String? token = await storage.read(key: 'token');
@@ -45,19 +52,33 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
     print(jsonData);
 
     final List<Meeting> appointmentData = [];
-    // final Random random = new Random();
+    final Random random = new Random();
     print('before loop');
     for (var data in jsonData) {
       Meeting meetingData = Meeting(
         eventName: data['calendarName'],
         from: _convertDateFromString(data['startDate']),
         to: _convertDateFromString(data['endDate']),
+        background: _colorCollection[random.nextInt(9)],
       );
 
       appointmentData.add(meetingData);
     }
     print('after loop');
     return appointmentData;
+  }
+
+  void _initializeEventColor() {
+    _colorCollection.add(const Color(0xFF0F8644));
+    _colorCollection.add(const Color(0xFF8B1FA9));
+    _colorCollection.add(const Color(0xFFD20100));
+    _colorCollection.add(const Color(0xFFFC571D));
+    _colorCollection.add(const Color(0xFF36B37B));
+    _colorCollection.add(const Color(0xFF01A1EF));
+    _colorCollection.add(const Color(0xFF3D4FB5));
+    _colorCollection.add(const Color(0xFFE47C73));
+    _colorCollection.add(const Color(0xFF636363));
+    _colorCollection.add(const Color(0xFF0A8043));
   }
 
   @override
@@ -83,7 +104,7 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
                   child: SfCalendar(
                 view: CalendarView.month,
                 // initialDisplayDate: DateTime(2017, 6, 01, 9, 0, 0),
-                initialSelectedDate: DateTime.now(),
+                // initialSelectedDate: DateTime.now(),
                 dataSource: MeetingDataSource(snapshot.data!),
               )),
             );
@@ -129,25 +150,25 @@ class MeetingDataSource extends CalendarDataSource {
     return appointments![index].eventName;
   }
 
-// @override
-// Color getColor(int index) {
-//   return appointments![index].background;
-// }
-//
+@override
+Color getColor(int index) {
+  return appointments![index].background;
+}
+
 // @override
 // bool isAllDay(int index) {
 //   return appointments![index].isAllDay;
 // }
 
-  Meeting _getMeetingData(int index) {
-    final dynamic meeting = appointments![index];
-    late final Meeting meetingData;
-    if (meeting is Meeting) {
-      meetingData = meeting;
-    }
-
-    return meetingData;
-  }
+  // Meeting _getMeetingData(int index) {
+  //   final dynamic meeting = appointments![index];
+  //   late final Meeting meetingData;
+  //   if (meeting is Meeting) {
+  //     meetingData = meeting;
+  //   }
+  //
+  //   return meetingData;
+  // }
 }
 
 class Meeting {
@@ -157,13 +178,13 @@ class Meeting {
     this.eventName,
     this.from,
     this.to,
+    this.background,
   });
 
   String? eventName;
   DateTime? from;
   DateTime? to;
-
-  // Color background;
+  Color? background;
   // bool isAllDay;
 
 

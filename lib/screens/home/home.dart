@@ -160,7 +160,6 @@ class _HomePageState extends State<HomePage> {
       child: TextButton(
         onPressed: () {
           setState(() {
-
             switch (widget.role) {
               case 'ceo':
                 {

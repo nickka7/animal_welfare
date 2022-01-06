@@ -70,45 +70,41 @@ DateTime date = DateTime.now();
         ),
       ),
       body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor('#697825'),
-                Colors.white,
-              ],
-            )),
+            color: HexColor('#697825'),
             child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top:8.0),
-                      child: Container(
-                        child: Text(
-                          '${DateFormat("d ", 'th').format(date)}',
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          child: Text(
+                            'วันที่',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                        Text(
+                          '${DateFormat("d", 'th').format(date)}',
                           style: TextStyle(
                               fontSize: 80,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Text(
+                        Text(
                           '${DateFormat("MMMM yyyy", 'th').format(date)}',
                           style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 Expanded(
                   child: Container(

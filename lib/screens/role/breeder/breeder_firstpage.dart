@@ -19,7 +19,7 @@ class BreederFirstpage extends StatefulWidget {
 }
 
 class _BreederFirstpageState extends State<BreederFirstpage> {
-   @override
+  @override
   void initState() {
     getAnimal();
     super.initState();
@@ -37,74 +37,72 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
     print('$jsonData');
     return jsonData;
   }
+
   DateTime date = DateTime.now();
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'งาน',
-          style: TextStyle(color: Colors.white),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'งาน',
+            style: TextStyle(color: Colors.white),
+          ),
+          leading: IconButton(
+            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-        leading: IconButton(
-          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor('#697825'),
-                Colors.white,
-              ],
-            )),
+        body: Container(
+            color: HexColor('#697825'),
             child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top:8.0),
-                      child: Container(
-                        child: Text(
-                          '${DateFormat("d ", 'th').format(date)}',
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          child: Text(
+                            'วันที่',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                        Text(
+                          '${DateFormat("d", 'th').format(date)}',
                           style: TextStyle(
                               fontSize: 80,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Text(
+                        Text(
                           '${DateFormat("MMMM yyyy", 'th').format(date)}',
                           style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 Expanded(
                   child: Container(
-                        decoration: BoxDecoration(
-                          color: HexColor("#F2F2F2"),
-                          borderRadius:
-                              BorderRadius.only(topRight: (Radius.circular(60))),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 25),
-                          child: totalAnimal(),
-                        ),
-                      ),
+                    decoration: BoxDecoration(
+                      color: HexColor("#F2F2F2"),
+                      borderRadius:
+                          BorderRadius.only(topRight: (Radius.circular(60))),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 25),
+                      child: totalAnimal(),
+                    ),
+                  ),
                 )
               ],
             )));
@@ -120,15 +118,15 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
               padding: const EdgeInsets.only(top: 10),
               child: Column(
                 children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 15, left: 8),
-                child: Align(
-                    alignment: Alignment.topLeft,
-                    child: _heading('สัตว์ทั้งหมด', 35.0, 120.0)),
-              ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, left: 8),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: _heading('สัตว์ทั้งหมด', 35.0, 120.0)),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 10.0),
+                        horizontal: 8.0, vertical: 10.0),
                     child: Card(
                       elevation: 5,
                       // ignore: deprecated_member_use
@@ -145,7 +143,8 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('จำนวนสัตว์ทั้งหมด ${snapshot.data?.data?.amount} ตัว' ,
+                                Text(
+                                    'จำนวนสัตว์ทั้งหมด ${snapshot.data?.data?.amount} ตัว',
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.black)),
                                 Icon(
@@ -172,50 +171,51 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
     );
   }
 
-   Widget breederData() {
+  Widget breederData() {
     return Container(
         child: Column(
-          children: [
-             Padding(
-                    padding: const EdgeInsets.only(top: 15, left: 8),
-                    child: Align(
-                        alignment: Alignment.topLeft,
-                        child: _heading('ข้อมูลการเพาะพันธุ์', 35.0, 170.0)),
-                  ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 10.0),
-              child: Card(
-                elevation: 5,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BreederSearchHistory()),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('ข้อมูลการเพาะพันธุ์สัตว์แต่ละชนิด',
-                            style: TextStyle(fontSize: 16, color: Colors.black)),
-                        Icon(
-                          Icons.navigate_next,
-                          color: Colors.black,
-                          size: 40,
-                        )
-                      ],
-                    ),
-                  ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 15, left: 8),
+          child: Align(
+              alignment: Alignment.topLeft,
+              child: _heading('ข้อมูลการเพาะพันธุ์', 35.0, 170.0)),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BreederSearchHistory()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('ข้อมูลการเพาะพันธุ์สัตว์แต่ละชนิด',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
                 ),
               ),
             ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    ));
   }
-   Widget _heading(var title, double h, double w) {
+
+  Widget _heading(var title, double h, double w) {
     return Container(
       height: h,
       width: w,

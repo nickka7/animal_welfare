@@ -37,8 +37,8 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
   }
 
   void initState() {
-    _initializeEventColor();
-    // _checkNetworkStatus();
+    // _initializeEventColor();
+    getDataFromWeb();
     super.initState();
   }
 
@@ -52,14 +52,14 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
     print(jsonData);
 
     final List<Meeting> appointmentData = [];
-    final Random random = new Random();
+    // final Random random = new Random();
     print('before loop');
     for (var data in jsonData) {
       Meeting meetingData = Meeting(
         eventName: data['calendarName'],
         from: _convertDateFromString(data['startDate']),
         to: _convertDateFromString(data['endDate']),
-        background: _colorCollection[random.nextInt(9)],
+        background: Colors.green,
       );
 
       appointmentData.add(meetingData);
@@ -118,7 +118,8 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
               )),
             );
           } else {
-            return new Center(
+            return 
+            new Center(
               child: CircularProgressIndicator(),
             );
           }

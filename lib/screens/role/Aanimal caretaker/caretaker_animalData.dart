@@ -1,8 +1,11 @@
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:flutter/material.dart';
 
 class AnimalData extends StatefulWidget {
-  const AnimalData({Key? key}) : super(key: key);
+  final Bio getanimal;
+  const AnimalData({Key? key, required this.getanimal})
+      : super(key: key);
 
   @override
   _AnimalDataState createState() => _AnimalDataState();
@@ -58,13 +61,13 @@ class _AnimalDataState extends State<AnimalData> {
             CircleAvatar(
               radius: 70,
               backgroundImage: NetworkImage(
-                'https://www.naewna.com/uploads/news/source/479084.jpg',
+                '${widget.getanimal.image}',
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'สุขใจ',
+                '${widget.getanimal.animalName}',
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
@@ -95,11 +98,12 @@ class _AnimalDataState extends State<AnimalData> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('ANIMAL ID : ', '123456'),
-              _buildfont('ชนิด : ', 'ช้าง'),
-              _buildfont('เพศ : ', 'เมีย'),
-              _buildfont('อายุ : ', '5 ปี'),
-              _buildfont('น้ำหนัก : ', '4,000 กิโลกรัม'),
+              _buildfont('ANIMAL ID : ', '${widget.getanimal.animalID}'),
+              _buildfont('ชนิด : ', '${widget.getanimal.typeName}'),
+              _buildfont('เพศ : ', '${widget.getanimal.gender}'),
+              _buildfont('อายุ : ', '${widget.getanimal.age} ปี'),
+              _buildfont('น้ำหนัก : ', '${widget.getanimal.weight} กิโลกรัม'),
+             // _buildfont('รหัสกรง : ', '${widget.getanimal.}'),
             ],
           ),
         ),

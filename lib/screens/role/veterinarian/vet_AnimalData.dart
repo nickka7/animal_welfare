@@ -1,19 +1,63 @@
+import 'dart:convert';
 
+import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/book.dart';
+import 'package:animal_welfare/model/MedHis.dart';
+import 'package:animal_welfare/model/VacHis.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
+import 'package:animal_welfare/screens/AllanimalData.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_MedicalHistory.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_VaccineHistory.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class VetAnimalData extends StatefulWidget {
-  final Book getanimal;
-  const VetAnimalData({Key? key, required this.getanimal}) : super(key: key);
+  final Bio getanimal;
+  final String? animalID;
+  const VetAnimalData({Key? key, required this.getanimal, this.animalID}) : super(key: key);
 
   @override
   _VetAnimalDataState createState() => _VetAnimalDataState();
 }
 
 class _VetAnimalDataState extends State<VetAnimalData> {
+  final storage = new FlutterSecureStorage();
+
+  Future<MedHis> getMedHis() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(
+        Uri.parse(
+            '$endPoint/api/getMedicalHistory?animalID=${widget.animalID}'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = MedHis.fromJson(jsonDecode(response.body));
+    print('$jsonData');
+    return jsonData;
+  }
+
+  Future<VacHis> getVacHis() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(
+        Uri.parse(
+            '$endPoint/api/getVaccineHistory?animalID=${widget.animalID}'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = VacHis.fromJson(jsonDecode(response.body));
+    print('$jsonData');
+    return jsonData;
+  }
+
+
+  String formatDateFromString(String date) {
+    var parseDate = DateTime.parse(date);
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formattedDate = formatter.format(parseDate);
+    return formattedDate;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,13 +123,13 @@ class _VetAnimalDataState extends State<VetAnimalData> {
             CircleAvatar(
               radius: 70,
               backgroundImage: NetworkImage(
-                'https://www.naewna.com/uploads/news/source/479084.jpg',
+                '${widget.getanimal.image}',
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'สุขใจ',
+                '${widget.getanimal.animalName}',
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
@@ -117,12 +161,12 @@ class _VetAnimalDataState extends State<VetAnimalData> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('ANIMAL ID : ', '${widget.getanimal.id}'),
-              _buildfont('ชนิด : ', '${widget.getanimal.title}'),
-              _buildfont('รหัสกรง : ', '123456'),
-              _buildfont('เพศ : ', 'เมีย'),
-              _buildfont('อายุ : ', '5 ปี'),
-              _buildfont('น้ำหนัก : ', '4,000 กิโลกรัม'),
+              _buildfont('ANIMAL ID : ', '${widget.getanimal.animalID}'),
+              _buildfont('ชนิด : ', '${widget.getanimal.typeName}'),
+              _buildfont('รหัสกรง : ', '${widget.getanimal.age}'),
+              _buildfont('เพศ : ', '${widget.getanimal.gender}'),
+              _buildfont('อายุ : ', '${widget.getanimal.age} ปี'),
+              _buildfont('น้ำหนัก : ', '${widget.getanimal.weight} กิโลกรัม'),
             ],
           ),
         ),
@@ -130,8 +174,14 @@ class _VetAnimalDataState extends State<VetAnimalData> {
     );
   }
 
-  //ประวัติการรักษาของแต่ละตัว
+  //ประวัติการรักษาล่าสุด
   Widget medicalHistory() {
+    return FutureBuilder<MedHis>(
+          future: getMedHis(),
+          builder:
+              (BuildContext context, AsyncSnapshot<MedHis> snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            if (snapshot.hasData) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -142,18 +192,19 @@ class _VetAnimalDataState extends State<VetAnimalData> {
             children: [
               Align(
                   alignment: Alignment.topLeft,
-                  child: _heading('ประวัติการรักษา', 35.0, 175.0)),
+                  child: _heading('ประวัติการรักษาล่าสุด', 35.0, 185.0)),
               SizedBox(
                 height: 10,
               ),
-              _buildfont('วันที่ : ', '18 ตุลาคม 2564'),
-              _buildfont('การรักษา : ', 'ถ่ายพยาธิ'),
+              _buildfont('วันที่ : ', '${formatDateFromString(snapshot.data!.latest!.date.toString())}'),
+              _buildfont('การรักษา : ', '${snapshot.data!.latest!.medicalName}'),
               TextButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const VetMedicalHistory()));
+                            builder: (context) =>  VetMedicalHistory(animalID: widget.animalID,
+                            )));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -182,10 +233,21 @@ class _VetAnimalDataState extends State<VetAnimalData> {
         ),
       ),
     );
+      } else {
+              return new Center(child: new CircularProgressIndicator());
+            }
+          },
+        );
   }
 
-  //ประวัติการฉีดวัคซีนของแต่ละตัว
+  //ประวัติการฉีดวัคซีนล่าสุด
   Widget vaccineHistory() {
+    return FutureBuilder<VacHis>(
+          future: getVacHis(),
+          builder:
+              (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            if (snapshot.hasData) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -196,18 +258,18 @@ class _VetAnimalDataState extends State<VetAnimalData> {
             children: [
               Align(
                   alignment: Alignment.topLeft,
-                  child: _heading('ประวัติการฉีดวัคซีน', 35.0, 200.0)),
+                  child: _heading('ประวัติการฉีดวัคซีนล่าสุด', 35.0, 210.0)),
               SizedBox(
                 height: 10,
               ),
-              _buildfont('วันที่ : ', '18 ตุลาคม 2564'),
-              _buildfont('วัคซีน : ', 'วัคซีนพิษสุนัขบ้า'),
+              _buildfont('วันที่ : ', '${formatDateFromString(snapshot.data!.latest!.date.toString())}'),
+              _buildfont('วัคซีน : ', '${snapshot.data!.latest!.vaccineName}'),
               TextButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const VetVaccineHistory()));
+                            builder: (context) =>  VetVaccineHistory(animalID:widget.animalID,)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -236,6 +298,11 @@ class _VetAnimalDataState extends State<VetAnimalData> {
         ),
       ),
     );
+     } else {
+              return new Center(child: new CircularProgressIndicator());
+            }
+          },
+        );
   }
 
   //ขนาดและรูปแบบฟ้อนใน card

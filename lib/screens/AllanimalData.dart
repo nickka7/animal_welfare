@@ -62,7 +62,7 @@ class _AnimalDataState extends State<AnimalData> {
             CircleAvatar(
               radius: 70,
               backgroundImage: NetworkImage(
-                'https://www.naewna.com/uploads/news/source/479084.jpg',
+                '${widget.getBio.image}',
               ),
             ),
             Padding(

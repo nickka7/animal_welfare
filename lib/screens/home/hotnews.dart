@@ -15,6 +15,12 @@ class HotnewsSlider extends StatefulWidget {
 }
 
 class _HotnewsSliderState extends State<HotnewsSlider> {
+
+    @override
+  void initState() {
+    getNews();
+    super.initState();
+  }
   final storage = new FlutterSecureStorage();
 
 Future<NewsData> getNews() async {

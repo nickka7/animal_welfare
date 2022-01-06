@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     MovieApi.getMovie();
-    // getProfile();
+     getNews();
     super.initState();
   }
 
@@ -160,18 +160,7 @@ class _HomePageState extends State<HomePage> {
       child: TextButton(
         onPressed: () {
           setState(() {
-         /*   print('dada ${widget.role}');
-            if (widget.role == 'caretaker') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CaretakerFirstPage()),
-              );
-            } else if (widget.role == 'breeder') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BreederFirstpage()),
-              );
-            }*/
+
             switch (widget.role) {
               case 'ceo':
                 {
@@ -189,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
                  break; 
-                  case 'veterinatian':
+                  case 'veterinarian':
                 {
                   Navigator.push(
                     context,
@@ -197,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
                  break; 
-              case 'reseacher':
+              case 'researcher':
                 {
                   Navigator.push(
                     context,

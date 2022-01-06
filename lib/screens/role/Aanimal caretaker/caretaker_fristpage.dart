@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/Schedule.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/weather.dart';
 import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,17 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
     return jsonData;
   }
 
+Future<AllAnimalsWithRole> getAnimal() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
+    print('$jsonData');
+    return jsonData;
+  } 
+
   Future<ScheduleData> getSchedule() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
@@ -56,7 +68,7 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'ผู้ดูแลสัตว์',
+            'งาน',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
@@ -160,79 +172,93 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
         ));
   }
 
-  Widget totalAnimal() {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 8),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text('สัตว์ภายใต้การดูแล',
-                  style: TextStyle(fontSize: 18, color: Colors.black)),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-            child: Card(
-              elevation: 5,
-              // ignore: deprecated_member_use
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchAnimalData()),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 75,
-                          width: 250,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+   Widget totalAnimal() {
+    return FutureBuilder<AllAnimalsWithRole>(
+      future: getAnimal(),
+      builder:
+          (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 8),
+                  child: Align(
+                      alignment: Alignment.topLeft,
+                      child: _heading('สัตว์ภายใต้การดูแล', 35.0, 190.0)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 10.0),
+                  child: Card(
+                    elevation: 5,
+                    // ignore: deprecated_member_use
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SearchAnimalData()),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text('จำนวนสัตว์ทั้งหมด : 15 ตัว',
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
+                              Container(
+                                height: 75,
+                                width: 250,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                     
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          height: 160,
+                                          width: double.infinity,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount: snapshot.data!.data!.length,
+                                            itemBuilder:
+                                                (BuildContext context, int index) {
+                                              return Text(
+                                                  '${snapshot.data!.data![index].animalName} ${snapshot.data!.data![index].amount} ตัว',
+                                                  style: TextStyle(fontSize: 16,color: Colors.black));
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                             
+                                    ],
+                                  ),
+                                ),
                               ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text('ช้าง 5 ตัว',
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text('เสือ 10 ตัว',
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
+                              Icon(
+                                Icons.navigate_next,
+                                color: Colors.black,
+                                size: 40,
                               )
                             ],
                           ),
-                        ),
-                        Icon(
-                          Icons.navigate_next,
-                          color: Colors.black,
-                          size: 40,
-                        )
-                      ],
-                    ),
-                  )),
+                        )),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
-
   Widget _workSchedule() {
     return FutureBuilder(
       future: getSchedule(),
@@ -246,8 +272,8 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
                   padding: const EdgeInsets.only(top: 15, left: 8),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text('ตารางงาน',
-                        style: TextStyle(fontSize: 18, color: Colors.black)),
+                    child: _heading('ตารางงาน',35.0, 120.0)
+                    ,
                   ),
                 ),
                 Padding(
@@ -283,6 +309,22 @@ class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
         }
         return Container();
       },
+    );
+  }
+  Widget _heading(var title, double h, double w) {
+    return Container(
+      height: h,
+      width: w,
+      decoration: BoxDecoration(
+          color: HexColor("#697825"),
+          borderRadius: BorderRadius.all(Radius.circular(45))),
+      child: Center(
+        child: Text(
+          title,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 }

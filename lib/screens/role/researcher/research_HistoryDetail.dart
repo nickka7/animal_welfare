@@ -129,7 +129,8 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
 
   Widget _buildfont(var title, var data) {
     return Container(
-      width: 360,
+      width: 370,
+
       child: Row(
         children: [
           Flexible(

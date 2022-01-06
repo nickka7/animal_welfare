@@ -1,16 +1,17 @@
 class AllAnimals {
   AllAnimals({
-      String? resultCode, 
-      String? status, 
-      dynamic errorMessage, 
-      Data? data, 
-      List<Bio>? bio,}){
+    String? resultCode,
+    String? status,
+    dynamic errorMessage,
+    Data? data,
+    List<Bio>? bio,
+  }) {
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
     _data = data;
     _bio = bio;
-}
+  }
 
   AllAnimals.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
@@ -49,24 +50,26 @@ class AllAnimals {
     }
     return map;
   }
-
 }
 
 class Bio {
   Bio({
-      String? animalID, 
-      String? animalName, 
-      String? typeName, 
-      String? gender, 
-      String? weight,
-      String? age,}){
+    String? animalID,
+    String? animalName,
+    String? typeName,
+    String? gender,
+    String? weight,
+    String? age,
+    String? image,
+  }) {
     _animalID = animalID;
     _animalName = animalName;
     _typeName = typeName;
     _gender = gender;
     _weight = weight;
     _age = age;
-}
+    _image = image;
+  }
 
   Bio.fromJson(dynamic json) {
     _animalID = json['animalID'];
@@ -75,6 +78,7 @@ class Bio {
     _gender = json['gender'];
     _weight = json['weight'];
     _age = json['age'];
+    _image = json['image'];
   }
   String? _animalID;
   String? _animalName;
@@ -82,6 +86,7 @@ class Bio {
   String? _gender;
   String? _weight;
   String? _age;
+  String? _image;
 
   String? get animalID => _animalID;
   String? get animalName => _animalName;
@@ -89,6 +94,7 @@ class Bio {
   String? get gender => _gender;
   String? get weight => _weight;
   String? get age => _age;
+  String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -98,16 +104,17 @@ class Bio {
     map['gender'] = _gender;
     map['weight'] = _weight;
     map['age'] = _age;
+    map['image'] = _image;
     return map;
   }
-
 }
 
 class Data {
   Data({
-      int? amount,}){
+    int? amount,
+  }) {
     _amount = amount;
-}
+  }
 
   Data.fromJson(dynamic json) {
     _amount = json['amount'];
@@ -121,5 +128,4 @@ class Data {
     map['amount'] = _amount;
     return map;
   }
-
 }

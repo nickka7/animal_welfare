@@ -22,6 +22,7 @@ class Logindata {
     );
 
     Map<String, dynamic> toJson() => {
+ 
         "message": message == null ? null : message,
         "token": token == null ? null : token,
         "user": user == null ? null : user.toJson(),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:animal_welfare/model/all_animals.dart.dart';
-import 'package:animal_welfare/screens/animalData.dart';
+import 'package:animal_welfare/screens/AllanimalData.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:flutter/material.dart';

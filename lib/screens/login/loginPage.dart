@@ -35,7 +35,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             _userIDController.text, _passwordController.text);
         if (response.statusCode == 200) {
           var jsonResponse = json.decode(response.body);
-          print(jsonResponse);
+          // print(jsonResponse);
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
             print(token);

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:animal_welfare/api/allAnimal.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/AllanimalData.dart';
+import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +12,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../haxColor.dart';
 
 class SearchAllAnimal extends StatefulWidget {
-  const SearchAllAnimal({ Key? key }) : super(key: key);
+  const SearchAllAnimal({Key? key}) : super(key: key);
 
   @override
   _SearchAllAnimalState createState() => _SearchAllAnimalState();
 }
 
 class _SearchAllAnimalState extends State<SearchAllAnimal> {
- @override
+  @override
   void initState() {
     getAnimal();
     super.initState();
@@ -40,67 +42,72 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('ข้อมูลสัตว์'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        title: Text('ข้อมูลสัตว์'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              HexColor('#697825'),
-              Colors.white,
-            ],
-          )),
-          child: ListView(
-            children: [
-              buildListview(),
-            ],
-          ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
+        child: ListView(
+          children: [
+            buildSearch(),
+            buildListview(),
+          ],
         ),
-      );
+      ),
+    );
   }
-  Widget buildListview(){
+
+  Widget buildListview() {
     return FutureBuilder<AllAnimals>(
       future: getAnimal(),
       builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-      itemCount: snapshot.data!.bio!.length,
-      shrinkWrap: true,
-      physics: ScrollPhysics(),
-      itemBuilder: (context, index) {
-        final animal = snapshot.data!.bio![index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Card(
-            elevation: 5,
-            child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  AnimalData(
-                      getBio: snapshot.data!.bio![index],)),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 250,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                           
-                 Align(
+              itemCount: snapshot.data!.bio!.length,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemBuilder: (context, index) {
+                final animal = snapshot.data!.bio![index];
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: Card(
+                    elevation: 5,
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AnimalData(
+                                      getBio: snapshot.data!.bio![index],
+                                    )),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: 70,
+                                width: 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         'Animal ID : ${animal.animalID}',
@@ -125,28 +132,43 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
                                             color: Colors.black, fontSize: 16),
                                       ),
                                     ),
-                                  
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Colors.black,
-                        size: 40,
-                      )
-                    ],
+                                  ],
+                                ),
+                              ),
+                              Icon(
+                                Icons.navigate_next,
+                                color: Colors.black,
+                                size: 40,
+                              )
+                            ],
+                          ),
+                        )),
                   ),
-                )),
-          ),
-        );
-      });
-          } else {
+                );
+              });
+        } else {
           return Center(
-            child: 
-            CircularProgressIndicator(),
+            child: CircularProgressIndicator(),
           );
         }
       },
     );
+  }
+
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+        onChanged: searchAnimal,
+      );
+
+  void searchAnimal(String value) async{
+    final animals = await AllAnimalsAPI.getAllAnimals(query);
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.books = books;
+    });
   }
 }

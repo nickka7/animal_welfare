@@ -25,11 +25,13 @@ class AllAnimalsAPI {
       print('3');
       print('test $bio');
       return bio.map((json) => Bio.fromJson(json)).where((animal) {
-        final animalTypeLower = animal.typeName!.toLowerCase();
+        final animalTypeLower = animal.typeName!;
         print(animalTypeLower);
-        final animalNameLower = animal.animalName!.toLowerCase();
+        final animalNameLower = animal.animalName!;
+        print(animalNameLower);
         final searchLower = query;
         print('4');
+        print(animalTypeLower.contains(searchLower));
         return animalTypeLower.contains(searchLower) ||
             animalNameLower.contains(searchLower);
       }).toList();

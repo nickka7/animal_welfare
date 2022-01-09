@@ -22,6 +22,7 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
   @override
   void initState() {
     getAnimal();
+    init();
     super.initState();
   }
 
@@ -32,9 +33,9 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
         headers: {"authorization": 'Bearer $token'});
-    print(response.body);
+    // print(response.body);
     var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-    print('$jsonData');
+    // print('$jsonData');
     return jsonData;
   }
 
@@ -155,20 +156,30 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     );
   }
 
+  List<Bio> bios = [];
+  String query = '';
+
+  Future init() async {
+    final bios = await AllAnimalsAPI.getAllAnimals(query);
+
+    setState(() => this.bios = bios);
+  }
+
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
         onChanged: searchAnimal,
       );
 
+
   void searchAnimal(String value) async{
-    final animals = await AllAnimalsAPI.getAllAnimals(query);
+    final bios = await AllAnimalsAPI.getAllAnimals(query);
 
     if (!mounted) return;
 
     setState(() {
       this.query = query;
-      this.books = books;
+      this.bios = bios;
     });
   }
 }

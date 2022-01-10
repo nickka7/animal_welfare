@@ -39,6 +39,15 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     return jsonData;
   }
 
+  List<Bio> bios = [];
+  String query = '';
+
+  Future init() async {
+    final bios = await AllAnimalsAPI.getAllAnimals(query);
+
+    setState(() => this.bios = bios);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,14 +165,7 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     );
   }
 
-  List<Bio> bios = [];
-  String query = '';
 
-  Future init() async {
-    final bios = await AllAnimalsAPI.getAllAnimals(query);
-
-    setState(() => this.bios = bios);
-  }
 
   Widget buildSearch() => SearchWidget(
         text: query,

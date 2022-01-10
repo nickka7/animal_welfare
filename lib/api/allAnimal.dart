@@ -31,7 +31,7 @@ class AllAnimalsAPI {
         print(animalNameLower);
         final searchLower = query;
         print('4');
-        print(animalTypeLower.contains(searchLower));
+        // print(animalTypeLower.contains(searchLower));
         return animalTypeLower.contains(searchLower) ||
             animalNameLower.contains(searchLower);
       }).toList();

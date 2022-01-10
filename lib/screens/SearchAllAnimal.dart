@@ -22,23 +22,23 @@ class SearchAllAnimal extends StatefulWidget {
 class _SearchAllAnimalState extends State<SearchAllAnimal> {
   @override
   void initState() {
-    getAnimal();
+    // getAnimal();
     init();
     super.initState();
   }
 
-  final storage = new FlutterSecureStorage();
+  // final storage = new FlutterSecureStorage();
 
-  Future<AllAnimals> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
-        headers: {"authorization": 'Bearer $token'});
-    // print(response.body);
-    var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-    // print('$jsonData');
-    return jsonData;
-  }
+  // Future<AllAnimals> getAnimal() async {
+  //   String? token = await storage.read(key: 'token');
+  //   String endPoint = Constant().endPoint;
+  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
+  //       headers: {"authorization": 'Bearer $token'});
+  //   // print(response.body);
+  //   var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
+  //   // print('$jsonData');
+  //   return jsonData;
+  // }
 
   List<Bio> bios = [];
   String query = '';
@@ -99,10 +99,10 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
   }
 
   Widget buildListview() {
-    return FutureBuilder<AllAnimals>(
-      future: getAnimal(),
-      builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
-        if (snapshot.hasData) {
+    // return FutureBuilder<AllAnimals>(
+    //   future: getAnimal(),
+    //   builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
+    //     if (snapshot.hasData) {
           return ListView.builder(
               itemCount: bios.length,
               shrinkWrap: true,
@@ -175,13 +175,13 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
                   ),
                 );
               });
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+    //     } else {
+    //       return Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //   },
+    // );
   }
 
   Widget buildSearch() => SearchWidget(

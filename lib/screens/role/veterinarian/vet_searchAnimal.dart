@@ -4,6 +4,7 @@ import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_AnimalData.dart';
+import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -15,23 +16,46 @@ class VetSearch extends StatefulWidget {
 }
 
 class _VetSearchState extends State<VetSearch > {
-  @override
+  
+    @override
   void initState() {
-    getAnimal();
     super.initState();
+    init();
   }
 
   final storage = new FlutterSecureStorage();
 
-  Future<AllAnimalsWithRole> getAnimal() async {
-    String? token = await storage.read(key: 'token');
+  static Future<List<Bio>> getAllAnimals(String query) async {
     String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
+    final url = Uri.parse(
+        '$endPoint/api/getAnimalWithRole');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final allanimals = json.decode(response.body);
+      final List bio = allanimals['bio'];
+
+      return bio.map((json) => Bio.fromJson(json)).where((animal) {
+        final animalTypeLower = animal.typeName!.toLowerCase();
+        final animalNameLower = animal.animalName!.toLowerCase();
+        final searchLower = query;
+
+        return animalTypeLower.contains(searchLower) ||
+            animalNameLower.contains(searchLower);
+      }).toList();
+    } else {
+      throw Exception();
+    }
+  }
+  
+
+List<Bio> animal = [];
+  String query = '';
+
+  Future init() async {
+    dynamic animal = await getAllAnimals(query);
+
+    setState(() => this.animal = animal );
   }
 
   @override
@@ -57,23 +81,37 @@ class _VetSearchState extends State<VetSearch > {
           )),
           child: ListView(
             children: [
+              buildSearch(),
               buildListview(),
             ],
           ),
         ),
       );
   }
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+        onChanged: searchAnimal,
+      );
+
+  Future searchAnimal(String query) async {
+    dynamic animal = await getAllAnimals(query);
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.animal = animal;
+    });
+  }
   Widget buildListview(){
-    return FutureBuilder<AllAnimalsWithRole>(
-      future: getAnimal(),
-      builder: (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
-        if (snapshot.hasData) {
+   
           return ListView.builder(
-      itemCount: snapshot.data!.bio!.length,
+      itemCount: animal.length,
       shrinkWrap: true,
       physics: ScrollPhysics(),
       itemBuilder: (context, index) {
-        final animal = snapshot.data!.bio![index];
+       // final animal = snapshot.data!.bio![index];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           child: Card(
@@ -83,8 +121,8 @@ class _VetSearchState extends State<VetSearch > {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) =>  VetAnimalData(
-                      animalID : animal.animalID,
-                      getanimal: snapshot.data!.bio![index],)),
+                      animalID : animal[index].animalID,
+                      getanimal: animal[index],)),
                   );
                 },
                 child: Padding(
@@ -102,7 +140,7 @@ class _VetSearchState extends State<VetSearch > {
                  Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        'Animal ID : ${animal.animalID}',
+                                        'Animal ID : ${animal[index].animalID}',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
                                       ),
@@ -110,7 +148,7 @@ class _VetSearchState extends State<VetSearch > {
                                     Align(
                                       alignment: Alignment.bottomLeft,
                                       child: Text(
-                                        'ชนิด : ${animal.typeName}',
+                                        'ชนิด : ${animal[index].typeName}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
@@ -119,7 +157,7 @@ class _VetSearchState extends State<VetSearch > {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'ชื่อสัตว์ : ${animal.animalName}',
+                                        'ชื่อสัตว์ : ${animal[index].animalName}',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
                                       ),
@@ -139,14 +177,9 @@ class _VetSearchState extends State<VetSearch > {
           ),
         );
       });
-          } else {
-          return Center(
-            child: 
-            CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+         
+      
+    
   }
   /*List<Book> books = [];
   String query = '';

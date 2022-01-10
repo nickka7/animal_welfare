@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:animal_welfare/api/allAnimal.dart';
@@ -41,12 +42,30 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
 
   List<Bio> bios = [];
   String query = '';
+  // Timer? debouncer;
 
   Future init() async {
     final bios = await AllAnimalsAPI.getAllAnimals(query);
 
     setState(() => this.bios = bios);
   }
+
+  // @override
+  // void dispose() {
+  //   debouncer?.cancel();
+  //   super.dispose();
+  // }
+  //
+  // void debounce(
+  //   VoidCallback callback, {
+  //   Duration duration = const Duration(milliseconds: 1000),
+  // }) {
+  //   if (debouncer != null) {
+  //     debouncer!.cancel();
+  //   }
+  //
+  //   debouncer = Timer(duration, callback);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +104,11 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
       builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-              itemCount: snapshot.data!.bio!.length,
+              itemCount: bios.length,
               shrinkWrap: true,
               physics: ScrollPhysics(),
               itemBuilder: (context, index) {
-                final animal = snapshot.data!.bio![index];
+                final animal = bios[index];
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -101,7 +120,7 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AnimalData(
-                                      getBio: snapshot.data!.bio![index],
+                                      getBio: bios[index],
                                     )),
                           );
                         },
@@ -165,23 +184,20 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     );
   }
 
-
-
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
         onChanged: searchAnimal,
       );
 
+  void searchAnimal(String query) async {
+        final bios = await AllAnimalsAPI.getAllAnimals(query);
 
-  void searchAnimal(String value) async{
-    final bios = await AllAnimalsAPI.getAllAnimals(query);
+        if (!mounted) return;
 
-    if (!mounted) return;
-
-    setState(() {
-      this.query = query;
-      this.bios = bios;
-    });
-  }
+        setState(() {
+          this.query = query;
+          this.bios = bios;
+        });
+      }
 }

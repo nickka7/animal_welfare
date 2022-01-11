@@ -43,7 +43,7 @@ class _VetSearchState extends State<VetSearch> {
   Future init() async {
     final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
 
-    setState(() => this.bios = bios.cast<Bio>());
+    setState(() => this.bios = bios);
   }
 
   @override
@@ -69,6 +69,7 @@ class _VetSearchState extends State<VetSearch> {
           )),
           child: ListView(
             children: [
+              buildSearch(),
               buildListview(),
             ],
           ),
@@ -174,7 +175,7 @@ class _VetSearchState extends State<VetSearch> {
 
     setState(() {
       this.query = query;
-      this.bios = bios.cast<Bio>();
+      this.bios = bios;
     });
   }
 

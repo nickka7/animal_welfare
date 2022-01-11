@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 import 'package:animal_welfare/api/bookApi.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
@@ -21,21 +22,30 @@ class SearchAnimalData extends StatefulWidget {
 class _SearchAnimalDataState extends State<SearchAnimalData> {
   @override
   void initState() {
-    getAnimal();
+    init();
     super.initState();
   }
 
-  final storage = new FlutterSecureStorage();
+  // final storage = new FlutterSecureStorage();
+  // Future<AllAnimalsWithRole> getAnimal() async {
+  //   String? token = await storage.read(key: 'token');
+  //   String endPoint = Constant().endPoint;
+  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
+  //       headers: {"authorization": 'Bearer $token'});
+  //   print(response.body);
+  //   var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
+  //   print('$jsonData');
+  //   return jsonData;
+  // }
 
-  Future<AllAnimalsWithRole> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
+  List<Bio> bios = [];
+  String query = '';
+  // Timer? debouncer;
+
+  Future init() async {
+    final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
+
+    setState(() => this.bios = bios);
   }
 
   @override
@@ -61,6 +71,7 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
         )),
         child: ListView(
           children: [
+            buildSearch(),
             buildListview(),
           ],
         ),
@@ -69,17 +80,17 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
   }
 
   Widget buildListview() {
-    return FutureBuilder<AllAnimalsWithRole>(
-      future: getAnimal(),
-      builder:
-          (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
-        if (snapshot.hasData) {
+    // return FutureBuilder<AllAnimalsWithRole>(
+    //   future: getAnimal(),
+    //   builder:
+    //       (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
+    //     if (snapshot.hasData) {
           return ListView.builder(
-              itemCount: snapshot.data!.bio!.length,
+              itemCount: bios.length,
               shrinkWrap: true,
               physics: ScrollPhysics(),
               itemBuilder: (context, index) {
-                final animal = snapshot.data!.bio![index];
+                final animal = bios[index];
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -91,8 +102,8 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AnimalData(
-                                  
-                                      getanimal: snapshot.data!.bio![index],
+
+                                      getanimal: bios[index],
                                     )),
                           );
                         },
@@ -147,12 +158,30 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                   ),
                 );
               });
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+    //     } else {
+    //       return Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //   },
+    // );
   }
+
+  Widget buildSearch() => SearchWidget(
+    text: query,
+    hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+    onChanged: searchAnimal,
+  );
+
+  void searchAnimal(String query) async {
+    final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.bios = bios;
+    });
+  }
+
 }

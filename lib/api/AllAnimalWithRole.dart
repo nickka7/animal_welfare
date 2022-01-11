@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:animal_welfare/model/all_animals.dart.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,7 +14,7 @@ class AllAnimalsWithRoleAPI {
     final url = Uri.parse('$endPoint/api/getAnimalWithRole');
 
     final response =
-    await http.get(url, headers: {"authorization": 'Bearer $token'});
+        await http.get(url, headers: {"authorization": 'Bearer $token'});
     print('1');
 
     if (response.statusCode == 200) {

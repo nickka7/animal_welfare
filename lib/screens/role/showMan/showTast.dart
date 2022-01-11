@@ -26,7 +26,8 @@ class _ShowTestState extends State<ShowTest> {
   }*/
 
   final storage = new FlutterSecureStorage();
-
+List<Appointment> appointments = <Appointment>[];
+  
   Future<List<Appointment>> getDataFromWeb() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
@@ -52,7 +53,7 @@ class _ShowTestState extends State<ShowTest> {
     return appointments;
   }
 
-  List<Appointment> appointments = <Appointment>[];
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +82,7 @@ class _ShowTestState extends State<ShowTest> {
                       view: CalendarView.month,
                       viewHeaderHeight: 50,
                       //  showDatePickerButton: true,
-                      initialSelectedDate: DateTime.now(),
+                     // initialSelectedDate: DateTime.now(),
                       showNavigationArrow: true,
                       monthViewSettings: MonthViewSettings(
                           //   showAgenda: true,

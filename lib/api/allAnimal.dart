@@ -15,15 +15,15 @@ class AllAnimalsAPI {
 
     final response =
         await http.get(url, headers: {"authorization": 'Bearer $token'});
-    print('1');
+    //print('1');
 
     if (response.statusCode == 200) {
-      print('2');
+    //  print('2');
 
       final allanimals = json.decode(response.body);
       final List bio = allanimals['bio'];
-      print('3');
-      print('test $bio');
+     // print('3');
+     // print('test $bio');
       return bio.map((json) => Bio.fromJson(json)).where((animal) {
         final animalTypeLower = animal.typeName!;
         print(animalTypeLower);

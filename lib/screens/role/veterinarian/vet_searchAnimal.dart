@@ -1,14 +1,11 @@
-import 'dart:convert';
 
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
-import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_AnimalData.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+
 class VetSearch extends StatefulWidget {
   const VetSearch({Key? key}) : super(key: key);
 
@@ -19,7 +16,6 @@ class VetSearch extends StatefulWidget {
 class _VetSearchState extends State<VetSearch> {
   @override
   void initState() {
-    // getAnimal();
     init();
     super.initState();
   }
@@ -27,7 +23,6 @@ class _VetSearchState extends State<VetSearch> {
 
   List<Bio> bios = [];
   String query = '';
-  // Timer? debouncer;
 
   Future init() async {
     final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);

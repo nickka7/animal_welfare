@@ -1,12 +1,10 @@
-import 'dart:convert';
-import 'package:animal_welfare/screens/role/researcher/research_HistoryDetail.dart';
-import 'package:http/http.dart' as http;
-import 'package:animal_welfare/constant.dart';
-import 'package:animal_welfare/haxColor.dart';
-// import 'package:animal_welfare/model/research_old.dart';
+import 'package:animal_welfare/api/research.dart';
 import 'package:animal_welfare/model/research.dart';
+import 'package:animal_welfare/screens/role/researcher/research_HistoryDetail.dart';
+import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/widget/search_widget.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 class ResearchHistory extends StatefulWidget {
@@ -17,18 +15,19 @@ class ResearchHistory extends StatefulWidget {
 }
 
 class _ResearchHistoryState extends State<ResearchHistory> {
-  final storage = new FlutterSecureStorage();
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
 
-  Future<Research> getResearch() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getResearchData'),
-        headers: {"authorization": 'Bearer $token'});
+  List<Data> research = [];
+  String query = '';
 
-    print(response.body);
-    var jsonData = Research.fromJson(jsonDecode(response.body));
-    print('here $jsonData');
-    return jsonData;
+  Future init() async {
+    final research = await ResearchApi.getResearch(query);
+
+    setState(() => this.research = research);
   }
 
   String formatDateFromString(String? date) {
@@ -60,22 +59,18 @@ class _ResearchHistoryState extends State<ResearchHistory> {
           )),
           child: ListView(
             children: [
-              // buildSearch(),
+               buildSearch(),
               buildListView(),
             ],
           ),
         ),
       );
 
-  Widget buildListView() => FutureBuilder<Research>(
-        future: getResearch(),
-        builder: (BuildContext context, AsyncSnapshot<Research> snapshot) {
-          if (snapshot.hasError) print('${snapshot.error}');
-          if (snapshot.hasData) {
-            return ListView.builder(
+  Widget buildListView() =>
+             ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: snapshot.data!.data!.length,
+              itemCount: research.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding:
@@ -88,7 +83,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ResearchHistoryDetail(
-                                    getResearch: snapshot.data!.data![index])),
+                                    getResearch: research[index] )),
                           );
                         },
                         child: Padding(
@@ -98,7 +93,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                             children: [
                               Container(
                                 height: 90,
-                                width:300,
+                                width: 300,
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -106,7 +101,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                                     Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        'รหัสงานวิจัย : ${snapshot.data!.data![index].researchID}',
+                                        'รหัสงานวิจัย : ${research[index].researchID}',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
                                       ),
@@ -114,7 +109,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                                     Align(
                                       alignment: Alignment.bottomLeft,
                                       child: Text(
-                                        'ชื่องานวิจัย : ${snapshot.data!.data![index].researchName}',
+                                        'ชื่องานวิจัย : ${research[index].researchName}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
@@ -123,7 +118,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'ชนิด : ${snapshot.data!.data![index].typeName}',
+                                        'ชนิด : ${research[index].typeName}',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
                                       ),
@@ -131,7 +126,7 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                                     Align(
                                       alignment: Alignment.bottomLeft,
                                       child: Text(
-                                        'อัพเดตล่าสุด  ${formatDateFromString(snapshot.data!.data![index].date)}',
+                                        'อัพเดตล่าสุด  ${formatDateFromString(research[index].date)}',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16),
                                       ),
@@ -151,11 +146,22 @@ class _ResearchHistoryState extends State<ResearchHistory> {
                 );
               },
             );
-          } else {
-            return new Center(
-              child: new CircularProgressIndicator(),
-            );
-          }
-        },
-      );
+         
+    Widget buildSearch() => SearchWidget(
+    text: query,
+    hintText: "รหัสการวิจัย,ชื่อการวิจัย,ชนิดของสัตว์",
+    onChanged: searchResearch,
+  );
+
+  void searchResearch(String query) async {
+    final research = await ResearchApi.getResearch(query);
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.research = research;
+    });
+  }
 }
+ 

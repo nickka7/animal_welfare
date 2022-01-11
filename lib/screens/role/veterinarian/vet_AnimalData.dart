@@ -51,7 +51,6 @@ class _VetAnimalDataState extends State<VetAnimalData> {
     return jsonData;
   }
 
-
   String formatDateFromString(String date) {
     var parseDate = DateTime.parse(date);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');

@@ -24,17 +24,6 @@ class _VetSearchState extends State<VetSearch> {
     super.initState();
   }
 
-  // final storage = new FlutterSecureStorage();
-  // Future<AllAnimalsWithRole> getAnimal() async {
-  //   String? token = await storage.read(key: 'token');
-  //   String endPoint = Constant().endPoint;
-  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
-  //       headers: {"authorization": 'Bearer $token'});
-  //   print(response.body);
-  //   var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
-  //   print('$jsonData');
-  //   return jsonData;
-  // }
 
   List<Bio> bios = [];
   String query = '';
@@ -77,10 +66,6 @@ class _VetSearchState extends State<VetSearch> {
       );
   }
   Widget buildListview(){
-    // return FutureBuilder<AllAnimalsWithRole>(
-    //   future: getAnimal(),
-    //   builder: (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
-    //     if (snapshot.hasData) {
           return ListView.builder(
       itemCount: bios.length,
       shrinkWrap: true,
@@ -152,14 +137,6 @@ class _VetSearchState extends State<VetSearch> {
           ),
         );
       });
-    //       } else {
-    //       return Center(
-    //         child:
-    //         CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   Widget buildSearch() => SearchWidget(

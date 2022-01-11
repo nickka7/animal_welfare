@@ -115,14 +115,7 @@ DateTime date = DateTime.now();
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 25),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                totalAnimal(),
-                                _workSchedule()
-                              ],
-                            ),
-                          ),
+                          child: totalAnimal(),
                         ),
                       ),
                 )
@@ -214,57 +207,6 @@ DateTime date = DateTime.now();
             child: new CircularProgressIndicator(),
           );
         }
-      },
-    );
-  }
-
-  Widget _workSchedule() {
-    return FutureBuilder(
-      future: getSchedule(),
-      builder: (BuildContext context, AsyncSnapshot<ScheduleData> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          var responseApi = snapshot.data;
-          return Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 8),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: _heading('ตารางงาน', 35.0, 120.0)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 10.0),
-                  child: Container(
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: HexColor('#697825'), width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: ListView.builder(
-                          itemCount: responseApi!.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Text(
-                                '${formatDateFromString(responseApi.data![index].startDate.toString())} ${responseApi.data![index].scheduleName} ',
-                                style: TextStyle(fontSize: 16));
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        }
-        return Container();
       },
     );
   }

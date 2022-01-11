@@ -10,6 +10,7 @@ import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_fristp
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
 import 'package:animal_welfare/screens/role/showMan/show.dart';
+import 'package:animal_welfare/screens/role/showMan/showTast.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
@@ -205,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ShowScreen()),
+                    MaterialPageRoute(builder: (context) => ShowTest()),
                   );
                 }
                  break; 

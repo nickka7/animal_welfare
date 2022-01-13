@@ -1,20 +1,17 @@
 import 'dart:convert';
 
-import 'package:animal_welfare/api/movieApi.dart';
 import 'package:animal_welfare/model/news.dart';
-import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_fristpage.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
-import 'package:animal_welfare/screens/role/showMan/show.dart';
+import 'package:animal_welfare/screens/role/showMan/showTast.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_welfare/haxColor.dart';
-import '../../api/movieApi.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../../constant.dart';
@@ -33,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    MovieApi.getMovie();
      getNews();
     super.initState();
   }
@@ -205,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ShowScreen()),
+                    MaterialPageRoute(builder: (context) => ShowTest()),
                   );
                 }
                  break; 

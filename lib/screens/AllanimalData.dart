@@ -109,6 +109,7 @@ class _AnimalDataState extends State<AnimalData> {
               _buildfont('เพศ : ', '${widget.getBio.gender}'),
               _buildfont('อายุ : ', '${widget.getBio.age} ปี'),
               _buildfont('น้ำหนัก : ', '${widget.getBio.weight} กิโลกรัม'),
+               _buildfont('กรง : ', '${widget.getBio.cageID} ')
             ],
           ),
         ),

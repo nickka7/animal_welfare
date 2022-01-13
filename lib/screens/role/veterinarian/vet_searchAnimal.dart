@@ -1,14 +1,11 @@
-import 'dart:convert';
 
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
-import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_AnimalData.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+
 class VetSearch extends StatefulWidget {
   const VetSearch({Key? key}) : super(key: key);
 
@@ -19,26 +16,13 @@ class VetSearch extends StatefulWidget {
 class _VetSearchState extends State<VetSearch> {
   @override
   void initState() {
-    // getAnimal();
     init();
     super.initState();
   }
 
-  // final storage = new FlutterSecureStorage();
-  // Future<AllAnimalsWithRole> getAnimal() async {
-  //   String? token = await storage.read(key: 'token');
-  //   String endPoint = Constant().endPoint;
-  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
-  //       headers: {"authorization": 'Bearer $token'});
-  //   print(response.body);
-  //   var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
-  //   print('$jsonData');
-  //   return jsonData;
-  // }
 
   List<Bio> bios = [];
   String query = '';
-  // Timer? debouncer;
 
   Future init() async {
     final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
@@ -77,10 +61,6 @@ class _VetSearchState extends State<VetSearch> {
       );
   }
   Widget buildListview(){
-    // return FutureBuilder<AllAnimalsWithRole>(
-    //   future: getAnimal(),
-    //   builder: (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
-    //     if (snapshot.hasData) {
           return ListView.builder(
       itemCount: bios.length,
       shrinkWrap: true,
@@ -152,14 +132,6 @@ class _VetSearchState extends State<VetSearch> {
           ),
         );
       });
-    //       } else {
-    //       return Center(
-    //         child:
-    //         CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   Widget buildSearch() => SearchWidget(

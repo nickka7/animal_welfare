@@ -51,7 +51,6 @@ class _VetAnimalDataState extends State<VetAnimalData> {
     return jsonData;
   }
 
-
   String formatDateFromString(String date) {
     var parseDate = DateTime.parse(date);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -167,6 +166,7 @@ class _VetAnimalDataState extends State<VetAnimalData> {
               _buildfont('เพศ : ', '${widget.getanimal.gender}'),
               _buildfont('อายุ : ', '${widget.getanimal.age} ปี'),
               _buildfont('น้ำหนัก : ', '${widget.getanimal.weight} กิโลกรัม'),
+              _buildfont('กรง : ', '${widget.getanimal.cageID} ')
             ],
           ),
         ),

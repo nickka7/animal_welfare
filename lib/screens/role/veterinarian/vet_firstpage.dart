@@ -19,24 +19,6 @@ class VetFirstpage extends StatefulWidget {
 class _VetFirstpageState extends State<VetFirstpage> {
   final storage = new FlutterSecureStorage();
 
-  Future<ScheduleData> getSchedule() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getSchedule'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = ScheduleData.fromJson(jsonDecode(response.body));
-    print(jsonData);
-    return jsonData;
-  }
-
-  /* @override
-  void initState() {
-    getAnimal();
-    getSchedule();
-    super.initState();
-  }*/
-
   Future<AllAnimalsWithRole> getAnimal() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
@@ -115,14 +97,7 @@ DateTime date = DateTime.now();
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 25),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                totalAnimal(),
-                                _workSchedule()
-                              ],
-                            ),
-                          ),
+                          child: totalAnimal(),
                         ),
                       ),
                 )
@@ -137,76 +112,78 @@ DateTime date = DateTime.now();
           (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
         if (snapshot.hasData) {
           return Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 8),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: _heading('สัตว์ภายใต้การดูแล', 35.0, 190.0)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 10.0),
-                  child: Card(
-                    elevation: 5,
-                    // ignore: deprecated_member_use
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const VetSearch()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 75,
-                                width: 250,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                     
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Container(
-                                          height: 160,
-                                          width: double.infinity,
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: true,
-                                            itemCount: snapshot.data!.data!.length,
-                                            itemBuilder:
-                                                (BuildContext context, int index) {
-                                              return Text(
-                                                  '${snapshot.data!.data![index].animalName} ${snapshot.data!.data![index].amount} ตัว',
-                                                  style: TextStyle(fontSize: 16,color: Colors.black));
-                                            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, left: 8),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: _heading('สัตว์ภายใต้การดูแล', 35.0, 190.0)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 10.0),
+                    child: Card(
+                      elevation: 5,
+                      // ignore: deprecated_member_use
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const VetSearch()),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 75,
+                                  width: 250,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                       
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Container(
+                                            height: 160,
+                                            width: double.infinity,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                              itemCount: snapshot.data!.data!.length,
+                                              itemBuilder:
+                                                  (BuildContext context, int index) {
+                                                return Text(
+                                                    '${snapshot.data!.data![index].animalName} ${snapshot.data!.data![index].amount} ตัว',
+                                                    style: TextStyle(fontSize: 16,color: Colors.black));
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                             
-                                    ],
+                               
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
-                            ],
-                          ),
-                        )),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.black,
+                                  size: 40,
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         } else {
@@ -214,57 +191,6 @@ DateTime date = DateTime.now();
             child: new CircularProgressIndicator(),
           );
         }
-      },
-    );
-  }
-
-  Widget _workSchedule() {
-    return FutureBuilder(
-      future: getSchedule(),
-      builder: (BuildContext context, AsyncSnapshot<ScheduleData> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          var responseApi = snapshot.data;
-          return Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 8),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: _heading('ตารางงาน', 35.0, 120.0)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 10.0),
-                  child: Container(
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: HexColor('#697825'), width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: ListView.builder(
-                          itemCount: responseApi!.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Text(
-                                '${formatDateFromString(responseApi.data![index].startDate.toString())} ${responseApi.data![index].scheduleName} ',
-                                style: TextStyle(fontSize: 16));
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        }
-        return Container();
       },
     );
   }

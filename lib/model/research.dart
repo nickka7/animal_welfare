@@ -3,8 +3,8 @@
 /// errorMessage : null
 /// data : [{"researchID":"R001","researchName":"การวิจัยการกินอาหารตอนกลางคืนของช้าง","typeName":"ช้าง","researchDetail":"วิจัยการกินอาหารตอนกลางคืนของช้าง ปรากฎว่าท้อเงสีย","date":"2021-11-04T17:00:00.000Z"},{"researchID":"R002","researchName":"การวิจัยการนอนของเสือ","typeName":"เสือ","researchDetail":"วิจัยการนอนของเสือช่วงกลางวัน ปรากฎว่านอนหลับไม่เพียงพอ","date":"2021-11-08T17:00:00.000Z"},{"researchID":"R003","researchName":"การวิจัยการนอนของม้าลาย","typeName":"ม้าลาย","researchDetail":"วิจัยการนอนของม้าลาย พบว่าการนอนหลับของม้าลายนั้นใช้เวลานานกว่าจะหลับ","date":"2021-12-01T17:00:00.000Z"},{"researchID":"R004","researchName":"การวิจัยการนอนของยีราฟ","typeName":"ยีราฟ","researchDetail":"วิจัยการนอนของยีราฟ พบว่าไม่สามารถนอนร่วมกับยีราฟตัวอื่นได้เพราะคอมันยาวเกินไป","date":"2021-12-12T17:00:00.000Z"}]
 
-class Research {
-  Research({
+class ResearchData {
+  ResearchData({
       String? resultCode, 
       String? status, 
       dynamic errorMessage, 
@@ -15,7 +15,7 @@ class Research {
     _data = data;
 }
 
-  Research.fromJson(dynamic json) {
+  ResearchData.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
     _status = json['status'];
     _errorMessage = json['errorMessage'];

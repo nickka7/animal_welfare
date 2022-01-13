@@ -79,6 +79,7 @@ class Bio {
     String? weight,
     String? age,
     String? image,
+    String? cageID,
   }) {
     _animalID = animalID;
     _animalName = animalName;
@@ -87,6 +88,7 @@ class Bio {
     _weight = weight;
     _age = age;
     _image = image;
+    _cageID = cageID;
   }
 
   Bio.fromJson(dynamic json) {
@@ -97,6 +99,7 @@ class Bio {
     _weight = json['weight'];
     _age = json['age'];
     _image = json['image'];
+    _cageID = json['cageID'];
   }
   String? _animalID;
   String? _animalName;
@@ -105,6 +108,7 @@ class Bio {
   String? _weight;
   String? _age;
   String? _image;
+  String? _cageID;
 
   String? get animalID => _animalID;
   String? get animalName => _animalName;
@@ -113,6 +117,7 @@ class Bio {
   String? get weight => _weight;
   String? get age => _age;
   String? get image => _image;
+  String? get cageID => _cageID;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -123,6 +128,7 @@ class Bio {
     map['weight'] = _weight;
     map['age'] = _age;
     map['image'] = _image;
+    map['cageID'] = _cageID;
     return map;
   }
 }

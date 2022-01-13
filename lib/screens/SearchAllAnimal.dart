@@ -5,10 +5,7 @@ import 'package:animal_welfare/api/allAnimal.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/AllanimalData.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
-import 'package:http/http.dart' as http;
-import 'package:animal_welfare/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../haxColor.dart';
 
@@ -26,19 +23,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     init();
     super.initState();
   }
-
-  // final storage = new FlutterSecureStorage();
-
-  // Future<AllAnimals> getAnimal() async {
-  //   String? token = await storage.read(key: 'token');
-  //   String endPoint = Constant().endPoint;
-  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
-  //       headers: {"authorization": 'Bearer $token'});
-  //   // print(response.body);
-  //   var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-  //   // print('$jsonData');
-  //   return jsonData;
-  // }
 
   List<Bio> bios = [];
   String query = '';

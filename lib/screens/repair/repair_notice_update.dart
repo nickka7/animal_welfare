@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:animal_welfare/screens/repair/repair_history.dart';
-import 'package:animal_welfare/screens/repair/successful.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

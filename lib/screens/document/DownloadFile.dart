@@ -20,7 +20,7 @@ class _DownloadFileState extends State<DownloadFile> {
           centerTitle: true,
         ),
         body: ListView.builder(
-          itemCount: 10,
+          itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
             return Card(
               child: ListTile(
@@ -30,7 +30,7 @@ class _DownloadFileState extends State<DownloadFile> {
                   // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
                   //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
                   // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
-                  url: 'http://www.pdf995.com/samples/pdf.pdf',
+                  url: "http://192.168.1.100:3000/Test.docx",
                   //  '',
                   // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
                   //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',

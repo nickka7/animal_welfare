@@ -1,5 +1,6 @@
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/login/loginPage.dart';
+import 'package:animal_welfare/screens/role/admin/admin_uploadDocument.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         const Locale('th'),
       ],
       locale: const Locale('th'),
-      home: MyLoginHome(),
+      home: UploadDocument(),
     );
   }
 }

@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:animal_welfare/screens/repair/successful.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 
 import '../../../constant.dart';
 import '../../../haxColor.dart';
-
 
 class UploadDocument extends StatefulWidget {
   const UploadDocument({Key? key}) : super(key: key);
@@ -33,7 +34,8 @@ class _UploadDocumentState extends State<UploadDocument> {
     Map<String, String> headers = {
       "authorization": "Bearer $token",
     };
-    request.headers.addAll(headers);//['authorization'] = data['Bearer $token'];
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
     var res = await request.send();
     print('${res.reasonPhrase}test');
     return res.reasonPhrase;
@@ -61,26 +63,6 @@ class _UploadDocumentState extends State<UploadDocument> {
               key: _formKey,
               child: Column(
                 children: [
-                  // Align(
-                  //     alignment: Alignment.topLeft,
-                  //     child: Text(
-                  //       'ปัญหาที่ชำรุด',
-                  //       style: TextStyle(fontSize: 18),
-                  //     )),
-                  // TextFormField(
-                  //   controller: repairController,
-                  //   validator: (String? input) {
-                  //     if (input!.isEmpty) {
-                  //       return "กรุณากรอกปัญหาที่ชำรุด";
-                  //     }
-                  //     return null;
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Colors.green.shade800, width: 2))),
-                  // ),
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -104,26 +86,49 @@ class _UploadDocumentState extends State<UploadDocument> {
                   SizedBox(
                     height: 30,
                   ),
-                  Container(
-                      height: 200,
-                      width: double.infinity,
-                      child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            shape: StadiumBorder(),
-                            side: BorderSide(
-                                width: 2, color: Colors.green.shade800),
-                          ),
-                          // color: Colors.green.shade800,
-                          child: Center(
-                            child: file == null
-                                ? Icon(
-                              Icons.camera_alt_outlined,
-                              size: 40,
-                            )
-                                : Image.file(file!),
-                          ),
-                          onPressed: () => {})),
-                  SizedBox(height: 70),
+                  ElevatedButton(
+                    onPressed: () async {
+                      // FilePickerResult? result = await FilePicker.platform
+                      //     .pickFiles();
+                      //
+                      // if (result != null) {
+                      //   File file = File(result.files.single.path!);
+                      //   // open(file);
+                      // } else {
+                      //   print('error');
+                      // }
+                      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+                      if (result != null) {
+                        List<File> files = result.paths.map((path) => File(path!)).toList();
+                        openFiles(files);
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    child: Text('Upload File'),
+                  ),
+                  // Container(
+                  //   height: 200,
+                  //   width: double.infinity,
+                  //   child: OutlinedButton(
+                  //       style: OutlinedButton.styleFrom(
+                  //         shape: StadiumBorder(),
+                  //         side: BorderSide(
+                  //             width: 2, color: Colors.green.shade800),
+                  //       ),
+                  //       // color: Colors.green.shade800,
+                  //       child: Center(
+                  //         child: file == null
+                  //             ? Icon(
+                  //                 Icons.camera_alt_outlined,
+                  //                 size: 40,
+                  //               )
+                  //             : Image.file(file!),
+                  //       ),
+                  //       onPressed: () => {}),
+                  // ),
+                  SizedBox(height: 40),
                   Container(
                     height: 50,
                     width: double.infinity,
@@ -173,7 +178,8 @@ class _UploadDocumentState extends State<UploadDocument> {
                                           print('before upload image');
                                           uploadImageAndData(
                                               file!.path,
-                                              '${Constant().endPoint}/api/postMaintenance',
+                                              '${Constant()
+                                                  .endPoint}/api/postMaintenance',
                                               data);
                                           Navigator.push(
                                             context,
@@ -181,7 +187,8 @@ class _UploadDocumentState extends State<UploadDocument> {
                                                 builder: (context) =>
                                                 const RepairSuccessful()),
                                           );
-                                        })                                  ],
+                                        })
+                                  ],
                                 );
                               });
                         }
@@ -202,4 +209,16 @@ class _UploadDocumentState extends State<UploadDocument> {
       ),
     );
   }
+
+  // void open(File file) {
+  //   OpenFile.open(file.path);
+  // }
+
+  Widget openFiles(List<File> files) =>
+      GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
+        itemCount: files.length,
+        itemBuilder: (context, index) {
+          return Text('data');
+        },);
 }

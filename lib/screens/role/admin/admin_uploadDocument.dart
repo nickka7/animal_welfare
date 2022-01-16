@@ -20,6 +20,7 @@ class UploadDocument extends StatefulWidget {
 
 class _UploadDocumentState extends State<UploadDocument> {
   List<PlatformFile>? file; //dart.io
+  FilePickerResult? result;
   final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
   TextEditingController locationController = TextEditingController();
@@ -86,47 +87,48 @@ class _UploadDocumentState extends State<UploadDocument> {
                   SizedBox(
                     height: 30,
                   ),
-                    file == null ?
-                  ElevatedButton(
-                    onPressed: () async {
-                      // FilePickerResult? result = await FilePicker.platform
-                      //     .pickFiles();
-                      //
-                      // if (result != null) {
-                      //   File file = File(result.files.single.path!);
-                      //   // open(file);
-                      // } else {
-                      //   print('error');
-                      // }
+                  result == null
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            // FilePickerResult? result = await FilePicker.platform
+                            //     .pickFiles();
+                            //
+                            // if (result != null) {
+                            //   File file = File(result.files.single.path!);
+                            //   // open(file);
+                            // } else {
+                            //   print('error');
+                            // }
 
-                      FilePickerResult? result = await FilePicker.platform
-                          .pickFiles(allowMultiple: true);
+                            result = await FilePicker.platform
+                                .pickFiles(allowMultiple: true);
+                            setState(() {});
+                            // print(result!.files);
+                            if (result != null) {
+                              // var a = result.files.first;
+                              // print('testttttdeeeeett $a');
 
-                      // print(result!.files);
-                      if (result != null) {
-                        // var a = result.files.first;
-                        // print('testttttdeeeeett $a');
+                              List<File> files = result!.paths
+                                  .map((path) => File(path!))
+                                  .toList();
 
-                        List<File> files =
-                            result.paths.map((path) => File(path!)).toList();
+                              // print(files);
+                              // print('Name: ${result.names}');
+                              // print('Path: ${result.paths}');
+                              // print('Name: ${result.names}');
+                              // print('Name: ${result.names}');
+                              print(result!.files);
 
-                        // print(files);
-                        // print('Name: ${result.names}');
-                        // print('Path: ${result.paths}');
-                        // print('Name: ${result.names}');
-                        // print('Name: ${result.names}');
-                        print(result.files);
-
-
-                        // openFiles(result.files);
-                      } else {
-                        // User canceled the picker
-                      }
-                    },
-                    child: Text('Upload File'),
-                  )
-                  : openFiles(file!), //TODO:
-                    SizedBox(height: 40),
+                              // openFiles(result.files);
+                            } else {
+                              // User canceled the picker
+                            }
+                          },
+                          child: Text('Upload File'),
+                        )
+                      : openFiles(result!.files),
+                  //TODO:
+                  SizedBox(height: 40),
                   // Container(
                   //   height: 50,
                   //   width: double.infinity,

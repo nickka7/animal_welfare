@@ -1,15 +1,9 @@
-import 'dart:io';
-
-import 'package:animal_welfare/screens/repair/successful.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
-
-import '../../../constant.dart';
-import '../../../haxColor.dart';
 
 class UploadDocument extends StatefulWidget {
   const UploadDocument({Key? key}) : super(key: key);
@@ -19,28 +13,62 @@ class UploadDocument extends StatefulWidget {
 }
 
 class _UploadDocumentState extends State<UploadDocument> {
-  List<PlatformFile>? file; //dart.io
+  Map<String, bool> values = {
+    'ceo': false,
+    'caretaker': false,
+    'veterinarian': false,
+    'researcher': false,
+    'breeder': false,
+    'showman': false,
+  };
+
+  List selected = [];
+
+  // List<PlatformFile>? file;
   FilePickerResult? result;
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController repairController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+  late List<String?> filePath;
+
+  List getItems() {
+    values.forEach((key, value) {
+      if (value == true) {
+        selected.add(key);
+      }
+    });
+    // Printing all selected items on Terminal screen.
+    print(selected);
+    // Here you will get all your selected Checkbox items.
+
+    // Clear array after use.
+    selected.clear();
+    // print(selected);
+
+    return selected;
+  }
+
+  // final _formKey = GlobalKey<FormState>();
+  // TextEditingController repairController = TextEditingController();
+  // TextEditingController locationController = TextEditingController();
   final storage = new FlutterSecureStorage();
 
-  // Future<String?> uploadImageAndData(filepath, url, data) async {
-  //   String? token = await storage.read(key: 'token');
-  //   var request = http.MultipartRequest('POST', Uri.parse(url));
-  //   request.files.add(await http.MultipartFile.fromPath('image', filepath));
-  //   request.fields['requestMessage'] = data['maintenanceDetail'];
-  //   request.fields['location'] = data['location'];
-  //   Map<String, String> headers = {
-  //     "authorization": "Bearer $token",
-  //   };
-  //   request.headers
-  //       .addAll(headers); //['authorization'] = data['Bearer $token'];
-  //   var res = await request.send();
-  //   print('${res.reasonPhrase}test');
-  //   return res.reasonPhrase;
-  // }
+  Future<String?> uploadDocAndRole(filepath, url, data) async {
+    String? token = await storage.read(key: 'token');
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    request.fields['requestMessage'] = data['maintenanceDetail'];
+    request.fields['location'] = data['location'];
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+    };
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
+    //TODO: Logic here
+    for(int i = 0; i < filePath.length; i++){
+
+    }
+    var res = await request.send();
+    print('${res.reasonPhrase}test');
+    return res.reasonPhrase;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,185 +85,95 @@ class _UploadDocumentState extends State<UploadDocument> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'ชื่อเอกสาร',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  TextFormField(
-                    controller: locationController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกชื่อเอกสาร";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  result == null
-                      ? ElevatedButton(
-                          onPressed: () async {
-                            // FilePickerResult? result = await FilePicker.platform
-                            //     .pickFiles();
-                            //
-                            // if (result != null) {
-                            //   File file = File(result.files.single.path!);
-                            //   // open(file);
-                            // } else {
-                            //   print('error');
-                            // }
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            result == null
+                ? Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        result = await FilePicker.platform
+                            .pickFiles(allowMultiple: true);
+                        // print(result!.files);
+                        if (result != null) {
+                          // var a = result.files.first;
+                          // print('testttttdeeeeett $a');
 
-                            result = await FilePicker.platform
-                                .pickFiles(allowMultiple: true);
-                            setState(() {});
-                            // print(result!.files);
-                            if (result != null) {
-                              // var a = result.files.first;
-                              // print('testttttdeeeeett $a');
+                          // List<File> files = result!.paths
+                          //     .map((path) => File(path!))
+                          //     .toList();
 
-                              List<File> files = result!.paths
-                                  .map((path) => File(path!))
-                                  .toList();
+                          // print(files);
+                          // print('Name: ${result.names}');
+                          // print('Path: ${result.paths}');
+                          // print('Name: ${result.names}');
+                          // print('Name: ${result.names}');
+                          print(result!.files);
 
-                              // print(files);
-                              // print('Name: ${result.names}');
-                              // print('Path: ${result.paths}');
-                              // print('Name: ${result.names}');
-                              // print('Name: ${result.names}');
-                              print(result!.files);
-
-                              // openFiles(result.files);
-                            } else {
-                              // User canceled the picker
-                            }
-                          },
-                          child: Text('Upload File'),
-                        )
-                      : openFiles(result!.files),
-                  //TODO:
-                  SizedBox(height: 40),
-                  // Container(
-                  //   height: 50,
-                  //   width: double.infinity,
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.all(Radius.circular(5)),
-                  //       boxShadow: [
-                  //         BoxShadow(color: Colors.black45, blurRadius: 5)
-                  //       ]),
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       bool pass = _formKey.currentState!.validate();
-                  //       if (pass) {
-                  //         Map<String, String> data = {
-                  //           "maintenanceDetail": repairController.text,
-                  //           "location": locationController.text,
-                  //         };
-                  //         showDialog(
-                  //             context: context,
-                  //             builder: (context) {
-                  //               return CupertinoAlertDialog(
-                  //                 title: CircleAvatar(
-                  //                   radius: 30,
-                  //                   backgroundColor: Colors.lightGreen[400],
-                  //                   child: Icon(
-                  //                     Icons.check,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //                 content: Text(
-                  //                   'ยืนยันการแจ้งซ่อม',
-                  //                   style: TextStyle(fontSize: 16),
-                  //                 ),
-                  //                 actions: [
-                  //                   CupertinoDialogAction(
-                  //                     child: Text(
-                  //                       'ยกเลิก',
-                  //                       style: TextStyle(color: Colors.red),
-                  //                     ),
-                  //                     onPressed: () => Navigator.pop(context),
-                  //                   ),
-                  //                   CupertinoDialogAction(
-                  //                       child: Text(
-                  //                         'ยืนยัน',
-                  //                         style: TextStyle(color: Colors.green),
-                  //                       ),
-                  //                       onPressed: () {
-                  //                         print('before upload image');
-                  //                         // uploadImageAndData(
-                  //                         //     file!.path,
-                  //                         //     '${Constant().endPoint}/api/postMaintenance',
-                  //                         //     data);
-                  //                         Navigator.push(
-                  //                           context,
-                  //                           MaterialPageRoute(
-                  //                               builder: (context) =>
-                  //                                   const RepairSuccessful()),
-                  //                         );
-                  //                       })
-                  //                 ],
-                  //               );
-                  //             });
-                  //       }
-                  //     },
-                  //     child: Text('เสร็จสิ้น',
-                  //         style: TextStyle(color: Colors.white, fontSize: 18)),
-                  //     style: ElevatedButton.styleFrom(
-                  //         shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(25.0)),
-                  //         primary: HexColor('#697825')),
-                  //   ),
-                  // ),
-                ],
-              ),
+                          // openFiles(result!.files);
+                          setState(() {
+                            filePath = result!.paths;
+                            print(filePath);
+                          });
+                        } else {
+                          // User canceled the picker
+                        }
+                      },
+                      child: Text('Upload File'),
+                    ),
+                  )
+                : openFiles(result!.files),
+            SizedBox(height: 15),
+            ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              children: values.keys.map((String key) {
+                return new CheckboxListTile(
+                  title: new Text(key),
+                  value: values[key],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      values[key] = value!;
+                    });
+                  },
+                );
+              }).toList(),
             ),
-          ),
+            Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      getItems();
+                    },
+                    child: Text('อัปโหลด')))
+          ],
         ),
       ),
     );
   }
 
-  // void open(File file) {
-  //   OpenFile.open(file.path);
-  // }
-
-  Widget openFiles(List<PlatformFile> files) => Center(
-        child: GridView.builder(
-          padding: EdgeInsets.all(16),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
-          itemCount: files.length,
-          itemBuilder: (context, index) {
-            final file = files[index];
-            // var color = files[index].extension;
-            return buildFiles(file, openFile);
-          },
-        ),
+  Widget openFiles(List<PlatformFile> files) => GridView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        padding: EdgeInsets.all(16),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
+        itemCount: files.length,
+        itemBuilder: (context, index) {
+          final file = files[index];
+          // var color = files[index].extension;
+          return buildFiles(file);
+        },
       );
 
-  Widget buildFiles(PlatformFile file, openFile) {
+  Widget buildFiles(PlatformFile file) {
     final kb = file.size / 1024;
     final mb = kb / 1024;
     final fileSize =
         mb >= 1 ? '${mb.toStringAsFixed(2)} MB' : '${mb.toStringAsFixed(2)} KB';
     final extension = file.extension ?? 'none';
-    // final color = getColor(extension);
+    final color = getColor(extension);
     return InkWell(
-      onTap: openFile,
+      onTap: () => openFile(file),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -243,7 +181,8 @@ class _UploadDocumentState extends State<UploadDocument> {
             child: Container(
               alignment: Alignment.center,
               width: double.infinity,
-              decoration: BoxDecoration(color: Colors.amberAccent),
+              decoration: BoxDecoration(
+                  color: color, borderRadius: BorderRadius.circular(25)),
               child: Text(
                 '.$extension',
                 style: TextStyle(
@@ -269,6 +208,81 @@ class _UploadDocumentState extends State<UploadDocument> {
       ),
     );
   }
+
+  MaterialColor? getColor(String extension) {
+    switch (extension) {
+      case 'xlsx':
+        {
+          return Colors.amber;
+        }
+
+      case 'pdf':
+        {
+          return Colors.blue;
+        }
+
+      case 'docx':
+        {
+          return Colors.orange;
+        }
+      default:
+        {
+          return Colors.grey;
+        }
+    }
+  }
+
+  // Navigator.of(context).push(
+  //   MaterialPageRoute(
+  //     builder: (context) => DocumentPage(
+  //       files: files,
+  //       onOpenedFile: openFile,
+  //     ),
+  //   ),
+  // );
+
+  // Widget buildFiles(PlatformFile file, openFile) {
+  //   final kb = file.size / 1024;
+  //   final mb = kb / 1024;
+  //   final fileSize =
+  //       mb >= 1 ? '${mb.toStringAsFixed(2)} MB' : '${mb.toStringAsFixed(2)} KB';
+  //   final extension = file.extension ?? 'none';
+  //   // final color = getColor(extension);
+  //   return InkWell(
+  //     onTap: openFile,
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Expanded(
+  //           child: Container(
+  //             alignment: Alignment.center,
+  //             width: double.infinity,
+  //             decoration: BoxDecoration(color: Colors.amberAccent),
+  //             child: Text(
+  //               '.$extension',
+  //               style: TextStyle(
+  //                   fontSize: 28,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.white),
+  //             ),
+  //           ),
+  //         ),
+  //         SizedBox(height: 8),
+  //         Text(
+  //           file.name,
+  //           style: TextStyle(
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.bold,
+  //               overflow: TextOverflow.ellipsis),
+  //         ),
+  //         Text(
+  //           fileSize,
+  //           style: TextStyle(fontSize: 16),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void openFile(PlatformFile file) {
     OpenFile.open(file.path!);

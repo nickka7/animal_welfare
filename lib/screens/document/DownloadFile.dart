@@ -43,10 +43,7 @@ class _DownloadFileState extends State<DownloadFile> {
   }
 
   Future openFile({required String url, String? fileName}) async {
-    final name = fileName ??
-        url //ถ้าไม่มี filename ให้ข้ามไป
-            .split('/')
-            .last;
+    final name = fileName ?? url.split('/').last;
     final file = await downloadFile(url, name);
     if (file == null) return;
     print('Path: ${file.path}');

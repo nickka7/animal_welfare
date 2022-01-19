@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 
+import '../../../constant.dart';
+
 class UploadDocument extends StatefulWidget {
   const UploadDocument({Key? key}) : super(key: key);
 
@@ -29,45 +31,50 @@ class _UploadDocumentState extends State<UploadDocument> {
   late List<String?> filePath;
 
   List getItems() {
+    //โรลที่ถูกเลือก
     values.forEach((key, value) {
       if (value == true) {
         selected.add(key);
       }
     });
-    // Printing all selected items on Terminal screen.
     print(selected);
-    // Here you will get all your selected Checkbox items.
-
-    // Clear array after use.
-    selected.clear();
+    // selected.clear();
     // print(selected);
 
     return selected;
   }
 
-  // final _formKey = GlobalKey<FormState>();
-  // TextEditingController repairController = TextEditingController();
-  // TextEditingController locationController = TextEditingController();
   final storage = new FlutterSecureStorage();
 
-  Future<String?> uploadDocAndRole(filepath, url, data) async {
-    String? token = await storage.read(key: 'token');
+  Future<String?> uploadDocAndRole({required List filePath, required String url, required List role}) async {
+    print('1');
+    // String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath('image', filepath));
-    request.fields['requestMessage'] = data['maintenanceDetail'];
-    request.fields['location'] = data['location'];
-    Map<String, String> headers = {
-      "authorization": "Bearer $token",
-    };
-    request.headers
-        .addAll(headers); //['authorization'] = data['Bearer $token'];
-    //TODO: Logic here
-    for(int i = 0; i < filePath.length; i++){
 
+    for (int i = 0; i < filePath.length; i++) {
+      print('filePath.length: ${filePath.length}');
+      request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
+      request.fields['documentName'] = getDocumentName(docPath: filePath[i]);
+      print('2');
+      print('role length: ${role.length}');
+      for (int j = 0; j < role.length; j++) {
+        print('2.5');
+        print('role length: ${role.length}');
+        request.fields['roleID'] = getRoleID(role[i])!;
+        print(getRoleID(role[i])!);
+        // Map<String, String> headers = {
+        //   "authorization":
+        //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJaMDAwMDAiLCJyb2xlSUQiOiJaMDAiLCJyb2xlIjoiYWRtaW4iLCJmaXJzdE5hbWUiOiLguKrguKHguJvguK3guIciLCJsYXN0TmFtZSI6IuC4i-C4seC4meC4iuC4suC4oiIsImlhdCI6MTY0MjUzMjMzNSwiZXhwIjoxNjQyNzA1MTM1fQ.ETkCjePHiVM4r8th_uLyX8Wo2FUa-HBX5GoidS-mYx0",
+        // };
+        // request.headers
+        //     .addAll(headers); //['authorization'] = data['Bearer $token'];
+        var res = await request.send();
+        print('${res.reasonPhrase} testtt');
+        print('3');
+        print(res.reasonPhrase);
+        return res.reasonPhrase;
+      }
     }
-    var res = await request.send();
-    print('${res.reasonPhrase}test');
-    return res.reasonPhrase;
   }
 
   @override
@@ -105,15 +112,15 @@ class _UploadDocumentState extends State<UploadDocument> {
 
                           // print(files);
                           // print('Name: ${result.names}');
-                          // print('Path: ${result.paths}');
+                          print('Path: ${result!.paths}');
                           // print('Name: ${result.names}');
                           // print('Name: ${result.names}');
-                          print(result!.files);
+                          // print(result!.files);
 
                           // openFiles(result!.files);
                           setState(() {
                             filePath = result!.paths;
-                            print(filePath);
+                            // print(filePath);
                           });
                         } else {
                           // User canceled the picker
@@ -140,11 +147,18 @@ class _UploadDocumentState extends State<UploadDocument> {
               }).toList(),
             ),
             Center(
-                child: ElevatedButton(
-                    onPressed: () {
-                      getItems();
-                    },
-                    child: Text('อัปโหลด')))
+              child: ElevatedButton(
+                onPressed: () {
+                  getItems();
+                  uploadDocAndRole(
+                    filePath: result!.paths,
+                    url: '${Constant().endPoint}/api/postDocument',
+                    role: selected,
+                  );
+                },
+                child: Text('อัปโหลด'),
+              ),
+            )
           ],
         ),
       ),
@@ -230,6 +244,39 @@ class _UploadDocumentState extends State<UploadDocument> {
           return Colors.grey;
         }
     }
+  }
+
+  String? getRoleID(role) {
+    switch (role) {
+      case 'ceo':
+        {
+          return 'Z01';
+        }
+      case 'caretaker':
+        {
+          return 'Z02';
+        }
+      case 'veterinarian':
+        {
+          return 'Z03';
+        }
+      case 'researcher':
+        {
+          return 'Z04';
+        }
+      case 'breeder':
+        {
+          return 'Z05';
+        }
+      case 'showman':
+        {
+          return 'Z06';
+        }
+    }
+  }
+
+  String getDocumentName({required String docPath}) {
+    return docPath.split('/').last;
   }
 
   // Navigator.of(context).push(

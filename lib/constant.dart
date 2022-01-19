@@ -1,3 +1,3 @@
 class Constant{
-  final String endPoint = 'https://animal-wf.azurewebsites.net';
+  final String endPoint = 'http://localhost:3000';
 }

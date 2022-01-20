@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         const Locale('th'),
       ],
       locale: const Locale('th'),
-      home: UploadDocument(),
+      home: MyLoginHome(),
     );
   }
 }

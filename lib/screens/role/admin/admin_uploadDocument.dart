@@ -52,16 +52,17 @@ class _UploadDocumentState extends State<UploadDocument> {
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
     for (int i = 0; i < filePath.length; i++) {
-      print('filePath.length: ${filePath.length}');
+      // print('filePath.length: ${filePath.length}');
       request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
+      print('${filePath[i]}');
       request.fields['documentName'] = getDocumentName(docPath: filePath[i]);
-      print('2');
-      print('role length: ${role.length}');
+      // print('2');
+      // print('role length: ${role.length}');
       for (int j = 0; j < role.length; j++) {
-        print('2.5');
-        print('role length: ${role.length}');
-        request.fields['roleID'] = getRoleID(role[i])!;
-        print(getRoleID(role[i])!);
+        // print('2.5');
+        // print('role length: ${role.length}');
+        request.fields['roleID'] = getRoleID(role[j])!;
+        // print(getRoleID(role[i])!);
         // Map<String, String> headers = {
         //   "authorization":
         //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJaMDAwMDAiLCJyb2xlSUQiOiJaMDAiLCJyb2xlIjoiYWRtaW4iLCJmaXJzdE5hbWUiOiLguKrguKHguJvguK3guIciLCJsYXN0TmFtZSI6IuC4i-C4seC4meC4iuC4suC4oiIsImlhdCI6MTY0MjUzMjMzNSwiZXhwIjoxNjQyNzA1MTM1fQ.ETkCjePHiVM4r8th_uLyX8Wo2FUa-HBX5GoidS-mYx0",
@@ -69,10 +70,10 @@ class _UploadDocumentState extends State<UploadDocument> {
         // request.headers
         //     .addAll(headers); //['authorization'] = data['Bearer $token'];
         var res = await request.send();
-        print('${res.reasonPhrase} testtt');
-        print('3');
-        print(res.reasonPhrase);
-        return res.reasonPhrase;
+        // print('${res.reasonPhrase} testtt');
+        // print('3');
+        // print(res.reasonPhrase);
+        // return res.reasonPhrase;
       }
     }
   }
@@ -150,6 +151,7 @@ class _UploadDocumentState extends State<UploadDocument> {
               child: ElevatedButton(
                 onPressed: () {
                   getItems();
+                  // for (int i = 0; i < filePath.length; i++) {}
                   uploadDocAndRole(
                     filePath: result!.paths,
                     url: '${Constant().endPoint}/api/postDocument',

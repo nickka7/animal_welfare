@@ -5,6 +5,7 @@ import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Executive/report.dart';
+import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_fristpage.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
@@ -208,6 +209,15 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => ShowScreen()),
                   );
                 }
+                 break;
+              case 'admin':
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AdminFirstpage()),
+                  );
+                }
+
                 break;
             }
           });

@@ -38,6 +38,7 @@ class _RepairNoticeState extends State<RepairNotice> {
   final storage = new FlutterSecureStorage();
   
   Future<String?> uploadImageAndData(filepath, url, data) async {
+    print(file!.path);
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));

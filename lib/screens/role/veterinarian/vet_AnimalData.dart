@@ -5,7 +5,6 @@ import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/VacHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
-import 'package:animal_welfare/screens/AllanimalData.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_MedicalHistory.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_VaccineHistory.dart';
 import 'package:flutter/material.dart';

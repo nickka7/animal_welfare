@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:animal_welfare/api/allAnimal.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,28 +18,30 @@ class AddShow extends StatefulWidget {
 class _AddShowState extends State<AddShow> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController showController = TextEditingController();
-  TextEditingController startTimeController = TextEditingController();
-  TextEditingController endTimeController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
 
   final storage = new FlutterSecureStorage();
 
-  Future<String?> uploadData(url,data) async {
+  Future<String?> uploadData(url, data) async {
     // print(file!.path);
     String? token = await storage.read(key: 'token');
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    // request.files.add(await http.MultipartFile.fromPath('image', filepath));
-    request.fields['showName'] = data['showName'];
-    request.fields['startDate'] = data['startDate'].toString();
-    request.fields['endDate'] = data['endDate'].toString();
-
-    Map<String, String> headers = {
-      "authorization": "Bearer $token",
-    };
-    request.headers
-        .addAll(headers); //['authorization'] = data['Bearer $token'];
-    var res = await request.send();
-    print('${res.reasonPhrase}test');
-    return res.reasonPhrase;
+    var request = http.post(Uri.parse(url),
+    headers: <String, String>{
+      "authorization": 'Bearer $token',
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+     //   headers: {"authorization": 'Bearer $token'},
+        body: jsonEncode(<String, String>{
+          'showName': data['showName'],
+          'startDate': data['startDate'],
+          'endDate': data['endDate'],
+        }));
+        
+    print(request);
+    print(data['showName']);
+    print(data['startDate']);
+    print(data['endDate']);
   }
 
   DateTime _date1 = DateTime.now();
@@ -85,34 +89,34 @@ class _AddShowState extends State<AddShow> {
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
                   ),
-                   TextFormField(
-                    controller: startTimeController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกชื่อการแสดง";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                  ),
-                   TextFormField(
-                    controller: endTimeController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกชื่อการแสดง";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                  ),
+                  // TextFormField(
+                  //   controller: startDateController,
+                  //   validator: (String? input) {
+                  //     if (input!.isEmpty) {
+                  //       return "กรุณากรอกชื่อการแสดง";
+                  //     }
+                  //     return null;
+                  //   },
+                  //   decoration: InputDecoration(
+                  //       border: OutlineInputBorder(),
+                  //       focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //               color: Colors.green.shade800, width: 2))),
+                  // ),
+                  // TextFormField(
+                  //   controller: endDateController,
+                  //   validator: (String? input) {
+                  //     if (input!.isEmpty) {
+                  //       return "กรุณากรอกชื่อการแสดง";
+                  //     }
+                  //     return null;
+                  //   },
+                  //   decoration: InputDecoration(
+                  //       border: OutlineInputBorder(),
+                  //       focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //               color: Colors.green.shade800, width: 2))),
+                  // ),
                   // SizedBox(
                   //   height: 30,
                   // ),
@@ -139,70 +143,70 @@ class _AddShowState extends State<AddShow> {
                   SizedBox(
                     height: 30,
                   ),
-                  // Align(
-                  //     alignment: Alignment.topLeft,
-                  //     child: Text(
-                  //       'วัน-เวลาที่เริ่มการแสดง',
-                  //       style: TextStyle(fontSize: 18),
-                  //     )),
-                  // Container(
-                  //   height: 58,
-                  //   width: double.infinity,
-                  //   child: OutlinedButton(
-                  //       style: OutlinedButton.styleFrom(
-                  //         side: BorderSide(width: 1, color: Colors.black45),
-                  //       ),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'วัน-เวลาที่เริ่มการแสดง',
+                        style: TextStyle(fontSize: 18),
+                      )),
+                  Container(
+                    height: 58,
+                    width: double.infinity,
+                    child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(width: 1, color: Colors.black45),
+                        ),
 
-                  //       onPressed: () {
-                  //         _showDatePicker1(context);
-                  //       },
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         children: [
-                  //           Text(
-                  //             '${inputFormat.format(_date1)}',
-                  //             style: TextStyle(color: Colors.black),
-                  //           ),
-                            
-                  //           Icon(
-                  //             Icons.arrow_drop_down,
-                  //             color: Colors.black,
-                  //           )
-                  //         ],
-                  //       )),
-                  // ),
-                  // SizedBox(height: 30),
-                  // Align(
-                  //     alignment: Alignment.topLeft,
-                  //     child: Text(
-                  //       'วัน-เวลาที่จบการแสดง',
-                  //       style: TextStyle(fontSize: 18),
-                  //     )),
-                  // Container(
-                  //   height: 58,
-                  //   width: double.infinity,
-                  //   child: OutlinedButton(
-                  //       style: OutlinedButton.styleFrom(
-                  //         side: BorderSide(width: 1, color: Colors.black45),
-                  //       ),
-                  //       onPressed: () {
-                  //         _showDatePicker2(context);
-                  //       },
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         children: [
-                  //           Text(
-                  //             '${inputFormat.format(_date2)}',
-                  //             style: TextStyle(color: Colors.black),
-                  //           ),
-                  //           Icon(
-                  //             Icons.arrow_drop_down,
-                  //             color: Colors.black,
-                  //           )
-                  //         ],
-                  //       )),
-                  // ),
-              
+                        onPressed: () {
+                          _showDatePicker1(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${inputFormat.format(_date1)}',
+                              style: TextStyle(color: Colors.black),
+                            ),
+
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'วัน-เวลาที่จบการแสดง',
+                        style: TextStyle(fontSize: 18),
+                      )),
+                  Container(
+                    height: 58,
+                    width: double.infinity,
+                    child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(width: 1, color: Colors.black45),
+                        ),
+                        onPressed: () {
+                          _showDatePicker2(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${inputFormat.format(_date2)}',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+
                   SizedBox(height: 70),
                   Container(
                     height: 50,
@@ -213,19 +217,19 @@ class _AddShowState extends State<AddShow> {
                         if (pass) {
                           Map<String, String> data = {
                             "showName": showController.text,
-                             "startTime": startTimeController.text,
-                             "endTime": endTimeController.text
-                             
+                            "startDate": _date1.toString(),
+                            "endDate": _date2.toString()
                           };
-                          uploadData('${Constant().endPoint}/api/postShow',data)
-                            .then((value) {
-                          Navigator.of(context).pop();
-                          final snackBar = SnackBar(
-                              content: Text('เพิ่มรอบการแสดงเรียบร้อยแล้ว'));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        });
+                          uploadData(
+                                  '${Constant().endPoint}/api/postShow', data)
+                              .then((value) {
+                            Navigator.of(context).pop();
+                            final snackBar = SnackBar(
+                                content: Text('เพิ่มรอบการแสดงเรียบร้อยแล้ว'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          });
                         }
-                        
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),

@@ -1,3 +1,4 @@
+import 'package:animal_welfare/haxColor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -131,8 +132,21 @@ class _UploadDocumentState extends State<UploadDocument> {
               }).toList(),
             ),
             Center(
-              child: ElevatedButton(
-                onPressed: () {
+              child:  Container(
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                width: double.infinity,
+                height: 45,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0)),
+                      primary: HexColor('#697825')),
+                  child: Text('อัปโหลด',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500)),
+                    onPressed: () {
                   getItems();
                   // for (int i = 0; i < filePath.length; i++) {}
                   uploadDocAndRole(
@@ -141,8 +155,21 @@ class _UploadDocumentState extends State<UploadDocument> {
                     role: selected,
                   );
                 },
-                child: Text('อัปโหลด'),
+               
+                ),
               ),
+              // child: ElevatedButton(
+              //   onPressed: () {
+              //     getItems();
+              //     // for (int i = 0; i < filePath.length; i++) {}
+              //     uploadDocAndRole(
+              //       filePath: result!.paths,
+              //       url: '${Constant().endPoint}/api/postDocument',
+              //       role: selected,
+              //     );
+              //   },
+              //   child: Text('อัปโหลด'),
+              // ),
             )
           ],
         ),

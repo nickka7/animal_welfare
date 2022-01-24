@@ -2,7 +2,7 @@
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
-import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_animalData.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_animalData.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 

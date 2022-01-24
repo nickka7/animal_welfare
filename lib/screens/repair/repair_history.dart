@@ -114,68 +114,71 @@ class _RepairHistoryState extends State<RepairHistory> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  height: 90,
-                                  width: 232,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                "ปัญหาที่ชำรุด : ${snapshot
-                                                    .data!.data![index]
-                                                    .requestMessage}",
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 16,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Container(
+                                    height: 90,
+                                    width: 232,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "ปัญหาที่ชำรุด : ${snapshot
+                                                      .data!.data![index]
+                                                      .requestMessage}",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                "สถานที่ : ${snapshot.data!
-                                                    .data![index].location}",
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 16,
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "สถานที่ : ${snapshot.data!
+                                                      .data![index].location}",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                "สถานะ : ${snapshot.data!
-                                                    .data![index].status}",
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 16,
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "สถานะ : ${snapshot.data!
+                                                      .data![index].status}",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
                             ),
-                            Align( //TODO: date format
+                            Align( 
                               alignment: Alignment.bottomRight,
                               child: Container(
                                   child: Text(

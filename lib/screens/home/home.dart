@@ -4,10 +4,11 @@ import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
-import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_fristpage.dart';
+import 'package:animal_welfare/screens/role/Executive/report.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_fristpage.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
-import 'package:animal_welfare/screens/role/showMan/showTast.dart';
+import 'package:animal_welfare/screens/role/showMan/show.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import '../../constant.dart';
 class HomePage extends StatefulWidget {
   final String? firstName;
   final String? role;
+ // final String? image;
   const HomePage({Key? key, this.firstName, this.role}) : super(key: key);
 
   @override
@@ -30,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-     getNews();
+    getNews();
     super.initState();
   }
 
@@ -134,7 +136,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(children: [
           Wrap(
             children: [
-              _buildButton(Icons.timer, 'เวลาเข้าออกงาน', Scaffold()),
+              _buildButton(Icons.timer, 'เวลาเข้าออกงาน', AnimalReport()),
               _buildButton(
                   Icons.calendar_today, 'ปฏิทินกิจกรรม', CalendarScreenTest()),
               _buildButton(
@@ -164,47 +166,49 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => BreederFirstpage()),
                   );
                 }
-                 break; 
+                break;
               case 'caretaker':
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CaretakerFirstPage()),
+                    MaterialPageRoute(
+                        builder: (context) => CaretakerFirstPage()),
                   );
                 }
-                 break; 
-                  case 'veterinarian':
+                break;
+              case 'veterinarian':
                 {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => VetFirstpage()),
                   );
                 }
-                 break; 
+                break;
               case 'researcher':
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ResearcherFirstpage()),
+                    MaterialPageRoute(
+                        builder: (context) => ResearcherFirstpage()),
                   );
                 }
-                 break; 
-                  case 'breeder':
+                break;
+              case 'breeder':
                 {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => BreederFirstpage()),
                   );
                 }
-                 break; 
+                break;
               case 'showman':
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ShowTest()),
+                    MaterialPageRoute(builder: (context) => ShowScreen()),
                   );
                 }
-                 break; 
+                break;
             }
           });
         },

@@ -34,22 +34,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
     setState(() => this.bios = bios);
   }
 
-  // @override
-  // void dispose() {
-  //   debouncer?.cancel();
-  //   super.dispose();
-  // }
-  //
-  // void debounce(
-  //   VoidCallback callback, {
-  //   Duration duration = const Duration(milliseconds: 1000),
-  // }) {
-  //   if (debouncer != null) {
-  //     debouncer!.cancel();
-  //   }
-  //
-  //   debouncer = Timer(duration, callback);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +67,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
   }
 
   Widget buildListview() {
-    // return FutureBuilder<AllAnimals>(
-    //   future: getAnimal(),
-    //   builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
-    //     if (snapshot.hasData) {
           return ListView.builder(
               itemCount: bios.length,
               shrinkWrap: true,
@@ -159,13 +139,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
                   ),
                 );
               });
-    //     } else {
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   Widget buildSearch() => SearchWidget(

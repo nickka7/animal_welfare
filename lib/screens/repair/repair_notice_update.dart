@@ -18,7 +18,7 @@ class RepairNoticeUpdate extends StatefulWidget {
 
 class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
   File? file; //dart.io
-  final _formKey = GlobalKey<FormState>();
+  //final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 

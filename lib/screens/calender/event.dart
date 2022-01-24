@@ -20,16 +20,12 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
   final storage = new FlutterSecureStorage();
   List<Color> _colorCollection = <Color>[];
 
-  // Future<CalendarTest> getAnimal() async {
-  //   String? token = await storage.read(key: 'token');
-  //   String endPoint = Constant().endPoint;
-  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
-  //       headers: {"authorization": 'Bearer $token'});
-  //   print(response.body);
-  //   var jsonData = CalendarTest.fromJson(jsonDecode(response.body));
-  //   print('$jsonData');
-  //   return jsonData;
-  // }
+   String _subjectText = '',
+      _startTimeText = '',
+      _endTimeText = '',
+      _dateText = '',
+      _timeDetails = '',
+      _locationText = '';
 
   DateTime _convertDateFromString(String? date) {
     return DateTime.parse(date!);
@@ -58,6 +54,7 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
         eventName: data['calendarName'],
         from: _convertDateFromString(data['startDate']),
         to: _convertDateFromString(data['endDate']),
+        location: (data['location']),
         background: Colors.green,
       );
 
@@ -114,6 +111,7 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
                 // initialDisplayDate: DateTime(2017, 6, 01, 9, 0, 0),
                 // initialSelectedDate: DateTime.now(),
                 dataSource: MeetingDataSource(snapshot.data!),
+                 onTap: calendarTapped,
               )),
             );
           } else {
@@ -126,18 +124,73 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
       ),
     );
   }
+  calendarTapped(CalendarTapDetails details) {
+    if (details.targetElement == CalendarElement.appointment) {
+      final Meeting appointmentDetails = details.appointments![0];
+      _subjectText = appointmentDetails.eventName!;
+      _locationText = appointmentDetails.location!;
+      _dateText = DateFormat("d MMMM yyyy",
+              'th') //.formatInBuddhistCalendarThai(appointmentDetails.from!)
+          .format(appointmentDetails.from!)
+          .toString();
+      _startTimeText = DateFormat('hh:mm a')
+          .format(appointmentDetails.from!)
+          .toString();
+      _endTimeText =
+          DateFormat('hh:mm a').format(appointmentDetails.to!).toString();
+      if (appointmentDetails.isAllDay) {
+        _timeDetails = 'ทั้งวัน';
+      } else {
+        _timeDetails = '$_startTimeText - $_endTimeText';
+      }
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Container(child: new Text('$_subjectText')),
+              content: Container(
+                height: 80,
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          '$_dateText',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(_timeDetails,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 15)),
+                      ],
+                    ),
+                    Row(
+                      children: [Text('สถานที่: $_locationText')],
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                new TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: new Text('ปิด'))
+              ],
+            );
+          });
+    }
+  }
 }
 
-// List<Meeting> _getDataSource() {
-//   final List<Meeting> meetings = <Meeting>[];
-//   final DateTime today = DateTime.now();
-//   final DateTime startTime =
-//       DateTime(today.year, today.month, today.day, 9, 0, 0);
-//   final DateTime endTime = startTime.add(const Duration(hours: 2));
-//   meetings.add(Meeting(
-//       'Conference', startTime, endTime, const Color(0xFF0F8644), false));
-//   return meetings;
-// }
+
+
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Meeting> source) {
@@ -163,21 +216,14 @@ class MeetingDataSource extends CalendarDataSource {
   Color getColor(int index) {
     return appointments![index].background;
   }
-
-// @override
-// bool isAllDay(int index) {
-//   return appointments![index].isAllDay;
-// }
-
-  // Meeting _getMeetingData(int index) {
-  //   final dynamic meeting = appointments![index];
-  //   late final Meeting meetingData;
-  //   if (meeting is Meeting) {
-  //     meetingData = meeting;
-  //   }
-  //
-  //   return meetingData;
-  // }
+    @override
+  String getLocation(int index) {
+    return appointments![index].location;
+  }
+   @override
+  bool isAllDay(int index) {
+    return appointments![index].isAllDay;
+  }
 }
 
 class Meeting {
@@ -188,12 +234,15 @@ class Meeting {
     this.from,
     this.to,
     this.background,
+    this.location,
+    this.isAllDay = false,
   });
 
   String? eventName;
   DateTime? from;
   DateTime? to;
   Color? background;
-  // bool isAllDay;
+   String? location;
+   bool isAllDay;
 
 }

@@ -141,11 +141,6 @@ class _RepairNoticeState extends State<RepairNotice> {
                   Container(
                     height: 50,
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black45, blurRadius: 5)
-                        ]),
                     child: ElevatedButton(
                       onPressed: () {
                         bool pass = _formKey.currentState!.validate();
@@ -188,7 +183,11 @@ class _RepairNoticeState extends State<RepairNotice> {
                                           uploadImageAndData(
                                               file!.path,
                                               '${Constant().endPoint}/api/postMaintenance',
-                                              data);
+                                              data).then((value) {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                            });
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

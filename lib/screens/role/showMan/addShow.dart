@@ -1,7 +1,10 @@
+import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class AddShow extends StatefulWidget {
   const AddShow({Key? key}) : super(key: key);
@@ -15,7 +18,27 @@ class _AddShowState extends State<AddShow> {
   TextEditingController showController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+
+  final storage = new FlutterSecureStorage();
+
+  Future<String?> uploadData(url,data) async {
+    // print(file!.path);
+    String? token = await storage.read(key: 'token');
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    // request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    request.fields['showName'] = data['showName'];
+    request.fields['startDate'] = data['startDate'].toString();
+    request.fields['endDate'] = data['endDate'].toString();
+
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+    };
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
+    var res = await request.send();
+    print('${res.reasonPhrase}test');
+    return res.reasonPhrase;
+  }
 
   DateTime _date1 = DateTime.now();
   DateTime _date2 = DateTime.now();
@@ -62,6 +85,37 @@ class _AddShowState extends State<AddShow> {
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
                   ),
+                   TextFormField(
+                    controller: startTimeController,
+                    validator: (String? input) {
+                      if (input!.isEmpty) {
+                        return "กรุณากรอกชื่อการแสดง";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.green.shade800, width: 2))),
+                  ),
+                   TextFormField(
+                    controller: endTimeController,
+                    validator: (String? input) {
+                      if (input!.isEmpty) {
+                        return "กรุณากรอกชื่อการแสดง";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.green.shade800, width: 2))),
+                  ),
+                  // SizedBox(
+                  //   height: 30,
+                  // ),
                   // Align(
                   //     alignment: Alignment.topLeft,
                   //     child: Text(
@@ -82,106 +136,73 @@ class _AddShowState extends State<AddShow> {
                   //           borderSide: BorderSide(
                   //               color: Colors.green.shade800, width: 2))),
                   // ),
-                  // SizedBox(
-                  //   height: 30,
+                  SizedBox(
+                    height: 30,
+                  ),
+                  // Align(
+                  //     alignment: Alignment.topLeft,
+                  //     child: Text(
+                  //       'วัน-เวลาที่เริ่มการแสดง',
+                  //       style: TextStyle(fontSize: 18),
+                  //     )),
+                  // Container(
+                  //   height: 58,
+                  //   width: double.infinity,
+                  //   child: OutlinedButton(
+                  //       style: OutlinedButton.styleFrom(
+                  //         side: BorderSide(width: 1, color: Colors.black45),
+                  //       ),
+
+                  //       onPressed: () {
+                  //         _showDatePicker1(context);
+                  //       },
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Text(
+                  //             '${inputFormat.format(_date1)}',
+                  //             style: TextStyle(color: Colors.black),
+                  //           ),
+                            
+                  //           Icon(
+                  //             Icons.arrow_drop_down,
+                  //             color: Colors.black,
+                  //           )
+                  //         ],
+                  //       )),
                   // ),
-                  SizedBox(height: 30),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'วัน-เวลาที่เริ่มการแสดง',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  TextFormField(
-                    controller: startTimeController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกเวลา";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                  ),
-                  SizedBox(height: 30),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'วัน-เวลาที่เริ่มการแสดง',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  Container(
-                    height: 58,
-                    width: double.infinity,
-                    child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(width: 1, color: Colors.black45),
-                        ),
-                        onPressed: () {
-                         _showDatePicker1(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${inputFormat.format(_date1)}',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                            )
-                          ],
-                        )),
-                  ),
-                  SizedBox(height: 30),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'วัน-เวลาที่จบการแสดง',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  Container(
-                    height: 58,
-                    width: double.infinity,
-                    child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(width: 1, color: Colors.black45),
-                        ),
-                        onPressed: () {
-                          _showDatePicker2(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${inputFormat.format(_date2)}',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                            )
-                          ],
-                        )),
-                  ),
-                  // TextFormField(
-                  //   controller: startTimeController,
-                  //   validator: (String? input) {
-                  //     if (input!.isEmpty) {
-                  //       return "กรุณากรอกเวลา";
-                  //     }
-                  //     return null;
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Colors.green.shade800, width: 2))),
+                  // SizedBox(height: 30),
+                  // Align(
+                  //     alignment: Alignment.topLeft,
+                  //     child: Text(
+                  //       'วัน-เวลาที่จบการแสดง',
+                  //       style: TextStyle(fontSize: 18),
+                  //     )),
+                  // Container(
+                  //   height: 58,
+                  //   width: double.infinity,
+                  //   child: OutlinedButton(
+                  //       style: OutlinedButton.styleFrom(
+                  //         side: BorderSide(width: 1, color: Colors.black45),
+                  //       ),
+                  //       onPressed: () {
+                  //         _showDatePicker2(context);
+                  //       },
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Text(
+                  //             '${inputFormat.format(_date2)}',
+                  //             style: TextStyle(color: Colors.black),
+                  //           ),
+                  //           Icon(
+                  //             Icons.arrow_drop_down,
+                  //             color: Colors.black,
+                  //           )
+                  //         ],
+                  //       )),
                   // ),
+              
                   SizedBox(height: 70),
                   Container(
                     height: 50,
@@ -191,16 +212,20 @@ class _AddShowState extends State<AddShow> {
                         bool pass = _formKey.currentState!.validate();
                         if (pass) {
                           Map<String, String> data = {
-                            "maintenanceDetail": showController.text,
-                            "location": locationController.text,
-                            "startTime": startTimeController.text,
-                            "endTime": endTimeController.text
+                            "showName": showController.text,
+                             "startTime": startTimeController.text,
+                             "endTime": endTimeController.text
+                             
                           };
+                          uploadData('${Constant().endPoint}/api/postShow',data)
+                            .then((value) {
+                          Navigator.of(context).pop();
+                          final snackBar = SnackBar(
+                              content: Text('เพิ่มรอบการแสดงเรียบร้อยแล้ว'));
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        });
                         }
-                        Navigator.of(context).pop();
-                        final snackBar = SnackBar(
-                            content: Text('เพิ่มรอบการแสดงเรียบร้อยแล้ว'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -252,6 +277,7 @@ class _AddShowState extends State<AddShow> {
               ),
             ));
   }
+
   void _showDatePicker2(ctx) {
     // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(

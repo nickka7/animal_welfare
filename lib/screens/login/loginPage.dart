@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
-import '../../navigatorBar.dart';
+import '../home/navigatorBar.dart';
 import 'package:animal_welfare/api/loginApi.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

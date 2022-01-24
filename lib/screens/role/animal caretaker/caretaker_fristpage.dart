@@ -4,7 +4,7 @@ import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/Schedule.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/weather.dart';
-import 'package:animal_welfare/screens/role/Aanimal%20caretaker/caretaker_searchAnimal.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';

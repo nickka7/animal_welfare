@@ -1,6 +1,7 @@
 import 'package:animal_welfare/screens/document/DownloadFile.dart';
 import 'package:animal_welfare/screens/home/home.dart';
-import 'package:animal_welfare/screens/role/researcher/research_firstpage.dart';
+import 'package:animal_welfare/screens/notification/warn_notification.dart';
+import 'package:animal_welfare/screens/profile/profile_main.dart';
 
 
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class _NavigatorBarState extends State<NavigatorBar> {
   late List<Widget> _widgetOptions = <Widget>[
     HomePage(firstName: '${widget.firstName}',role: '${widget.role}',),
     DownloadFile(),
-    Scaffold(),
-    ResearcherFirstpage(),
+    WarnNotifications(),
+    MyMainProfile(),
   ];
 
 

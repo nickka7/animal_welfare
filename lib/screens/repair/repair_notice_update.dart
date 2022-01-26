@@ -149,9 +149,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black45, blurRadius: 5)
-                        ]),
+                       ),
                     child: ElevatedButton(
                       onPressed: () {
                         // bool pass = _formKey.currentState!.validate();

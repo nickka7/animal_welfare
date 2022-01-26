@@ -16,7 +16,7 @@ class CalendarScreenTest extends StatefulWidget {
 
 class _CalendarScreenTestState extends State<CalendarScreenTest> {
   final storage = new FlutterSecureStorage();
-  List<Color> _colorCollection = <Color>[];
+ // List<Color> _colorCollection = <Color>[];
 
    String _subjectText = '',
       _startTimeText = '',
@@ -62,18 +62,18 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
     return appointmentData;
   }
 
-  void _initializeEventColor() {
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-    _colorCollection.add(const Color(0xFF0A8043));
-  }
+  // void _initializeEventColor() {
+  //   _colorCollection.add(const Color(0xFF0F8644));
+  //   _colorCollection.add(const Color(0xFF8B1FA9));
+  //   _colorCollection.add(const Color(0xFFD20100));
+  //   _colorCollection.add(const Color(0xFFFC571D));
+  //   _colorCollection.add(const Color(0xFF36B37B));
+  //   _colorCollection.add(const Color(0xFF01A1EF));
+  //   _colorCollection.add(const Color(0xFF3D4FB5));
+  //   _colorCollection.add(const Color(0xFFE47C73));
+  //   _colorCollection.add(const Color(0xFF636363));
+  //   _colorCollection.add(const Color(0xFF0A8043));
+  // }
 
   @override
   Widget build(BuildContext context) {

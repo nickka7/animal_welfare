@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class AddShow extends StatefulWidget {
   const AddShow({Key? key}) : super(key: key);
@@ -13,9 +18,31 @@ class AddShow extends StatefulWidget {
 class _AddShowState extends State<AddShow> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController showController = TextEditingController();
-  TextEditingController startTimeController = TextEditingController();
-  TextEditingController endTimeController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
+
+  final storage = new FlutterSecureStorage();
+
+  Future<String?> uploadData(url, data) async {
+    // print(file!.path);
+    String? token = await storage.read(key: 'token');
+    var request = http.post(Uri.parse(url),
+    headers: <String, String>{
+      "authorization": 'Bearer $token',
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+     //   headers: {"authorization": 'Bearer $token'},
+        body: jsonEncode(<String, String>{
+          'showName': data['showName'],
+          'startDate': data['startDate'],
+          'endDate': data['endDate'],
+        }));
+        
+    print(request);
+    print(data['showName']);
+    print(data['startDate']);
+    print(data['endDate']);
+  }
 
   DateTime _date1 = DateTime.now();
   DateTime _date2 = DateTime.now();
@@ -62,6 +89,37 @@ class _AddShowState extends State<AddShow> {
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
                   ),
+                  // TextFormField(
+                  //   controller: startDateController,
+                  //   validator: (String? input) {
+                  //     if (input!.isEmpty) {
+                  //       return "กรุณากรอกชื่อการแสดง";
+                  //     }
+                  //     return null;
+                  //   },
+                  //   decoration: InputDecoration(
+                  //       border: OutlineInputBorder(),
+                  //       focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //               color: Colors.green.shade800, width: 2))),
+                  // ),
+                  // TextFormField(
+                  //   controller: endDateController,
+                  //   validator: (String? input) {
+                  //     if (input!.isEmpty) {
+                  //       return "กรุณากรอกชื่อการแสดง";
+                  //     }
+                  //     return null;
+                  //   },
+                  //   decoration: InputDecoration(
+                  //       border: OutlineInputBorder(),
+                  //       focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //               color: Colors.green.shade800, width: 2))),
+                  // ),
+                  // SizedBox(
+                  //   height: 30,
+                  // ),
                   // Align(
                   //     alignment: Alignment.topLeft,
                   //     child: Text(
@@ -82,31 +140,9 @@ class _AddShowState extends State<AddShow> {
                   //           borderSide: BorderSide(
                   //               color: Colors.green.shade800, width: 2))),
                   // ),
-                  // SizedBox(
-                  //   height: 30,
-                  // ),
-                  SizedBox(height: 30),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'วัน-เวลาที่เริ่มการแสดง',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  TextFormField(
-                    controller: startTimeController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกเวลา";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
+                  SizedBox(
+                    height: 30,
                   ),
-                  SizedBox(height: 30),
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -120,8 +156,9 @@ class _AddShowState extends State<AddShow> {
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
+
                         onPressed: () {
-                         _showDatePicker1(context);
+                          _showDatePicker1(context);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,6 +167,7 @@ class _AddShowState extends State<AddShow> {
                               '${inputFormat.format(_date1)}',
                               style: TextStyle(color: Colors.black),
                             ),
+
                             Icon(
                               Icons.arrow_drop_down,
                               color: Colors.black,
@@ -168,20 +206,7 @@ class _AddShowState extends State<AddShow> {
                           ],
                         )),
                   ),
-                  // TextFormField(
-                  //   controller: startTimeController,
-                  //   validator: (String? input) {
-                  //     if (input!.isEmpty) {
-                  //       return "กรุณากรอกเวลา";
-                  //     }
-                  //     return null;
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Colors.green.shade800, width: 2))),
-                  // ),
+
                   SizedBox(height: 70),
                   Container(
                     height: 50,
@@ -191,16 +216,20 @@ class _AddShowState extends State<AddShow> {
                         bool pass = _formKey.currentState!.validate();
                         if (pass) {
                           Map<String, String> data = {
-                            "maintenanceDetail": showController.text,
-                            "location": locationController.text,
-                            "startTime": startTimeController.text,
-                            "endTime": endTimeController.text
+                            "showName": showController.text,
+                            "startDate": _date1.toString(),
+                            "endDate": _date2.toString()
                           };
+                          uploadData(
+                                  '${Constant().endPoint}/api/postShow', data)
+                              .then((value) {
+                            Navigator.of(context).pop();
+                            final snackBar = SnackBar(
+                                content: Text('เพิ่มรอบการแสดงเรียบร้อยแล้ว'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          });
                         }
-                        Navigator.of(context).pop();
-                        final snackBar = SnackBar(
-                            content: Text('เพิ่มรอบการแสดงเรียบร้อยแล้ว'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -252,6 +281,7 @@ class _AddShowState extends State<AddShow> {
               ),
             ));
   }
+
   void _showDatePicker2(ctx) {
     // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(

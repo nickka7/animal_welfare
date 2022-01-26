@@ -1,4 +1,5 @@
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/role/admin/addWork.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -76,26 +77,26 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 25),
-                      child: breederData(),
+                      child: Column(
+                        children: [
+                          uplodeDoc(),
+                          addWork()
+                        ],
+                      ),
                     ),
                   ),
-                )
+                ),
+                
               ],
             ))
             
             );
   }
 
- Widget breederData() {
+ Widget uplodeDoc() {
     return Container(
         child: Column(
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(top: 15, left: 8),
-        //   child: Align(
-        //       alignment: Alignment.topLeft,
-        //       child: _heading('ข้อมูลการเพาะพันธุ์', 35.0, 170.0)),
-        // ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
           child: Card(
@@ -114,6 +115,44 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('อัปโหลดเอกสาร',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ));
+  }
+
+Widget addWork() {
+    return Container(
+        child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddWork()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('เพิ่มงานให้พนักงาน',
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                     Icon(
                       Icons.navigate_next,

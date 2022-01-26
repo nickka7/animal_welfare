@@ -21,32 +21,38 @@ class _AddShowState extends State<AddShow> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
 
+
+  DateTime _date1 = DateTime.now();
+  DateTime _date2 = DateTime.now();
+  var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
+
+  int index = 0;
+  final show = ['โชว์ช้าง', 'โชว์นกแก้ว', 'โชว์ลิง', 'โชว์แมวน้ำ'];
+
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadData(url, data) async {
     // print(file!.path);
     String? token = await storage.read(key: 'token');
     var request = http.post(Uri.parse(url),
-    headers: <String, String>{
-      "authorization": 'Bearer $token',
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-     //   headers: {"authorization": 'Bearer $token'},
+        headers: <String, String>{
+          "authorization": 'Bearer $token',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
           'showName': data['showName'],
           'startDate': data['startDate'],
           'endDate': data['endDate'],
         }));
-        
+
     print(request);
     print(data['showName']);
     print(data['startDate']);
     print(data['endDate']);
   }
 
-  DateTime _date1 = DateTime.now();
-  DateTime _date2 = DateTime.now();
-  var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,71 +81,30 @@ class _AddShowState extends State<AddShow> {
                         'ชื่อการแสดง',
                         style: TextStyle(fontSize: 18),
                       )),
-                  TextFormField(
-                    controller: showController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกชื่อการแสดง";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
+                  Container(
+                    height: 58,
+                    width: double.infinity,
+                    child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(width: 1, color: Colors.black45),
+                        ),
+                        onPressed: () {
+                          _showPicker(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              show[index],
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
                   ),
-                  // TextFormField(
-                  //   controller: startDateController,
-                  //   validator: (String? input) {
-                  //     if (input!.isEmpty) {
-                  //       return "กรุณากรอกชื่อการแสดง";
-                  //     }
-                  //     return null;
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Colors.green.shade800, width: 2))),
-                  // ),
-                  // TextFormField(
-                  //   controller: endDateController,
-                  //   validator: (String? input) {
-                  //     if (input!.isEmpty) {
-                  //       return "กรุณากรอกชื่อการแสดง";
-                  //     }
-                  //     return null;
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Colors.green.shade800, width: 2))),
-                  // ),
-                  // SizedBox(
-                  //   height: 30,
-                  // ),
-                  // Align(
-                  //     alignment: Alignment.topLeft,
-                  //     child: Text(
-                  //       'สถานที่',
-                  //       style: TextStyle(fontSize: 18),
-                  //     )),
-                  // TextFormField(
-                  //   controller: locationController,
-                  //   validator: (String? input) {
-                  //     if (input!.isEmpty) {
-                  //       return "กรุณากรอกสถานที่";
-                  //     }
-                  //     return null;
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: Colors.green.shade800, width: 2))),
-                  // ),
                   SizedBox(
                     height: 30,
                   ),
@@ -156,7 +121,6 @@ class _AddShowState extends State<AddShow> {
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
-
                         onPressed: () {
                           _showDatePicker1(context);
                         },
@@ -167,7 +131,6 @@ class _AddShowState extends State<AddShow> {
                               '${inputFormat.format(_date1)}',
                               style: TextStyle(color: Colors.black),
                             ),
-
                             Icon(
                               Icons.arrow_drop_down,
                               color: Colors.black,
@@ -206,7 +169,6 @@ class _AddShowState extends State<AddShow> {
                           ],
                         )),
                   ),
-
                   SizedBox(height: 70),
                   Container(
                     height: 50,
@@ -216,7 +178,7 @@ class _AddShowState extends State<AddShow> {
                         bool pass = _formKey.currentState!.validate();
                         if (pass) {
                           Map<String, String> data = {
-                            "showName": showController.text,
+                            "showName": show[index].toString(),
                             "startDate": _date1.toString(),
                             "endDate": _date2.toString()
                           };
@@ -245,6 +207,54 @@ class _AddShowState extends State<AddShow> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showPicker(context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 400,
+          width: double.infinity,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: 300,
+                width: double.infinity,
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 30,
+                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  children: show
+                      .map((item) => Center(
+                            child: Text(
+                              item,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ))
+                      .toList(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      this.index = index;
+                      final item = show[index];
+                      print('selected $item');
+                    });
+                  },
+                  diameterRatio: 1,
+                  useMagnifier: true,
+                  magnification: 1.3,
+                ),
+              ),
+              CupertinoButton(
+                child: Text('ยืนยัน'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

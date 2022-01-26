@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../constant.dart';
 
 class UploadDocument extends StatefulWidget {
@@ -49,15 +49,21 @@ class _UploadDocumentState extends State<UploadDocument> {
 
   Future<String?> uploadDocAndRole(
       {required List filePath, required String url, required List role}) async {
+    String? token = await storage.read(key: 'token');
     print('1');
     var request = http.MultipartRequest('POST', Uri.parse(url));
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+      // "Content-Disposition": "attachment;filename=1.png",
+      // "Content-Type": "image/png"
+    };
     for (int i = 0; i < filePath.length; i++) {
       request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
     }
     for (int j = 0; j < role.length; j++) {
       request.fields['roleName[$j]'] = '${role[j]}';
     }
-
+    request.headers.addAll(headers);
     var response = await request.send();
     print(response.statusCode);
   }
@@ -132,7 +138,7 @@ class _UploadDocumentState extends State<UploadDocument> {
               }).toList(),
             ),
             Center(
-              child:  Container(
+              child: Container(
                 margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                 width: double.infinity,
                 height: 45,
@@ -146,16 +152,15 @@ class _UploadDocumentState extends State<UploadDocument> {
                           color: Colors.white,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500)),
-                    onPressed: () {
-                  getItems();
-                  // for (int i = 0; i < filePath.length; i++) {}
-                  uploadDocAndRole(
-                    filePath: result!.paths,
-                    url: '${Constant().endPoint}/api/postDocument',
-                    role: selected,
-                  );
-                },
-               
+                  onPressed: () {
+                    getItems();
+                    // for (int i = 0; i < filePath.length; i++) {}
+                    uploadDocAndRole(
+                      filePath: result!.paths,
+                      url: '${Constant().endPoint}/api/postDocument',
+                      role: selected,
+                    );
+                  },
                 ),
               ),
               // child: ElevatedButton(

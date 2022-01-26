@@ -31,10 +31,11 @@ class _RepairHistoryState extends State<RepairHistory> {
     return formattedDate;
   }
 
-
   late final SlidableController slidableController;
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
+  final snackBar =
+  SnackBar(content: Text('ลบข้อมูลแล้ว'));
 
   Future<Repair> getMaintenance() async {
     String? token = await storage.read(key: 'token');
@@ -45,6 +46,7 @@ class _RepairHistoryState extends State<RepairHistory> {
     print(jsonData);
     return jsonData;
   }
+
   Future deleteMaintenance(String maintenanceID) async {
     print(maintenanceID);
     String? token = await storage.read(key: 'token');
@@ -91,7 +93,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border:
-                        Border.all(color: HexColor('#697825'), width: 1),
+                            Border.all(color: HexColor('#697825'), width: 1),
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: Padding(
@@ -105,7 +107,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                                   width: 80,
                                   child: Padding(
                                     padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
+                                        const EdgeInsets.symmetric(vertical: 8),
                                     child: Image.network(
                                       '${snapshot.data!.data![index].image}',
                                       height: 113,
@@ -120,17 +122,16 @@ class _RepairHistoryState extends State<RepairHistory> {
                                     width: 232,
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Container(
                                           child: Row(
                                             children: [
                                               Flexible(
                                                 child: Text(
-                                                  "ปัญหาที่ชำรุด : ${snapshot
-                                                      .data!.data![index]
-                                                      .requestMessage}",
-                                                  overflow: TextOverflow.ellipsis,
+                                                  "ปัญหาที่ชำรุด : ${snapshot.data!.data![index].requestMessage}",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                   ),
@@ -144,9 +145,9 @@ class _RepairHistoryState extends State<RepairHistory> {
                                             children: [
                                               Flexible(
                                                 child: Text(
-                                                  "สถานที่ : ${snapshot.data!
-                                                      .data![index].location}",
-                                                  overflow: TextOverflow.ellipsis,
+                                                  "สถานที่ : ${snapshot.data!.data![index].location}",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                   ),
@@ -160,9 +161,9 @@ class _RepairHistoryState extends State<RepairHistory> {
                                             children: [
                                               Flexible(
                                                 child: Text(
-                                                  "สถานะ : ${snapshot.data!
-                                                      .data![index].status}",
-                                                  overflow: TextOverflow.ellipsis,
+                                                  "สถานะ : ${snapshot.data!.data![index].status}",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                   ),
@@ -177,13 +178,14 @@ class _RepairHistoryState extends State<RepairHistory> {
                                 )
                               ],
                             ),
-                            Align( 
+                            Align(
                               alignment: Alignment.bottomRight,
                               child: Container(
                                   child: Text(
-                                    formatDateFromString('${snapshot.data!.data![index].createDtm}'),
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                formatDateFromString(
+                                    '${snapshot.data!.data![index].createDtm}'),
+                                style: TextStyle(fontSize: 12),
+                              )),
                             ),
                           ],
                         ),
@@ -201,10 +203,9 @@ class _RepairHistoryState extends State<RepairHistory> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  RepairNoticeUpdate(
-                                      maintenanceID: '${snapshot.data!
-                                          .data![index].maintenanceID}')),
+                              builder: (context) => RepairNoticeUpdate(
+                                  maintenanceID:
+                                      '${snapshot.data!.data![index].maintenanceID}')),
                         );
                       },
                     ),
@@ -213,15 +214,12 @@ class _RepairHistoryState extends State<RepairHistory> {
                       color: Colors.red,
                       icon: Icons.delete,
                       onTap: () {
-                        final snackBar =
-                        SnackBar(content: Text('ลบข้อมูลแล้ว'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        setState(() {
-                          deleteMaintenance(
-                              '${snapshot.data!.data![index].maintenanceID}')
-                              .then((value) =>
-                              snapshot.data!.data!.removeAt(index));
-                        });
+                        deleteMaintenance(
+                                '${snapshot.data!.data![index].maintenanceID}')
+                            .then(
+                                (value) => snapshot.data!.data!.removeAt(index))
+                            .then((value) => setState(() {})).then((value) => ScaffoldMessenger.of(context).showSnackBar(snackBar));
+
                       },
                     ),
                     IconSlideAction(

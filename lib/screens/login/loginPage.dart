@@ -40,6 +40,14 @@ class _MyLoginHomeState extends State<MyLoginHome> {
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
             print(token);
+            // TODO: ความรู้การแตก payload
+            var payload = json.decode(
+                utf8.decode(
+                    base64.decode(base64.normalize(token.split(".")[1]))
+                )
+            );
+            print(payload);
+            print(payload['userID']);
             String firstName = jsonResponse['user']['firstName'];
             String roles = jsonResponse['user']['role'];
             // print(firstName.runtimeType);

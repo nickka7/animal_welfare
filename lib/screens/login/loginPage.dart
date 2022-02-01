@@ -20,7 +20,6 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   TextEditingController _passwordController = TextEditingController();
 
   LoginApi loginAPI = LoginApi();
-
   final storage = new FlutterSecureStorage();
 
   void displayDialog(context, title, text) => showDialog(
@@ -34,12 +33,13 @@ class _MyLoginHomeState extends State<MyLoginHome> {
       try {
         var response = await loginAPI.doLogin(
             _userIDController.text, _passwordController.text);
+        // print(response.body);
         if (response.statusCode == 200) {
           var jsonResponse = json.decode(response.body);
           // print(jsonResponse);
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
-            print(token);
+            // print(token);
             String firstName = jsonResponse['user']['firstName'];
             String roles = jsonResponse['user']['role'];
             // print(firstName.runtimeType);

@@ -3,14 +3,12 @@ import 'package:animal_welfare/screens/home/home.dart';
 import 'package:animal_welfare/screens/notification/warn_notification.dart';
 import 'package:animal_welfare/screens/profile/profile_main.dart';
 
-
 import 'package:flutter/material.dart';
 
-
 class NavigatorBar extends StatefulWidget {
-
   final String? firstName;
   final String? role;
+
   const NavigatorBar({Key? key, this.firstName, this.role}) : super(key: key);
 
   @override
@@ -20,12 +18,14 @@ class NavigatorBar extends StatefulWidget {
 class _NavigatorBarState extends State<NavigatorBar> {
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions = <Widget>[
-    HomePage(firstName: '${widget.firstName}',role: '${widget.role}',),
+    HomePage(
+      firstName: '${widget.firstName}',
+      role: '${widget.role}',
+    ),
     DownloadFile(),
     WarnNotifications(),
     MyMainProfile(),
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; 
+      _selectedIndex = index;
     });
   }
 }

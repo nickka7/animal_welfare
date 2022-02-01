@@ -21,8 +21,10 @@ class _AddShowState extends State<AddShow> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
 
-  DateTime _date1 = DateTime.now();
-  DateTime _date2 = DateTime.now();
+
+
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   int index = 0;
@@ -126,7 +128,7 @@ class _AddShowState extends State<AddShow> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${inputFormat.format(_date1)}',
+                              '${inputFormat.format(startDate)}',
                               style: TextStyle(color: Colors.black),
                             ),
                             Icon(
@@ -157,7 +159,7 @@ class _AddShowState extends State<AddShow> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${inputFormat.format(_date2)}',
+                              '${inputFormat.format(endDate)}',
                               style: TextStyle(color: Colors.black),
                             ),
                             Icon(
@@ -177,8 +179,8 @@ class _AddShowState extends State<AddShow> {
                         if (pass) {
                           Map<String, String> data = {
                             "showName": show[index].toString(),
-                            "startDate": _date1.toString(),
-                            "endDate": _date2.toString()
+                            "startDate": startDate.toString(),
+                            "endDate": endDate.toString()
                           };
                           uploadData(
                                   '${Constant().endPoint}/api/postShow', data)
@@ -273,10 +275,11 @@ class _AddShowState extends State<AddShow> {
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),
+                        use24hFormat: true,
                         onDateTimeChanged: (val) {
                           setState(() {
-                            _date1 = val;
-                            print(_date1);
+                            startDate = val;
+                            print(startDate);
                           });
                         }),
                   ),
@@ -304,13 +307,16 @@ class _AddShowState extends State<AddShow> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
+                      
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),
+                        
+                        use24hFormat: true,
                         onDateTimeChanged: (val) {
                           setState(() {
-                            _date2 = val;
-                            print(_date2);
+                            endDate = val;
+                            print(endDate);
                           });
                         }),
                   ),

@@ -17,6 +17,11 @@ class ShowScreen extends StatefulWidget {
 }
 
 class _ShowScreenState extends State<ShowScreen> {
+  @override
+  void initState() {
+    getDataFromWeb();
+    super.initState();
+  }
   DateTime _convertDateFromString(String? date) {
     return DateTime.parse(date!);
   }

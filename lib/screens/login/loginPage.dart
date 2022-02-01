@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animal_welfare/screens/login/select_contact.dart';
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
 import '../home/navigatorBar.dart';
@@ -130,10 +131,10 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500)),
                           onPressed: () => {
-                            /* Navigator.push(
+                             Navigator.push(
                                 context,MaterialPageRoute(
                                   builder: (context) => const SelectMyContact()),
-                                  ),*/
+                                  ),
                           },
                         ),
                       ),
@@ -159,36 +160,36 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                   onPressed: () => doLogin(),
                 ),
               ),
-              Center(
-                child: Text('หากคุณยังไม่มีบัญชีกรุณาลงทะเบียน',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w300)),
-              ),
+              // Center(
+              //   child: Text('หากคุณยังไม่มีบัญชีกรุณาลงทะเบียน',
+              //       style: TextStyle(
+              //           color: Colors.black,
+              //           fontSize: 12.0,
+              //           fontWeight: FontWeight.w300)),
+              // ),
               //ปุ่มลงทะเบียน
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      primary: HexColor('#697825')),
-                  child: Text('ลงทะเบียน',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500)),
-                  onPressed: () => {
-                    /* Navigator.push(
-                              context,MaterialPageRoute(
-                                builder: (context) => const MyRegisterHome()),
-                                ),*/
-                  },
-                ),
-              ),
+              // Container(
+              //   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              //   width: double.infinity,
+              //   height: 45,
+              //   child: ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //         shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(25.0)),
+              //         primary: HexColor('#697825')),
+              //     child: Text('ลงทะเบียน',
+              //         style: TextStyle(
+              //             color: Colors.white,
+              //             fontSize: 20.0,
+              //             fontWeight: FontWeight.w500)),
+              //     onPressed: () => {
+              //        Navigator.push(
+              //                 context,MaterialPageRoute(
+              //                   builder: (context) => const MyRegisterHome()),
+              //                   ),
+              //     },
+              //   ),
+             // ),
             ],
           ),
         ),

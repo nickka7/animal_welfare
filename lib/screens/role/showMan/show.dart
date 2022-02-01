@@ -45,14 +45,14 @@ class _ShowScreenState extends State<ShowScreen> {
           notes: data['totalAudience']);
 
       appointments.add(meetingData);
+      
     }
     print('after loop');
+   
     return appointments;
   }
 
   List<Appointment> appointments = <Appointment>[];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +137,7 @@ class _ShowScreenState extends State<ShowScreen> {
                                         ))),
                                 title: Container(
                                     child: Text(
-                                        '${appointments[index].subject}',
+                                        '${appointments[index].startTime}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
@@ -149,7 +149,7 @@ class _ShowScreenState extends State<ShowScreen> {
                           height: 5,
                         ),
                       ))),
-                   //FloatingActionButton สำหรับเพิ่มรอบการแสดง   
+                  //FloatingActionButton สำหรับเพิ่มรอบการแสดง
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
@@ -157,9 +157,9 @@ class _ShowScreenState extends State<ShowScreen> {
                       child: FloatingActionButton(
                         onPressed: () {
                           Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddShow()),
-                  );
+                            context,
+                            MaterialPageRoute(builder: (context) => AddShow()),
+                          );
                         },
                         backgroundColor: HexColor("#697825"),
                         child: const Icon(Icons.add),

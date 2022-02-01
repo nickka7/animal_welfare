@@ -152,14 +152,57 @@ class _UploadDocumentState extends State<UploadDocument> {
                           color: Colors.white,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500)),
-                  onPressed: () {
-                    getItems();
-                    // for (int i = 0; i < filePath.length; i++) {}
-                    uploadDocAndRole(
-                      filePath: result!.paths,
-                      url: '${Constant().endPoint}/api/postDocument',
-                      role: selected,
-                    );
+
+                   onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.lightGreen[400],
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                            ),
+                            content: Text(
+                              'ยืนยันการอัปโหลดเอกสาร',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text(
+                                  'ยกเลิก',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              CupertinoDialogAction(
+                                  child: Text(
+                                    'ยืนยัน',
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                  onPressed: () {
+                                    getItems();
+                                    // for (int i = 0; i < filePath.length; i++) {}
+                                    uploadDocAndRole(
+                                      filePath: result!.paths,
+                                      url:
+                                          '${Constant().endPoint}/api/postDocument',
+                                      role: selected,
+                                    );
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    final snackBar = SnackBar(
+                                        content:
+                                            Text('อัปโหลดเอกสารเรียบร้อยแล้ว'));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  })
+                            ],
+                          );
+                        });
                   },
                 ),
               ),

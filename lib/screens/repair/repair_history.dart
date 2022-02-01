@@ -227,7 +227,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                       color: Colors.grey,
                       icon: Icons.close,
                       onTap: () {},
-                    ),
+                  ),
                   ],
                 );
               });

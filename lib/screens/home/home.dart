@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/meeting/meeting_booking.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
-import 'package:animal_welfare/screens/role/Executive/executive_home.dart';
+import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
 //import 'package:animal_welfare/screens/role/Executive/report.dart';
 import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_fristpage.dart';
@@ -52,6 +51,7 @@ class _HomePageState extends State<HomePage> {
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
         headers: {"authorization": 'Bearer $token'});
+    
     // print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));
     // print(jsonData);
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyExecutiveHome()),
+                    MaterialPageRoute(builder: (context) => AnimalReportTest()),
                   );
                 }
                 break;

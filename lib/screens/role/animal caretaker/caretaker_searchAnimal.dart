@@ -1,10 +1,17 @@
 
+import 'dart:convert';
+
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
+
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_animalData.dart';
+
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import '../../../constant.dart';
 
 class SearchAnimalData extends StatefulWidget {
   const SearchAnimalData({Key? key}) : super(key: key);
@@ -19,6 +26,18 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
     init();
     super.initState();
   }
+
+  // final storage = new FlutterSecureStorage();
+  // Future<AllAnimalsWithRole> getAnimal() async {
+  //   String? token = await storage.read(key: 'token');
+  //   String endPoint = Constant().endPoint;
+  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
+  //       headers: {"authorization": 'Bearer $token'});
+  //   print(response.body);
+  //   var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
+  //   print('$jsonData');
+  //   return jsonData;
+  // }
 
   List<Bio> bios = [];
   String query = '';
@@ -62,6 +81,11 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
   }
 
   Widget buildListview() {
+    // return FutureBuilder<AllAnimalsWithRole>(
+    //   future: getAnimal(),
+    //   builder:
+    //       (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
+    //     if (snapshot.hasData) {
           return ListView.builder(
               itemCount: bios.length,
               shrinkWrap: true,
@@ -135,6 +159,13 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                   ),
                 );
               });
+    //     } else {
+    //       return Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //   },
+    // );
   }
 
   Widget buildSearch() => SearchWidget(

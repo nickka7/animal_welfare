@@ -16,6 +16,7 @@ class _WarnNotificationsState extends State<WarnNotifications> {
     return Scaffold(
       backgroundColor: HexColor("#F7F7F7"),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         flexibleSpace: Container(
           decoration: BoxDecoration(
         color: HexColor("#697825")

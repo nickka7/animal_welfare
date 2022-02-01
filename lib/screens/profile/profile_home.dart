@@ -25,6 +25,7 @@ class _MyHomeProfileState extends State<MyHomeProfile> {
                 Colors.blue.shade600
               ]))),
           centerTitle: true,
+          
           title: Text('ข้อมูลส่วนตัว'),
         ),
         body: Container(

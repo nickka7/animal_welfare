@@ -57,6 +57,7 @@ class _MyExecutiveHomeState extends State<MyExecutiveHome> {
             decoration: BoxDecoration(color: HexColor("#697825")),
           ),
           centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Text('ผู้บริหาร', style: const TextStyle(color: Colors.white)),
         ),
         body: FutureBuilder(

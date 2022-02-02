@@ -228,7 +228,7 @@ class _MySettingHomeState extends State<MySettingHome> {
                                 children: [
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text('ออกจาระบบ',
+                                    child: Text('ออกจากระบบ',
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 18.0,
@@ -245,7 +245,7 @@ class _MySettingHomeState extends State<MySettingHome> {
                                 onPressed: () async {
                                   final action = await UserLogout.yesCancelDialog(context, 'ต้องการออกจากระบบ');
                                   if (action == DialogAction.yes) {
-                                    setState(() => tappedYes = true);  
+                                    setState(() => UserLogout().clearTokenAndLogout(context));
                                     } else {
                                       setState(() => tappedYes = true);
                                     }

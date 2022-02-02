@@ -43,18 +43,18 @@ class _AnimalReportState extends State<AnimalReportTest> {
 
   final storage = new FlutterSecureStorage();
 
-   Future<GetReport> getAnimalReport() async {
+  Future<GetReport> getAnimalReport() async {
     String? token = await storage.read(key: 'token');
     //String? year = await storage.read(key: 'year');
-    
+
     // String? month = await storage.read(key: 'month');
     // String? vaccine = await storage.read(key: 'vaccineType');
     String endPoint = Constant().endPoint;
     var response = await http.get(
-        Uri.parse(
-            '$endPoint/api/getReport/getReport?year=${year[indexY]}&month=${month[indexM]}&vaccineType=${vaccine[indexV]}'),
-        headers: {"authorization": 'Bearer $token'},
-        );
+      Uri.parse(
+          '$endPoint/api/getReport?year=${year[indexY]}&month=${month[indexM]}&vaccineType=${vaccine[indexV]}'),
+      headers: {"authorization": 'Bearer $token'},
+    );
     print(response.body);
     var jsonData = GetReport.fromJson(jsonDecode(response.body));
     print('$jsonData');
@@ -176,7 +176,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    getAnimalReport();
+                    getAnimalReport().then((value) => _charts());
                   },
                   child: Text('ค้นหา',
                       style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -186,6 +186,9 @@ class _AnimalReportState extends State<AnimalReportTest> {
                       primary: HexColor('#697825')),
                 ),
               ),
+              SizedBox(height: 30),
+              //กราฟ
+              _charts()
             ],
           ),
         ),
@@ -336,4 +339,13 @@ class _AnimalReportState extends State<AnimalReportTest> {
       },
     );
   }
+
+  _charts() {
+    return Container(
+      child: Text('data'),
+
+    );
+  }
 }
+
+

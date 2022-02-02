@@ -36,6 +36,7 @@ class _DownloadFileState extends State<DownloadFile> {
         appBar: AppBar(
           title: const Text('เอกสาร'),
           centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: FutureBuilder(

@@ -23,10 +23,9 @@ import 'package:http/http.dart' as http;
 import '../../constant.dart';
 
 class HomePage extends StatefulWidget {
-  final String? firstName;
-  final String? role;
+  final payload;
  // final String? image;
-  const HomePage({Key? key, this.firstName, this.role}) : super(key: key);
+  const HomePage({Key? key,this.payload}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -118,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                   TextStyle(fontSize: 30, color: Colors.white),
                             ),
                             Text(
-                              '${widget.firstName}',
+                              '${widget.payload['firstName']}',
                               style:
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
@@ -163,7 +162,7 @@ class _HomePageState extends State<HomePage> {
       child: TextButton(
         onPressed: () {
           setState(() {
-            switch (widget.role) {
+            switch (widget.payload['role']) {
               case 'ceo':
                 {
                   Navigator.push(

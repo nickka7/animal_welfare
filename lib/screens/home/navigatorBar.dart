@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:animal_welfare/screens/document/DownloadFile.dart';
 import 'package:animal_welfare/screens/home/home.dart';
 import 'package:animal_welfare/screens/notification/warn_notification.dart';
@@ -9,9 +11,8 @@ import 'package:flutter/material.dart';
 
 class NavigatorBar extends StatefulWidget {
 
-  final String? firstName;
-  final String? role;
-  const NavigatorBar({Key? key, this.firstName, this.role}) : super(key: key);
+  final payload;
+  const NavigatorBar({Key? key, this.payload}) : super(key: key);
 
   @override
   _NavigatorBarState createState() => _NavigatorBarState();
@@ -19,12 +20,14 @@ class NavigatorBar extends StatefulWidget {
 
 class _NavigatorBarState extends State<NavigatorBar> {
   int _selectedIndex = 0;
+
   late List<Widget> _widgetOptions = <Widget>[
-    HomePage(firstName: '${widget.firstName}',role: '${widget.role}',),
+    HomePage(payload: widget.payload),
     DownloadFile(),
     WarnNotifications(),
     MyMainProfile(),
   ];
+
 
 
   @override

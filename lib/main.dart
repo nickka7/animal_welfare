@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/home/navigatorBar.dart';
 import 'package:animal_welfare/screens/login/loginPage.dart';
@@ -51,17 +50,20 @@ class MyApp extends StatelessWidget {
       home: FutureBuilder(
         future: jwtOrEmpty,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if(!snapshot.hasData) return CircularProgressIndicator();
-          if(snapshot.data != "") {
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (snapshot.data != "") {
             var str = snapshot.data;
             var jwt = str!.split(".");
 
-            if(jwt.length !=3) {
+            if (jwt.length != 3) {
               return MyLoginHome();
             } else {
-              var payload = json.decode(utf8.decode(base64.decode(base64.normalize(jwt[1]))));
-              if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
-                return NavigatorBar();//HomePage(str, payload);
+              var payload = json
+                  .decode(utf8.decode(base64.decode(base64.normalize(jwt[1]))));
+              print(payload.runtimeType);
+              if (DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000)
+                  .isAfter(DateTime.now())) {
+                return NavigatorBar(payload: payload); //HomePage(str, payload);
               } else {
                 return MyLoginHome();
               }
@@ -69,7 +71,7 @@ class MyApp extends StatelessWidget {
           } else {
             return MyLoginHome();
           }
-          },
+        },
       ),
     );
   }

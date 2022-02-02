@@ -40,7 +40,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
             print(token);
-            // TODO: ความรู้การแตก payload
+            // TODO: ความรู้การแตก jwt token เอา payload
             var payload = json.decode(
                 utf8.decode(
                     base64.decode(base64.normalize(token.split(".")[1]))
@@ -57,8 +57,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
               context,
               MaterialPageRoute(
                 builder: (context) => NavigatorBar(
-                  firstName: firstName,
-                  role: roles
+                    payload: payload
                 ),
               ),
             );

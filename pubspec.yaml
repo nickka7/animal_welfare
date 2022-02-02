@@ -45,7 +45,7 @@ dependencies:
   dio: ^4.0.4
   flutter_secure_storage: ^5.0.2
   file_picker: ^4.3.1
-
+  charts_flutter: ^0.12.0
 
 
 

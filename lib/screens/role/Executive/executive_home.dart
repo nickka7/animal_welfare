@@ -59,6 +59,10 @@ class _MyExecutiveHomeState extends State<MyExecutiveHome> {
           centerTitle: true,
           automaticallyImplyLeading: false,
           title: Text('ผู้บริหาร', style: const TextStyle(color: Colors.white)),
+           leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         ),
         body: FutureBuilder(
           builder:

@@ -142,7 +142,7 @@ class _ShowScreenState extends State<ShowScreen> {
                                         ))),
                                 title: Container(
                                     child: Text(
-                                        '${appointments[index].startTime}',
+                                        '${appointments[index].subject}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,

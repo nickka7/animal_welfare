@@ -4,13 +4,13 @@
 /// total : [{"typeName":"ช้าง","total":8},{"typeName":"ม้าลาย","total":2},{"typeName":"ยีราฟ","total":2},{"typeName":"เสือ","total":5}]
 /// vaccinate : [{"typeName":"ช้าง","vaccinate":2},{"typeName":"ม้าลาย","vaccinate":1},{"typeName":"ยีราฟ","vaccinate":1},{"typeName":"เสือ","vaccinate":1}]
 
-class GetReport {
-  GetReport({
+class GetReportAnimal {
+  GetReportAnimal({
       String? resultCode, 
       String? status, 
       dynamic errorMessage, 
       List<Total>? total, 
-      List<Vaccinate>? vaccinate,}){
+      List<Vaccinate>? vaccinate, typeName,}){
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
@@ -18,7 +18,7 @@ class GetReport {
     _vaccinate = vaccinate;
 }
 
-  GetReport.fromJson(dynamic json) {
+  GetReportAnimal.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
     _status = json['status'];
     _errorMessage = json['errorMessage'];
@@ -97,7 +97,7 @@ class Vaccinate {
 /// total : 8
 
 class Total {
-  Total({
+  Total(String s, int i, {
       String? typeName, 
       int? total,}){
     _typeName = typeName;

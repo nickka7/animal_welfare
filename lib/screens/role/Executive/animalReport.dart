@@ -3,6 +3,7 @@ import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/VacHis.dart';
 import 'package:animal_welfare/model/report_animal.dart';
+import 'package:animal_welfare/screens/role/Executive/animalCharts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -43,12 +44,8 @@ class _AnimalReportState extends State<AnimalReportTest> {
 
   final storage = new FlutterSecureStorage();
 
-  Future<GetReport> getAnimalReport() async {
+  Future<GetReportAnimal> getAnimalReport() async {
     String? token = await storage.read(key: 'token');
-    //String? year = await storage.read(key: 'year');
-
-    // String? month = await storage.read(key: 'month');
-    // String? vaccine = await storage.read(key: 'vaccineType');
     String endPoint = Constant().endPoint;
     var response = await http.get(
       Uri.parse(
@@ -56,7 +53,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
       headers: {"authorization": 'Bearer $token'},
     );
     print(response.body);
-    var jsonData = GetReport.fromJson(jsonDecode(response.body));
+    var jsonData = GetReportAnimal.fromJson(jsonDecode(response.body));
     print('$jsonData');
     return jsonData;
   }
@@ -176,7 +173,9 @@ class _AnimalReportState extends State<AnimalReportTest> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    getAnimalReport().then((value) => _charts());
+                    getAnimalReport().then((value) => _charts(
+
+                    ));
                   },
                   child: Text('ค้นหา',
                       style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -340,12 +339,20 @@ class _AnimalReportState extends State<AnimalReportTest> {
     );
   }
 
-  _charts() {
-    return Container(
-      child: Text('data'),
-
+  Widget _charts() {
+    return FutureBuilder<GetReportAnimal>(
+      future: getAnimalReport(),
+      builder: (BuildContext context, AsyncSnapshot<GetReportAnimal> snapshot) {
+        if (snapshot.hasData) {
+          return SafeArea(
+            child: Container(child: SimpleBarChart(report: snapshot.data!,)),
+          );
+        } else {
+          return new Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
-
-

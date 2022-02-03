@@ -28,6 +28,7 @@ class _MyMainProfileState extends State<MyMainProfile> {
     return Scaffold(
       backgroundColor: HexColor("#F7F7F7"),
       appBar: AppBar(
+         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           decoration: BoxDecoration(
         color: HexColor("#697825")
@@ -35,7 +36,8 @@ class _MyMainProfileState extends State<MyMainProfile> {
         ),
           centerTitle: true,
           title: Text('ข้อมูลส่วนตัว',
-          style: const TextStyle(color: Colors.white)   
+          style: const TextStyle(color: Colors.white),  
+         
       ),
       ),
       body: SingleChildScrollView(

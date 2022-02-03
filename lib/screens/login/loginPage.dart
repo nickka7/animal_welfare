@@ -76,14 +76,17 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[HexColor("#697825"), HexColor("#FFFFFF")]),
-          ),
+      body: Container(
+       decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          HexColor('#697825'),
+          Colors.white,
+        ],
+      )),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
@@ -114,7 +117,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                         },
                         decoration: InputDecoration(hintText: 'Username'),
                       ),
-
+        
                       //TextForm password
                       TextFormField(
                         controller: _passwordController,

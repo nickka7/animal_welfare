@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/VacHis.dart';
 import 'package:animal_welfare/model/report_animal.dart';
 import 'package:animal_welfare/screens/role/Executive/animalCharts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class AnimalReportTest extends StatefulWidget {
   const AnimalReportTest({Key? key}) : super(key: key);
@@ -58,6 +58,23 @@ class _AnimalReportState extends State<AnimalReportTest> {
     return jsonData;
   }
 
+  //  List<charts.Series<Total, String>> createData() {
+  //   final data = [
+  //     Total('typeName', 29),
+  //     Total('เสือ', 50),
+  //     Total('ยีราฟ', 88),
+  //   ];
+  //   return [
+  //     charts.Series<Total, String>(
+  //       data: data,
+  //       id: 'sale',
+  //       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+  //       domainFn: (Total barModel, _) => barModel.typeName.toString(),
+  //       measureFn: (Total barModel, _) => barModel.total,
+  //     )
+  //   ];
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,13 +94,6 @@ class _AnimalReportState extends State<AnimalReportTest> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                // child: Text(
-                //   'กรุณาเลือกเดือน',
-                //   style: TextStyle(fontSize: 18),
-                // )
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -187,7 +197,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
               ),
               SizedBox(height: 30),
               //กราฟ
-              _charts()
+          _charts()
             ],
           ),
         ),
@@ -355,4 +365,15 @@ class _AnimalReportState extends State<AnimalReportTest> {
       },
     );
   }
+
+  // Widget charts1(){
+  //   return Container(
+  //      height: 300,
+  //     // width: 300,
+  //     child: charts.BarChart(
+  //       createData(),
+  //       animate: true,
+  //     ),
+  //   );
+  // }
 }

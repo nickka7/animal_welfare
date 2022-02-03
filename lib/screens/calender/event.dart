@@ -240,7 +240,7 @@ class Meeting {
   DateTime? from;
   DateTime? to;
   Color? background;
-   String? location;
-   bool isAllDay;
+  String? location;
+  bool isAllDay;
 
 }

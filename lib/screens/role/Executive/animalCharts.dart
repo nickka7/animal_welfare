@@ -14,23 +14,20 @@ class SimpleBarChart extends StatefulWidget {
   @override
   State<SimpleBarChart> createState() => _SimpleBarChartState();
 }
-
-final storage = new FlutterSecureStorage();
-
  
-   List<charts.Series<Total, String>> _createData() {
+   List<charts.Series<BarCharts, String>> _createData() {
     final data = [
-      Total('typeName', 29),
-      Total('เสือ', 50),
-      Total('ยีราฟ', 88),
+      BarCharts('ช้าง', 29),
+      BarCharts('เสือ', 50),
+      BarCharts('ยีราฟ', 88),
     ];
     return [
-      charts.Series<Total, String>(
+      charts.Series<BarCharts, String>(
         data: data,
         id: 'sale',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (Total barModel, _) => barModel.typeName.toString(),
-        measureFn: (Total barModel, _) => barModel.total,
+        domainFn: (BarCharts barModel, _) => barModel.animalType,
+        measureFn: (BarCharts barModel, _) => barModel.total,
       )
     ];
   }
@@ -42,7 +39,10 @@ class _SimpleBarChartState extends State<SimpleBarChart> {
     return Container(
       height: 300,
       width: 350,
-      child: Text('${widget.report.total![0].typeName}')
+      child: charts.BarChart(
+        _createData(),
+        animate: true,
+      ),
     );
   }
 }

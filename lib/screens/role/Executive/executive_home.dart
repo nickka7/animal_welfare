@@ -1,7 +1,6 @@
 // import 'dart:ffi';
 
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/model/get_sky_line.dart';
 import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_employee.dart';

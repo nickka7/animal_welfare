@@ -21,7 +21,7 @@ class _RepairNoticeState extends State<RepairNotice> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-
+  bool _validate = false;
   Future<Null> chooseImage(ImageSource source) async {
     try {
       var object = await ImagePicker().pickImage(
@@ -84,6 +84,7 @@ class _RepairNoticeState extends State<RepairNotice> {
                       )),
                   TextFormField(
                     controller: repairController,
+
                     validator: (String? input) {
                       if (input!.isEmpty) {
                         return "กรุณากรอกปัญหาที่ชำรุด";

@@ -205,7 +205,8 @@ class _RepairHistoryState extends State<RepairHistory> {
                           MaterialPageRoute(
                               builder: (context) => RepairNoticeUpdate(
                                   maintenanceID:
-                                      '${snapshot.data!.data![index].maintenanceID}')),
+                                      '${snapshot.data!.data![index].maintenanceID}', location: '${snapshot.data!.data![index].location}', maintenanceDetail: '${snapshot.data!.data![index].requestMessage}',)),
+                                      
                         );
                       },
                     ),

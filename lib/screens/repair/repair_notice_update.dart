@@ -8,9 +8,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:animal_welfare/constant.dart';
 
 class RepairNoticeUpdate extends StatefulWidget {
-  final String? maintenanceID;
+  final String maintenanceID;
+  final String maintenanceDetail;
+  final String location;
 
-  RepairNoticeUpdate({Key? key, this.maintenanceID}) : super(key: key);
+  RepairNoticeUpdate(
+      {Key? key,
+      required this.maintenanceID,
+      required this.maintenanceDetail,
+      required this.location})
+      : super(key: key);
 
   @override
   State<RepairNoticeUpdate> createState() => _RepairNoticeUpdateState();
@@ -96,6 +103,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                     //   return null;
                     // },
                     decoration: InputDecoration(
+                        hintText: '${widget.maintenanceDetail}',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -117,6 +125,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                     // },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        hintText: '${widget.location}',
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
@@ -148,8 +157,8 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                     height: 50,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                       ),
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
                     child: ElevatedButton(
                       onPressed: () {
                         // bool pass = _formKey.currentState!.validate();
@@ -197,7 +206,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
-                                            });
+                                        });
                                       })
                                 ],
                               );

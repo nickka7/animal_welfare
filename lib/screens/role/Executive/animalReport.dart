@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/report_animal.dart';
-import 'package:animal_welfare/screens/role/Executive/animalCharts.dart';
+import 'package:animal_welfare/model/reportAnimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -44,7 +43,9 @@ class _AnimalReportState extends State<AnimalReportTest> {
 
   final storage = new FlutterSecureStorage();
 
-  Future<GetReportAnimal> getAnimalReport() async {
+  List<AnimalReport> report = [];
+
+  Future<AnimalReport> getAnimalReport() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(
@@ -52,29 +53,30 @@ class _AnimalReportState extends State<AnimalReportTest> {
           '$endPoint/api/getReport?year=${year[indexY]}&month=${month[indexM]}&vaccineType=${vaccine[indexV]}'),
       headers: {"authorization": 'Bearer $token'},
     );
-    print(response.body);
-    var jsonData = GetReportAnimal.fromJson(jsonDecode(response.body));
+
+    //print(response.body);
+    var jsonData = jsonDecode(response.body);
+    
+    List<AnimalReport> tempdata = animalReportFromJson(response.body) ;
+    setState(() {
+      report = tempdata;
+     
+    });
     print('$jsonData');
     return jsonData;
   }
-
-  //  List<charts.Series<Total, String>> createData() {
-  //   final data = [
-  //     Total('typeName', 29),
-  //     Total('เสือ', 50),
-  //     Total('ยีราฟ', 88),
-  //   ];
-  //   return [
-  //     charts.Series<Total, String>(
-  //       data: data,
-  //       id: 'sale',
-  //       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-  //       domainFn: (Total barModel, _) => barModel.typeName.toString(),
-  //       measureFn: (Total barModel, _) => barModel.total,
-  //     )
-  //   ];
-  // }
-
+  
+List<charts.Series<AnimalReport, String>> _createSampleData() {
+    return [
+      charts.Series<AnimalReport, String>(
+        data: report,
+        id: 'sales',
+        colorFn: (_, __) => charts.MaterialPalette.teal.shadeDefault,
+        domainFn: (AnimalReport genderModel, _) => genderModel.typename,
+        measureFn: (AnimalReport genderModel, _) => genderModel.percent,
+      )
+    ];
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -183,9 +185,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    getAnimalReport().then((value) => _charts(
-
-                    ));
+                    getAnimalReport().then((value) => charts1());
                   },
                   child: Text('ค้นหา',
                       style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -195,9 +195,13 @@ class _AnimalReportState extends State<AnimalReportTest> {
                       primary: HexColor('#697825')),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 40),
               //กราฟ
-          _charts()
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
+                    charts1()
             ],
           ),
         ),
@@ -349,31 +353,17 @@ class _AnimalReportState extends State<AnimalReportTest> {
     );
   }
 
-  Widget _charts() {
-    return FutureBuilder<GetReportAnimal>(
-      future: getAnimalReport(),
-      builder: (BuildContext context, AsyncSnapshot<GetReportAnimal> snapshot) {
-        if (snapshot.hasData) {
-          return SafeArea(
-            child: Container(child: SimpleBarChart(report: snapshot.data!,)),
-          );
-        } else {
-          return new Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+
+  Widget charts1() {
+    return Container(
+      height: 300,
+      width: 300,
+      child: charts.BarChart(
+        
+        _createSampleData(),
+        animate: true,
+      ),
+      
     );
   }
-
-  // Widget charts1(){
-  //   return Container(
-  //      height: 300,
-  //     // width: 300,
-  //     child: charts.BarChart(
-  //       createData(),
-  //       animate: true,
-  //     ),
-  //   );
-  // }
 }

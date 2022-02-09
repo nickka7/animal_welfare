@@ -72,7 +72,6 @@ class _AnimalReportState extends State<AnimalReportTest> {
         data: report,
         id: 'sales',
         colorFn: (_, __) => charts.MaterialPalette.teal.shadeDefault,
-        domainUpperBoundFn: (datum, index) => (100,100),
         domainFn: (AnimalReport genderModel, _) => genderModel.typename,
         measureFn: (AnimalReport genderModel, _) => genderModel.percent,
       )

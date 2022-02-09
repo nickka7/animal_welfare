@@ -130,33 +130,31 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
   }
 
   Widget _buildfont(var title, var data) {
-    return Container(
-      width: 370,
-      child: Row(
-        children: [
-          Flexible(
-            child: Text(
-              title,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold),
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Text(
+            title,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold),
           ),
-          Flexible(
-            child: Text(
-              data,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              softWrap: false,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.normal),
-            ),
-          )
-        ],
-      ),
+        ),
+        Flexible(
+          child: Text(
+            data,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            softWrap: false,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.normal),
+          ),
+        )
+      ],
     );
   }
 

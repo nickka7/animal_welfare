@@ -19,6 +19,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
   TextEditingController yearController = TextEditingController();
   TextEditingController monthController = TextEditingController();
   TextEditingController vaccineController = TextEditingController();
+
   // DateTime _Date = DateTime.now();
   int indexY = 0;
   int indexM = 0;
@@ -39,7 +40,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
     'พฤศจิกายน',
     'ธันวาคม'
   ];
-  final vaccine = ['พิษสุนัขบ้า', 'บาดทะยัก'];
+  final vaccine = ['บาดทะยัก', 'พิษสุนัขบ้า'];
 
   final storage = new FlutterSecureStorage();
 
@@ -56,27 +57,28 @@ class _AnimalReportState extends State<AnimalReportTest> {
 
     //print(response.body);
     var jsonData = jsonDecode(response.body);
-    
-    List<AnimalReport> tempdata = animalReportFromJson(response.body) ;
+
+    List<AnimalReport> tempdata = animalReportFromJson(response.body);
     setState(() {
       report = tempdata;
-     
     });
     print('$jsonData');
     return jsonData;
   }
-  
-List<charts.Series<AnimalReport, String>> _createSampleData() {
+
+  List<charts.Series<AnimalReport, String>> _createSampleData() {
     return [
       charts.Series<AnimalReport, String>(
         data: report,
         id: 'sales',
         colorFn: (_, __) => charts.MaterialPalette.teal.shadeDefault,
+        domainUpperBoundFn: (datum, index) => (100,100),
         domainFn: (AnimalReport genderModel, _) => genderModel.typename,
         measureFn: (AnimalReport genderModel, _) => genderModel.percent,
       )
     ];
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,7 +187,7 @@ List<charts.Series<AnimalReport, String>> _createSampleData() {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    getAnimalReport().then((value) => charts1());
+                    getAnimalReport();
                   },
                   child: Text('ค้นหา',
                       style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -199,9 +201,9 @@ List<charts.Series<AnimalReport, String>> _createSampleData() {
               //กราฟ
               SizedBox(height: 10),
               Align(
-                alignment: Alignment.topCenter,
-                child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
-                    charts1()
+                  alignment: Alignment.topCenter,
+                  child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
+              charts1()
             ],
           ),
         ),
@@ -353,17 +355,19 @@ List<charts.Series<AnimalReport, String>> _createSampleData() {
     );
   }
 
-
   Widget charts1() {
-    return Container(
-      height: 300,
-      width: 300,
-      child: charts.BarChart(
-        
-        _createSampleData(),
-        animate: true,
-      ),
-      
-    );
+    if (report.isNotEmpty) {
+      return Container(
+        height: 300,
+        width: 300,
+        child: charts.BarChart(
+          _createSampleData(),
+          animate: true,
+
+
+        ),
+      );
+    } else
+      return Text("");
   }
 }

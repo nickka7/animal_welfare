@@ -96,12 +96,6 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                       )),
                   TextFormField(
                     controller: repairController,
-                    // validator: (String? input) {
-                    //   if (input!.isEmpty) {
-                    //     return "กรุณากรอกปัญหาที่ชำรุด";
-                    //   }
-                    //   return null;
-                    // },
                     decoration: InputDecoration(
                         hintText: '${widget.maintenanceDetail}',
                         border: OutlineInputBorder(),
@@ -117,12 +111,6 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                       )),
                   TextFormField(
                     controller: locationController,
-                    // validator: (String? input) {
-                    //   if (input!.isEmpty) {
-                    //     return "กรุณากรอกสถานที่";
-                    //   }
-                    //   return null;
-                    // },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: '${widget.location}',
@@ -161,8 +149,6 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        // bool pass = _formKey.currentState!.validate();
-                        // if (pass) {
                         Map<String, String> data = {
                           "maintenanceDetail": repairController.text,
                           "location": locationController.text,
@@ -196,27 +182,19 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                                         'ยืนยัน',
                                         style: TextStyle(color: Colors.green),
                                       ),
-                                      onPressed: () {
-                                        print('before upload image');
+                                      onPressed: (){
                                         uploadImageAndData(
                                                 file?.path,
                                                 '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',
                                                 data)
                                             .then((value) {
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
                                         });
                                       })
                                 ],
                               );
                             });
-                        // print('before upload image');
-                        // uploadImageAndData(
-                        //     file!.path,
-                        //     '${Constant().endPoint}/api/postMaintenance',
-                        //     data);
-                        // }
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),

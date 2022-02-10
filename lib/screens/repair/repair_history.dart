@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:animal_welfare/haxColor.dart';
@@ -34,8 +35,7 @@ class _RepairHistoryState extends State<RepairHistory> {
   late final SlidableController slidableController;
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
-  final snackBar =
-  SnackBar(content: Text('ลบข้อมูลแล้ว'));
+  final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
 
   Future<Repair> getMaintenance() async {
     String? token = await storage.read(key: 'token');
@@ -56,6 +56,16 @@ class _RepairHistoryState extends State<RepairHistory> {
     var jsonResponse = await json.decode(response.body);
     print(jsonResponse['message']);
   }
+
+  // FutureOr onGoBack(dynamic value){
+  //   getMaintenance();
+  //   setState(() {});
+  // }
+
+  // Future onGoBack(dynamic value) async{
+  //   await getMaintenance();
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -204,10 +214,14 @@ class _RepairHistoryState extends State<RepairHistory> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => RepairNoticeUpdate(
-                                  maintenanceID:
-                                      '${snapshot.data!.data![index].maintenanceID}', location: '${snapshot.data!.data![index].location}', maintenanceDetail: '${snapshot.data!.data![index].requestMessage}',)),
-                                      
-                        );
+                                    maintenanceID:
+                                        '${snapshot.data!.data![index].maintenanceID}',
+                                    location:
+                                        '${snapshot.data!.data![index].location}',
+                                    maintenanceDetail:
+                                        '${snapshot.data!.data![index].requestMessage}',
+                                  )),
+                        ).then((value) => setState((){})); //หลังจาก call back เรียก setState
                       },
                     ),
                     IconSlideAction(
@@ -219,8 +233,9 @@ class _RepairHistoryState extends State<RepairHistory> {
                                 '${snapshot.data!.data![index].maintenanceID}')
                             .then(
                                 (value) => snapshot.data!.data!.removeAt(index))
-                            .then((value) => setState(() {})).then((value) => ScaffoldMessenger.of(context).showSnackBar(snackBar));
-
+                            .then((value) => setState(() {}))
+                            .then((value) => ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar));
                       },
                     ),
                     IconSlideAction(
@@ -228,7 +243,7 @@ class _RepairHistoryState extends State<RepairHistory> {
                       color: Colors.grey,
                       icon: Icons.close,
                       onTap: () {},
-                  ),
+                    ),
                   ],
                 );
               });

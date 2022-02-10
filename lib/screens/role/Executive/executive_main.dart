@@ -4,6 +4,7 @@ import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/SearchAllAnimal.dart';
+import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_employee.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_visitors.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstpage.dart';
@@ -58,26 +59,45 @@ class _CeoHomeState extends State<CeoHome> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(8.0),
+         decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
+        // margin: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Flexible(
-              child: Container(
-                height: 130,
-                child: TextButton(
-                  child: buildStatCard(
-                      'จำนวนผู้เข้าชมสวนสัตว์', 5,'คน', HexColor("#9B7401")),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QuantityVisitors()),
-                    ),
-                  },
-                ),
-              ),
-            ),
             Container(
+              decoration: BoxDecoration(
+                          color: HexColor("#F2F2F2"),
+                          borderRadius:
+                              BorderRadius.only(bottomLeft: (Radius.circular(60))),
+                        ),
+              height: 320,
+             // color: Colors.white,
+              child: Column(
+                children: [
+                  Flexible(
+                    child: Container(
+                      height: 130,
+                      child: TextButton(
+                        child: buildStatCard(
+                            'จำนวนผู้เข้าชมสวนสัตว์', 5, 'คน', HexColor("#9B7401")),
+                        onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => QuantityVisitors()),
+                          ),
+                        },
+                      ),
+                    ),
+                  ),
+                   Container(
               child: Row(
                 children: [
                   Flexible(
@@ -85,8 +105,8 @@ class _CeoHomeState extends State<CeoHome> {
                       height: MediaQuery.of(context).size.height * 0.2,
                       width: 200,
                       child: TextButton(
-                        child: buildStatCard('เจ้าหน้าที่\nที่มาปฏิบัติงาน',
-                            5,'คน', HexColor("#3B5998")),
+                        child: buildStatCard('เจ้าหน้าที่\nที่มาปฏิบัติงาน', 5,
+                            'คน', HexColor("#3B5998")),
                         onPressed: () => {
                           Navigator.push(
                             context,
@@ -109,7 +129,8 @@ class _CeoHomeState extends State<CeoHome> {
                               return TextButton(
                                 child: buildStatCard(
                                     'จำนวนสัตว์',
-                                    snapshot.data!.data!.amount,'ตัว',
+                                    snapshot.data!.data!.amount,
+                                    'ตัว',
                                     HexColor("#28B446")),
                                 onPressed: () => {
                                   Navigator.push(
@@ -131,29 +152,96 @@ class _CeoHomeState extends State<CeoHome> {
                 ],
               ),
             ),
-            Flexible(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                        'อัพเดทข้อมูลล่าสุด : ${DateFormat("dd/MM/yyyy HH:mm").format(myDateTime)}',
-                        textAlign: TextAlign.right)
-                  ],
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                      'อัพเดทข้อมูลล่าสุด : ${DateFormat("dd/MM/yyyy HH:mm").format(myDateTime)}',
+                      textAlign: TextAlign.right)
+                ],
+              ),
+            ),
+                ],
+              ),
+            ),
+           SizedBox(height: 15,),
+            
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+              child: Card(
+                elevation: 5,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AnimalReportTest()),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('รายงานการเข้างานของพนักงาน',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black)),
+                        Icon(
+                          Icons.navigate_next,
+                          color: Colors.black,
+                          size: 40,
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            )
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+              child: Card(
+                elevation: 5,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AnimalReportTest()),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('รายงานการฉีดวัคซีนของสัตว์แต่ละชนิด',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black)),
+                        Icon(
+                          Icons.navigate_next,
+                          color: Colors.black,
+                          size: 40,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  buildStatCard(String title, int? count,String text, HexColor color) {
+  buildStatCard(String title, int? count, String text, HexColor color) {
     return Container(
-    //  margin: const EdgeInsets.symmetric(vertical: 8),
+      //  margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: color,

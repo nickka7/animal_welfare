@@ -70,7 +70,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
     return [
       charts.Series<AnimalReport, String>(
         data: report,
-        id: 'sales',
+        id: 'animal',
         colorFn: (_, __) => charts.MaterialPalette.teal.shadeDefault,
         domainFn: (AnimalReport genderModel, _) => genderModel.typename,
         measureFn: (AnimalReport genderModel, _) => genderModel.percent,
@@ -199,9 +199,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
               SizedBox(height: 40),
               //กราฟ
               SizedBox(height: 10),
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
+              
               charts1()
             ],
           ),
@@ -356,15 +354,20 @@ class _AnimalReportState extends State<AnimalReportTest> {
 
   Widget charts1() {
     if (report.isNotEmpty) {
-      return Container(
-        height: 300,
-        width: 300,
-        child: charts.BarChart(
-          _createSampleData(),
-          animate: true,
-
-
-        ),
+      return Column(
+        children: [
+          Align(
+                  alignment: Alignment.topCenter,
+                  child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
+          Container(
+            height: 300,
+            width: 300,
+            child: charts.BarChart(
+              _createSampleData(),
+              animate: true,
+            ),
+          ),
+        ],
       );
     } else
       return Text("");

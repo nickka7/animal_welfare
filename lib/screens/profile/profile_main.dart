@@ -141,7 +141,7 @@ class _MyMainProfileState extends State<MyMainProfile> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 15),
               width: double.infinity,
-              height: 330,
+              height: 335,
               decoration: BoxDecoration(
                 border: Border.all(color: HexColor("#697825")),
                 color: HexColor("#ECEFF0"),
@@ -149,75 +149,73 @@ class _MyMainProfileState extends State<MyMainProfile> {
               
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('ข้อมูลพนักงาน',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                        ),),
-                        // ignore: deprecated_member_use
-                        FlatButton(
-                          onPressed: () => {
-                            Navigator.push(
-                              context,MaterialPageRoute(
-                                builder: (context) => const ModifyMySelf()),
-                              ),
-                          },
-                          child:  Image.asset('icontaps/pencil.png',
-                          ),
-                          )],
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Flexible(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            dataDetailOne('วันเกิด', 'เพศ', 'ที่อยู่'),
-                            ],
-                            )
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('ข้อมูลพนักงาน',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                          // ignore: deprecated_member_use
+                          FlatButton(
+                            onPressed: () => {
+                              Navigator.push(
+                                context,MaterialPageRoute(
+                                  builder: (context) => const ModifyMySelf()),
+                                ),
+                            },
+                            child:  Image.asset('icontaps/pencil.png',
                             ),
-                    ),
-                             Divider(
-                            //    height: 50,
-                               color: HexColor("#697825"),
-                             ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('ข้อมูลการติดต่อ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                        ),),
-                        // ignore: deprecated_member_use
-                        FlatButton(
-                          onPressed: () => {
-                            Navigator.push(
-                              context,MaterialPageRoute(
-                                builder: (context) => const ModifyMyContact()),
-                              ),
-                          },
-                          child:  Image.asset('icontaps/pencil.png',
-                          ),
-                          )],
+                            )],
                       ),
-                      Flexible(
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            dataDetailTwo('email', 'line id'),
+                            Flexible(child: dataDetailOne('วันเกิด', 'เพศ', 'ที่อยู่')),
                             ],
-                            )
+                            ),
+                      ),
+                               Divider(
+                              //    height: 50,
+                                 color: HexColor("#697825"),
+                               ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('ข้อมูลการติดต่อ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                          // ignore: deprecated_member_use
+                          FlatButton(
+                            onPressed: () => {
+                              Navigator.push(
+                                context,MaterialPageRoute(
+                                  builder: (context) => const ModifyMyContact()),
+                                ),
+                            },
+                            child:  Image.asset('icontaps/pencil.png',
+                            ),
+                            )],
                         ),
-                ],),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Flexible(child: dataDetailTwo('email', 'line id')),
+                            ],
+                            ),
+                  ],),
+                ),
               ),
             ),
             Container(
@@ -607,154 +605,148 @@ class _MyMainProfileState extends State<MyMainProfile> {
     );
   }
 
-  Expanded dataDetailOne(String birth, String gender, String address) {
-    return Expanded(
-      
-      child: Container(
-        width: 300.0,
-        height: 110.0,
-        // color: Colors.blue,
-        // margin: const EdgeInsets.symmetric(
-        //         horizontal: 0, vertical: 0
-        //       ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+   dataDetailOne(String birth, String gender, String address) {
+    return Container(
+      width: 300.0,
+      height: 110.0,
+      // color: Colors.blue,
+      // margin: const EdgeInsets.symmetric(
+      //         horizontal: 0, vertical: 0
+      //       ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
 
-            Row(
-              children: [ 
-                Image.asset('icontaps/calendar.png',
-              width: 35,
-              ),
-              Text (' วันเกิด : ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
+          Row(
+            children: [ 
+              Image.asset('icontaps/calendar.png',
+            width: 35,
             ),
-            Text (birth,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
+            Text (' วันเกิด : ',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+          Text (birth,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+            ],
+          ),
+          // ),
+          Row(
+            children: [
+              Image.asset('icontaps/heart.png',
+            width: 35,
             ),
-              ],
+            Text (' เพศ : ',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
             ),
-            // ),
-            Row(
-              children: [
-                Image.asset('icontaps/heart.png',
-              width: 35,
-              ),
-              Text (' เพศ : ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),
+          ),
+          Text (gender,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+            ],
+          ),
+          Row(
+            children: [
+              Image.asset('icontaps/address.png',
+            width: 35,
+            ), 
+            Text (' ที่อยู่ : ',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
             ),
-            Text (gender,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
-              ],
-            ),
-            Row(
-              children: [
-                Image.asset('icontaps/address.png',
-              width: 35,
-              ), 
-              Text (' ที่อยู่ : ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Text (address,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
-           // ),
-          ],
-            ),
-          ],
-      ),
-      ),
+          ),
+          Text (address,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+         // ),
+        ],
+          ),
+        ],
+    ),
     );
   }
 
-    Expanded dataDetailTwo(String email, String line) {
-    return Expanded(
-      
-      child: Container(
-        width: 300.0,
-        height: 80.0,
-        // color: Colors.blue,
-        // margin: const EdgeInsets.symmetric(
-        //         horizontal: 5, vertical: 5
-        //       ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-           // Center(
-              //child: 
-            Row(
-              children: [ 
-                Image.asset('icontaps/mail.png',
-              width: 35,
-              ),
-              Text (' E-mail : ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
+     dataDetailTwo(String email, String line) {
+    return Container(
+      width: 300.0,
+      height: 80.0,
+      // color: Colors.blue,
+      // margin: const EdgeInsets.symmetric(
+      //         horizontal: 5, vertical: 5
+      //       ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+         // Center(
+            //child: 
+          Row(
+            children: [ 
+              Image.asset('icontaps/mail.png',
+            width: 35,
             ),
-            Text (email,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
+            Text (' E-mail : ',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+          Text (email,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+            ],
+          ),
+          // ),
+          Row(
+            children: [
+              Image.asset('icontaps/massage.png',
+            width: 35,
             ),
-              ],
+            Text (' Line ID : ',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
             ),
-            // ),
-            Row(
-              children: [
-                Image.asset('icontaps/massage.png',
-              width: 35,
-              ),
-              Text (' Line ID : ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Text (line,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
-              ],
-            ),
-          ],
-      ),
-      ),
+          ),
+          Text (line,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+            ],
+          ),
+        ],
+    ),
     );
   }
 

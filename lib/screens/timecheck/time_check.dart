@@ -38,6 +38,10 @@ class _WorkTimeCheckState extends State<WorkTimeCheck> {
           title: Text('เวลาเข้าออกงาน',
           style: const TextStyle(color: Colors.white)   
       ),
+      leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Column(
         children: [
@@ -193,13 +197,11 @@ class _WorkTimeCheckState extends State<WorkTimeCheck> {
                                 width: double.infinity,
                                   child: 
                                   
-                                  Flexible(
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        timeDetailIn(DateTime.now(), 'location', DateTime.now()),
-                                        ],
-                                      )
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      timeDetailIn(DateTime.now(), 'location', DateTime.now()),
+                                      ],
                                     ), 
 
                                   ),
@@ -240,13 +242,11 @@ class _WorkTimeCheckState extends State<WorkTimeCheck> {
                                 width: double.infinity,
                                   child: 
                                   
-                                  Flexible(
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        timeDetailOut(DateTime.now(), 'location', DateTime.now()),
-                                        ],
-                                      )
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      timeDetailOut(DateTime.now(), 'location', DateTime.now()),
+                                      ],
                                     ), 
 
                                   ),
@@ -266,108 +266,102 @@ class _WorkTimeCheckState extends State<WorkTimeCheck> {
     );
   }
 
-  Expanded timeDetailIn(DateTime time, String location, DateTime date) {
-    return Expanded(
-      
-      child: Container(
-        // width: 150.0,
-        // height: 30.0,
-        // color: Colors.blue,
-        margin: const EdgeInsets.symmetric(
-                horizontal: 10, vertical: 5
-              ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-
-              Text ('${DateFormat("HH : mm").format(time)}',
-              style: TextStyle(
-                color: HexColor("#575757"),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w800,
-              ),  
+   timeDetailIn(DateTime time, String location, DateTime date) {
+    return Container(
+      // width: 150.0,
+      // height: 30.0,
+      // color: Colors.blue,
+      margin: const EdgeInsets.symmetric(
+              horizontal: 10, vertical: 5
             ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
 
-            Row(
-              children: [ 
-                Icon(Icons.location_on_outlined,
-                color: HexColor("#1273EB"),),
+            Text ('${DateFormat("HH : mm").format(time)}',
+            style: TextStyle(
+              color: HexColor("#575757"),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w800,
+            ),  
+          ),
 
-              Text (location,
-              style: TextStyle(
-                color: HexColor("#1273EB"),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
-              ],
-            ),
+          Row(
+            children: [ 
+              Icon(Icons.location_on_outlined,
+              color: HexColor("#1273EB"),),
 
-              Text ('${DateFormat("d MMM yyyy", 'th').formatInBuddhistCalendarThai(date)}',
-              // '${DateFormat("d MMMM yyyy", 'th').formatInBuddhistCalendarThai(date)}'
-              style: TextStyle(
-                color: HexColor("#575757"),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
+            Text (location,
+            style: TextStyle(
+              color: HexColor("#1273EB"),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+            ],
+          ),
+
+            Text ('${DateFormat("d MMM yyyy", 'th').formatInBuddhistCalendarThai(date)}',
+            // '${DateFormat("d MMMM yyyy", 'th').formatInBuddhistCalendarThai(date)}'
+            style: TextStyle(
+              color: HexColor("#575757"),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
  
-          ],
-      ),
-      ),
+        ],
+    ),
     );
   }
 
-  Expanded timeDetailOut(DateTime time, String location, DateTime date) {
-    return Expanded(
-      
-      child: Container(
-        // width: 150.0,
-        // height: 30.0,
-        // color: Colors.blue,
-        margin: const EdgeInsets.symmetric(
-                horizontal: 10, vertical: 5
-              ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-
-              Text ('${DateFormat("HH : mm").format(time)}',
-              style: TextStyle(
-                color: HexColor("#575757"),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w800,
-              ),  
+   timeDetailOut(DateTime time, String location, DateTime date) {
+    return Container(
+      // width: 150.0,
+      // height: 30.0,
+      // color: Colors.blue,
+      margin: const EdgeInsets.symmetric(
+              horizontal: 10, vertical: 5
             ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
 
-            Row(
-              children: [ 
-                Icon(Icons.location_on_outlined,
-                color: HexColor("#DD873C"),),
+            Text ('${DateFormat("HH : mm").format(time)}',
+            style: TextStyle(
+              color: HexColor("#575757"),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w800,
+            ),  
+          ),
 
-              Text (location,
-              style: TextStyle(
-                color: HexColor("#DD873C"),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
-              ],
-            ),
+          Row(
+            children: [ 
+              Icon(Icons.location_on_outlined,
+              color: HexColor("#DD873C"),),
 
-              Text ('${DateFormat("d MMM yyyy", 'th').formatInBuddhistCalendarThai(date)}',
-              style: TextStyle(
-                color: HexColor("#575757"),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-              ),  
-            ),
+            Text (location,
+            style: TextStyle(
+              color: HexColor("#DD873C"),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
+            ],
+          ),
+
+            Text ('${DateFormat("d MMM yyyy", 'th').formatInBuddhistCalendarThai(date)}',
+            style: TextStyle(
+              color: HexColor("#575757"),
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),  
+          ),
  
-          ],
-      ),
-      ),
+        ],
+    ),
     );
   }
 

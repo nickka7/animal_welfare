@@ -59,24 +59,20 @@ class _CeoHomeState extends State<CeoHome> {
         ),
       ),
       body: Container(
-         decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            HexColor('#697825'),
-            Colors.white,
-          ],
-        )),
+        //  decoration: BoxDecoration(
+        //     gradient: LinearGradient(
+        //   begin: Alignment.topCenter,
+        //   end: Alignment.bottomCenter,
+          // color: 
+          //   HexColor('#697825'),
+        //     Colors.white,
+        //   ],
+        // )),
         // margin: EdgeInsets.all(8.0),
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
-                          color: HexColor("#F2F2F2"),
-                          borderRadius:
-                              BorderRadius.only(bottomLeft: (Radius.circular(60))),
-                        ),
+              
               height: 320,
              // color: Colors.white,
               child: Column(
@@ -160,6 +156,7 @@ class _CeoHomeState extends State<CeoHome> {
                 children: <Widget>[
                   Text(
                       'อัพเดทข้อมูลล่าสุด : ${DateFormat("dd/MM/yyyy HH:mm").format(myDateTime)}',
+                     
                       textAlign: TextAlign.right)
                 ],
               ),
@@ -173,6 +170,7 @@ class _CeoHomeState extends State<CeoHome> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
               child: Card(
+                  color: HexColor('#697825'),
                 elevation: 5,
                 child: TextButton(
                   onPressed: () {
@@ -189,10 +187,10 @@ class _CeoHomeState extends State<CeoHome> {
                       children: [
                         Text('รายงานการเข้างานของพนักงาน',
                             style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
+                                TextStyle(fontSize: 16, color: Colors.white)),
                         Icon(
                           Icons.navigate_next,
-                          color: Colors.black,
+                          color: Colors.white,
                           size: 40,
                         )
                       ],
@@ -205,6 +203,7 @@ class _CeoHomeState extends State<CeoHome> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
               child: Card(
+                color: HexColor('#697825'),
                 elevation: 5,
                 child: TextButton(
                   onPressed: () {
@@ -221,10 +220,10 @@ class _CeoHomeState extends State<CeoHome> {
                       children: [
                         Text('รายงานการฉีดวัคซีนของสัตว์แต่ละชนิด',
                             style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
+                                TextStyle(fontSize: 16, color: Colors.white)),
                         Icon(
                           Icons.navigate_next,
-                          color: Colors.black,
+                          color: Colors.white,
                           size: 40,
                         )
                       ],

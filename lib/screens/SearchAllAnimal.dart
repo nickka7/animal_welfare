@@ -25,6 +25,7 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
 
   List<Bio> bios = [];
   String query = '';
+
   // Timer? debouncer;
 
   Future init() async {
@@ -32,7 +33,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
 
     setState(() => this.bios = bios);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,78 +66,76 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
   }
 
   Widget buildListview() {
-          return ListView.builder(
-              itemCount: bios.length,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemBuilder: (context, index) {
-                final animal = bios[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Card(
-                    elevation: 5,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AnimalData(
-                                      getBio: bios[index],
-                                    )),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListView.builder(
+        itemCount: bios.length,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemBuilder: (context, index) {
+          final animal = bios[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Card(
+              elevation: 5,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AnimalData(
+                                getBio: bios[index],
+                              )),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 250,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
-                                height: 70,
-                                width: 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        'Animal ID : ${animal.animalID}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'ชนิด : ${animal.typeName}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'ชื่อสัตว์ : ${animal.animalName}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                  ],
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'Animal ID : ${animal.animalID}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
                                 ),
                               ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'ชนิด : ${animal.typeName}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'ชื่อสัตว์ : ${animal.animalName}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
-                        )),
-                  ),
-                );
-              });
+                        ),
+                        Icon(
+                          Icons.navigate_next,
+                          color: Colors.black,
+                          size: 40,
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        });
   }
 
   Widget buildSearch() => SearchWidget(
@@ -147,13 +145,13 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
       );
 
   void searchAnimal(String query) async {
-        final bios = await AllAnimalsAPI.getAllAnimals(query);
+    final bios = await AllAnimalsAPI.getAllAnimals(query);
 
-        if (!mounted) return;
+    if (!mounted) return;
 
-        setState(() {
-          this.query = query;
-          this.bios = bios;
-        });
-      }
+    setState(() {
+      this.query = query;
+      this.bios = bios;
+    });
+  }
 }

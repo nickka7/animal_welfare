@@ -6,6 +6,7 @@ import '../haxColor.dart';
 
 class AnimalData extends StatefulWidget {
   final Bio getBio;
+
   const AnimalData({Key? key, required this.getBio}) : super(key: key);
 
   @override
@@ -33,8 +34,8 @@ class _AnimalDataState extends State<AnimalData> {
           Stack(children: [
             _picture(),
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 210, bottom: 8, left: 10, right: 10),
+              padding: const EdgeInsets.only(
+                  top: 210, bottom: 8, left: 10, right: 10),
               child: Container(
                 child: Column(
                   children: [
@@ -105,11 +106,11 @@ class _AnimalDataState extends State<AnimalData> {
               ),
               _buildfont('ANIMAL ID : ', '${widget.getBio.animalID}'),
               _buildfont('ชนิด : ', '${widget.getBio.typeName}'),
-              _buildfont('รหัสกรง : ', '123456'),
+              _buildfont('รหัสกรง : ', '${widget.getBio.cageID}'),
               _buildfont('เพศ : ', '${widget.getBio.gender}'),
               _buildfont('อายุ : ', '${widget.getBio.age} ปี'),
               _buildfont('น้ำหนัก : ', '${widget.getBio.weight} กิโลกรัม'),
-               _buildfont('กรง : ', '${widget.getBio.cageID} ')
+              _buildfont('กรง : ', '${widget.getBio.cageID} ')
             ],
           ),
         ),

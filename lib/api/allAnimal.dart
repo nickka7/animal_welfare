@@ -10,23 +10,25 @@ class AllAnimalsAPI {
     final storage = new FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
-
+    final allanimals;
     final url = Uri.parse('$endPoint/api/getAnimalInZoo');
 
     final response =
         await http.get(url, headers: {"authorization": 'Bearer $token'});
     if (response.statusCode == 200) {
-      final allanimals = json.decode(response.body);
+      allanimals = json.decode(response.body);
       final List bio = allanimals['bio'];
+      // print('bioo $bio');
       return bio.map((json) => Bio.fromJson(json)).where((animal) {
+        final animalIDLower = animal.animalID!;
         final animalTypeLower = animal.typeName!;
-        print(animalTypeLower);
+        // print(animalTypeLower);
         final animalNameLower = animal.animalName!;
-        print(animalNameLower);
+        // print(animalNameLower);
         final searchLower = query;
-        print(searchLower);
+        // print(searchLower);
         // print(animalTypeLower.contains(searchLower));
-        return animalTypeLower.contains(searchLower) ||
+        return animalIDLower.contains(searchLower) || animalTypeLower.contains(searchLower) ||
             animalNameLower.contains(searchLower);
       }).toList();
     } else {

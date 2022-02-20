@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-
-// impo'../../SearchAllAnimal.dart'
 import 'package:animal_welfare/model/all_animals.dart.dart';
+
 // import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +28,21 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
   }
 
   final storage = new FlutterSecureStorage();
-
+  List x = [];
   Future<AllAnimals> getAnimal() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
         headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-    print('$jsonData');
+    // print('decode ${json.decode(response.body)}');
+    // print('response ${response.body}');
+    // var a = json.decode(response.body);
+    // print(a);
+    AllAnimals jsonData = AllAnimals.fromJson(jsonDecode(response.body));
+    // print('jsondata ${jsonData.bio}');
+    // var q=json.decode(response.body);
+    // x=q['bio'];
+    // print('x= $x');
     return jsonData;
   }
 
@@ -96,16 +101,17 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
                 ),
                 Expanded(
                   child: Container(
-                        decoration: BoxDecoration(
-                          color: HexColor("#F2F2F2"),
-                          borderRadius:
-                              BorderRadius.only(topRight: (Radius.circular(60))),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 25),
-                          child: totalAnimal(),
-                        ),
-                      ),
+                    decoration: BoxDecoration(
+                      color: HexColor("#F2F2F2"),
+                      borderRadius:
+                          BorderRadius.only(topRight: (Radius.circular(60))),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 25),
+                      child: totalAnimal(),
+                    ),
+                  ),
                 )
               ],
             )));
@@ -120,11 +126,11 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
             child: Column(
               children: [
                 Padding(
-                padding: const EdgeInsets.only(top: 15, left: 8),
-                child: Align(
-                    alignment: Alignment.topLeft,
-                    child: _heading('สัตว์ทั้งหมด', 35.0, 120.0)),
-              ),
+                  padding: const EdgeInsets.only(top: 15, left: 8),
+                  child: Align(
+                      alignment: Alignment.topLeft,
+                      child: _heading('สัตว์ทั้งหมด', 35.0, 120.0)),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 10.0),
@@ -158,10 +164,10 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
                         )),
                   ),
                 ),
-                   Padding(
-                     padding: const EdgeInsets.only(top:8.0),
-                     child: researchData(),
-                   ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: researchData(),
+                ),
               ],
             ),
           );
@@ -177,47 +183,47 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
   Widget researchData() {
     return Container(
         child: Column(
-          children: [
-             Padding(
-                    padding: const EdgeInsets.only(top: 15, left: 8),
-                    child: Align(
-                        alignment: Alignment.topLeft,
-                        child: _heading('ข้อมูลงานวิจัย', 35.0, 125.0)),
-                  ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 10.0),
-              child: Card(
-                elevation: 5,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResearchHistory()),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('ข้อมูลงานวิจัยสัตว์แต่ละชนิด',
-                            style: TextStyle(fontSize: 16, color: Colors.black)),
-                        Icon(
-                          Icons.navigate_next,
-                          color: Colors.black,
-                          size: 40,
-                        )
-                      ],
-                    ),
-                  ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 15, left: 8),
+          child: Align(
+              alignment: Alignment.topLeft,
+              child: _heading('ข้อมูลงานวิจัย', 35.0, 125.0)),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ResearchHistory()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('ข้อมูลงานวิจัยสัตว์แต่ละชนิด',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
                 ),
               ),
             ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    ));
   }
-   Widget _heading(var title, double h, double w) {
+
+  Widget _heading(var title, double h, double w) {
     return Container(
       height: h,
       width: w,

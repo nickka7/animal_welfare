@@ -21,7 +21,7 @@ class _RepairNoticeState extends State<RepairNotice> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  bool _validate = false;
+  // bool _validate = false;
   Future<Null> chooseImage(ImageSource source) async {
     try {
       var object = await ImagePicker().pickImage(

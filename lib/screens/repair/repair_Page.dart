@@ -1,4 +1,5 @@
 import 'package:animal_welfare/screens/repair/repair_history.dart';
+import 'package:animal_welfare/screens/repair/repair_history_pagination.dart';
 import 'package:animal_welfare/screens/repair/repair_notice.dart';
 import 'package:flutter/material.dart';
 import '../../haxColor.dart';
@@ -81,7 +82,7 @@ class _RepairPageState extends State<RepairPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const RepairHistory()),
+                        builder: (context) => const RepairHistoryPagination()),
                   );
                 },
                 child: Padding(

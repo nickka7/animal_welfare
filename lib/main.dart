@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
             var str = snapshot.data;
             var jwt = str!.split(".");
 
+            //ไม่มี token
             if (jwt.length != 3) {
               return MyLoginHome();
             } else {
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
               print(payload.runtimeType);
               if (DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000)
                   .isAfter(DateTime.now())) {
+                // NavigatorBar(payload: payload)
                 return NavigatorBar(payload: payload); //HomePage(str, payload);
               } else {
                 return MyLoginHome();

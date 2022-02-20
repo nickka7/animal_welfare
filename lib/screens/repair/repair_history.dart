@@ -21,7 +21,6 @@ class RepairHistory extends StatefulWidget {
 class _RepairHistoryState extends State<RepairHistory> {
   @override
   void initState() {
-    // getMaintenance();
     super.initState();
   }
 
@@ -221,7 +220,8 @@ class _RepairHistoryState extends State<RepairHistory> {
                                     maintenanceDetail:
                                         '${snapshot.data!.data![index].requestMessage}',
                                   )),
-                        ).then((value) => setState((){})); //หลังจาก call back เรียก setState
+                        ).then((value) =>
+                            setState(() {})); //หลังจาก call back เรียก setState
                       },
                     ),
                     IconSlideAction(

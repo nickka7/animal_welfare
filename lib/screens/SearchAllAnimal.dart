@@ -25,7 +25,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
 
   List<Bio> bios = [];
   String query = '';
-
   // Timer? debouncer;
 
   Future init() async {
@@ -33,6 +32,7 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
 
     setState(() => this.bios = bios);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +48,13 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            HexColor('#697825'),
-            Colors.white,
-          ],
-        )),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                HexColor('#697825'),
+                Colors.white,
+              ],
+            )),
         child: ListView(
           children: [
             buildSearch(),
@@ -73,7 +73,8 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
         itemBuilder: (context, index) {
           final animal = bios[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Card(
               elevation: 5,
               child: TextButton(
@@ -82,8 +83,8 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => AnimalData(
-                                getBio: bios[index],
-                              )),
+                            getBio: bios[index],
+                          )),
                     );
                   },
                   child: Padding(
@@ -95,7 +96,8 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
                           height: 70,
                           width: 250,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
                             children: [
                               Align(
                                 alignment: Alignment.topLeft,
@@ -139,10 +141,10 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
   }
 
   Widget buildSearch() => SearchWidget(
-        text: query,
-        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
-        onChanged: searchAnimal,
-      );
+    text: query,
+    hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+    onChanged: searchAnimal,
+  );
 
   void searchAnimal(String query) async {
     final bios = await AllAnimalsAPI.getAllAnimals(query);

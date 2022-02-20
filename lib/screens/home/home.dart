@@ -5,6 +5,7 @@ import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/meeting/meeting_booking.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
+import 'package:animal_welfare/screens/role/Executive/executive_main.dart';
 //import 'package:animal_welfare/screens/role/Executive/report.dart';
 import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_fristpage.dart';
@@ -167,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AnimalReportTest()),
+                    MaterialPageRoute(builder: (context) => CeoHome()),
                   );
                 }
                 break;

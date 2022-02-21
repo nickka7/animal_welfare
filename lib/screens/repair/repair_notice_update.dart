@@ -126,9 +126,10 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                       width: double.infinity,
                       child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            shape: StadiumBorder(),
-                            side: BorderSide(
-                                width: 2, color: Colors.green.shade800),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            side: BorderSide(width: 2, color: Colors.green),
                           ),
                           // color: Colors.green.shade800,
                           child: Center(

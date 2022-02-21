@@ -25,6 +25,7 @@ class AllAnimalsWithRoleAPI {
     //  print('3');
       print('test $bio');
       return bio.map((json) => Bio.fromJson(json)).where((animal) {
+        final animalIDLower = animal.animalID!;
         final animalTypeLower = animal.typeName!;
         print(animalTypeLower);
         final animalNameLower = animal.animalName!;
@@ -32,7 +33,7 @@ class AllAnimalsWithRoleAPI {
         final searchLower = query;
         print(searchLower);
         // print(animalTypeLower.contains(searchLower));
-        return animalTypeLower.contains(searchLower) ||
+        return animalIDLower.contains(searchLower) || animalTypeLower.contains(searchLower) ||
             animalNameLower.contains(searchLower);
       }).toList();
     } else {

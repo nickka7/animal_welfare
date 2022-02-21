@@ -93,7 +93,7 @@ class _ShowScreenState extends State<ShowScreen> {
                     ),
                   ),
                   Expanded(
-                      flex: 4,
+                      flex: 3,
                       child: Container(
                           // color: Colors.black12,
                           child: ListView.separated(
@@ -164,7 +164,8 @@ class _ShowScreenState extends State<ShowScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AddShow()),
-                          );
+                          ).then((value) =>
+                              setState(() {}));
                         },
                         backgroundColor: HexColor("#697825"),
                         child: const Icon(Icons.add),

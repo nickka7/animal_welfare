@@ -178,7 +178,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                                     ),
                                     onPressed: () => Navigator.pop(context),
                                   ),
-                                  CupertinoDialogAction(
+                                  CupertinoDialogAction (
                                       child: Text(
                                         'ยืนยัน',
                                         style: TextStyle(color: Colors.green),

@@ -50,10 +50,14 @@ class _VetAnimalDataState extends State<VetAnimalData> {
     return jsonData;
   }
 
-  String formatDateFromString(String date) {
-    var parseDate = DateTime.parse(date);
+  String formatDateFromString(String? date) {
+    if(date == 'ไม่มีประวัติ'){
+      return 'ไม่มีประวัติ';
+    }
+    var parseDate = DateTime.parse(date!);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formattedDate = formatter.format(parseDate);
+    print('57 $formattedDate');
     return formattedDate;
   }
   @override
@@ -195,8 +199,8 @@ class _VetAnimalDataState extends State<VetAnimalData> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('วันที่ : ', '${formatDateFromString(snapshot.data!.latest!.date.toString())}'),
-              _buildfont('การรักษา : ', '${snapshot.data!.latest!.medicalName}'),
+              _buildfont('วันที่ : ', '${formatDateFromString((snapshot.data?.latest?.date  ?? 'ไม่มีประวัติ').toString())}'),
+              _buildfont('การรักษา : ', '${snapshot.data?.latest?.medicalName ?? 'ไม่มีประวัติ'}'),
               TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -261,8 +265,8 @@ class _VetAnimalDataState extends State<VetAnimalData> {
               SizedBox(
                 height: 10,
               ),
-              _buildfont('วันที่ : ', '${formatDateFromString(snapshot.data!.latest!.date.toString())}'),
-              _buildfont('วัคซีน : ', '${snapshot.data!.latest!.vaccineName}'),
+              _buildfont('วันที่ : ', '${formatDateFromString((snapshot.data?.latest?.date ?? 'ไม่มีประวัติ').toString())}'),
+              _buildfont('วัคซีน : ', '${snapshot.data?.latest?.vaccineName ?? 'ไม่มีประวัติ'}'),
               TextButton(
                   onPressed: () {
                     Navigator.push(

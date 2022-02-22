@@ -1,4 +1,3 @@
-
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
@@ -20,7 +19,6 @@ class _VetSearchState extends State<VetSearch> {
     super.initState();
   }
 
-
   List<Bio> bios = [];
   String query = '';
 
@@ -34,111 +32,112 @@ class _VetSearchState extends State<VetSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('ข้อมูลสัตว์'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        title: Text('ข้อมูลสัตว์'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              HexColor('#697825'),
-              Colors.white,
-            ],
-          )),
-          child: ListView(
-            children: [
-              buildSearch(),
-              buildListview(),
-            ],
-          ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
+        child: ListView(
+          children: [
+            buildSearch(),
+            buildListview(),
+          ],
         ),
-      );
+      ),
+    );
   }
-  Widget buildListview(){
-          return ListView.builder(
-      itemCount: bios.length,
-      shrinkWrap: true,
-      physics: ScrollPhysics(),
-      itemBuilder: (context, index) {
-        final animal = bios[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Card(
-            elevation: 5,
-            child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  VetAnimalData(
-                      animalID : animal.animalID,
-                      getanimal: animal,)),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 250,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
 
-                 Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        'Animal ID : ${animal.animalID}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'ชนิด : ${animal.typeName}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'ชื่อสัตว์ : ${animal.animalName}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-
-                          ],
+  Widget buildListview() {
+    return ListView.builder(
+        itemCount: bios.length,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemBuilder: (context, index) {
+          final animal = bios[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Card(
+              elevation: 5,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => VetAnimalData(
+                                animalID: animal.animalID,
+                                getanimal: animal,
+                              )),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 250,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'Animal ID : ${animal.animalID}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'ชนิด : ${animal.typeName}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'ชื่อสัตว์ : ${animal.animalName}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Colors.black,
-                        size: 40,
-                      )
-                    ],
-                  ),
-                )),
-          ),
-        );
-      });
+                        Icon(
+                          Icons.navigate_next,
+                          color: Colors.black,
+                          size: 40,
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        });
   }
 
   Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
-    onChanged: searchAnimal,
-  );
+        text: query,
+        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+        onChanged: searchAnimal,
+      );
 
   void searchAnimal(String query) async {
     final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
@@ -150,5 +149,4 @@ class _VetSearchState extends State<VetSearch> {
       this.bios = bios;
     });
   }
-
 }

@@ -35,11 +35,11 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
     });
   }
 
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
 
   ScrollController scrollController = ScrollController();
   int page = 1;
@@ -54,6 +54,14 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
   String endPoint = Constant().endPoint;
   final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
   String? token;
+
+  FutureOr onGoBack() {
+    print('after pop');
+    setState(() {
+      getMaintenance();
+      page = 1;
+    });
+  }
 
   String formatDateFromString(String date) {
     var parseDate = DateTime.parse(date);
@@ -300,8 +308,8 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
                                           maintenanceDetail:
                                               '${listRepair[index].requestMessage}',
                                         )),
-                              ).then((value) => setState(
-                                  () {})); //หลังจาก call back เรียก setState
+                              ).then((value) =>
+                                  onGoBack()); //หลังจาก call back เรียก setState
                             },
                           ),
                           IconSlideAction(

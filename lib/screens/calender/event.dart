@@ -127,8 +127,8 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
       final Meeting appointmentDetails = details.appointments![0];
       _subjectText = appointmentDetails.eventName!;
       _locationText = appointmentDetails.location!;
-      _dateText = DateFormat("d MMMM yyyy",
-              'th') //.formatInBuddhistCalendarThai(appointmentDetails.from!)
+      _dateText = DateFormat("d MMMM yyyy",'th'
+              ) //.formatInBuddhistCalendarThai(appointmentDetails.from!)
           .format(appointmentDetails.from!)
           .toString();
       _startTimeText = DateFormat('hh:mm a')

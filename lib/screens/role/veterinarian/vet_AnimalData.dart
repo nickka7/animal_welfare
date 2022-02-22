@@ -310,14 +310,14 @@ class _VetAnimalDataState extends State<VetAnimalData> {
       child: Row(
         children: [
           Text(
-            title,
+            title?? 0,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold),
           ),
           Text(
-            data,
+            data?? 0,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,

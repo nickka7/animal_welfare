@@ -265,6 +265,7 @@ class _AddWorkState extends State<AddWork> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
+                       use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),
@@ -299,6 +300,7 @@ class _AddWorkState extends State<AddWork> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
+                       use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),

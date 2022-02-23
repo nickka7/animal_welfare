@@ -3,6 +3,7 @@ import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/meeting/meeting_booking.dart';
+import 'package:animal_welfare/screens/meeting/meeting_history.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_main.dart';
@@ -145,7 +146,7 @@ class _HomePageState extends State<HomePage> {
               _buildButton(
                   Icons.calendar_today, 'ปฏิทินกิจกรรม', CalendarScreenTest()),
               _buildButton(
-                  Icons.assistant_photo_outlined, 'จองห้องประชุม', MyBookingMeeting()),
+                  Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
               _buildButton(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
               buildButton(),

@@ -226,6 +226,22 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
                                                   children: [
                                                     Flexible(
                                                       child: Text(
+                                                        "รหัสการแจ้งซ่อม : ${listRepair[index].maintenanceID}",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Flexible(
+                                                      child: Text(
                                                         "ปัญหาที่ชำรุด : ${listRepair[index].requestMessage}",
                                                         overflow: TextOverflow
                                                             .ellipsis,

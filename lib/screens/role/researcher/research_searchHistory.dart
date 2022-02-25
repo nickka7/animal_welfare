@@ -2,6 +2,8 @@ import 'package:animal_welfare/api/research.dart';
 import 'package:animal_welfare/model/research.dart';
 import 'package:animal_welfare/screens/role/researcher/research_HistoryDetail.dart';
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/role/researcher/research_addresearch.dart';
+import 'package:animal_welfare/screens/role/showMan/addShow.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 
 import 'package:flutter/material.dart';
@@ -61,9 +63,22 @@ class _ResearchHistoryState extends State<ResearchHistory> {
             children: [
                buildSearch(),
               buildListView(),
+              
             ],
           ),
+          
         ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddResearch()),
+                          ).then((value) =>
+                              setState(() {}));
+                        },
+                        backgroundColor: HexColor("#697825"),
+                        child: const Icon(Icons.add),
+      ),
       );
 
   Widget buildListView() =>

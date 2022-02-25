@@ -127,12 +127,28 @@ class _RepairHistoryState extends State<RepairHistory> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Container(
-                                    height: 90,
+                                    height: 120,
                                     width: 232,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "รหัสการแจ้งซ่อม : ${snapshot.data!.data![index].maintenanceID}",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         Container(
                                           child: Row(
                                             children: [

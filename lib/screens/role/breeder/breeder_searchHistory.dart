@@ -2,6 +2,7 @@
 import 'package:animal_welfare/api/breeding.dart';
 import 'package:animal_welfare/model/breeding.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_HistoryDetail.dart';
+import 'package:animal_welfare/screens/role/breeder/breeder_addbreeding.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -64,6 +65,17 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
             ],
           ),
         ),
+         floatingActionButton: FloatingActionButton(
+        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddBreeding()),
+                          ).then((value) =>
+                              setState(() {}));
+                        },
+                        backgroundColor: HexColor("#697825"),
+                        child: const Icon(Icons.add),
+      ),
       );
   Widget buildListView() => ListView.builder(
       itemCount: breeding.length,

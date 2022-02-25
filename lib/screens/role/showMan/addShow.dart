@@ -2,14 +2,19 @@ import 'dart:convert';
 
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/show.dart';
+import 'package:animal_welfare/model/showType.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AddShow extends StatefulWidget {
-  const AddShow({Key? key}) : super(key: key);
+  const AddShow({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _AddShowState createState() => _AddShowState();
@@ -21,8 +26,6 @@ class _AddShowState extends State<AddShow> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
 
-
-
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
@@ -30,7 +33,25 @@ class _AddShowState extends State<AddShow> {
   int index = 0;
   final show = ['โชว์ช้าง', 'โชว์นกแก้ว', 'โชว์ลิง', 'โชว์แมวน้ำ'];
 
+  List<ShowType> shows = [];
   final storage = new FlutterSecureStorage();
+  String endPoint = Constant().endPoint;
+
+  Future<ShowType> getShowType() async {
+    String? token = await storage.read(key: 'token');
+    var response = await http.get(Uri.parse('$endPoint/api/getAllShowType'),
+        headers: {"authorization": 'Bearer $token'});
+        print(response);
+    var jsonData = showTypeFromJson(response.body);
+
+    // List<ShowType> data = showTypeFromJson(response.body) as List<ShowType>;
+    // setState(() {
+    //   shows = data;
+    //   print(shows);
+    // });
+
+    return jsonData;
+  }
 
   Future<String?> uploadData(url, data) async {
     // print(file!.path);
@@ -47,10 +68,10 @@ class _AddShowState extends State<AddShow> {
           'endDate': data['endDate'],
         }));
 
-    print(request);
-    print(data['showName']);
-    print(data['startDate']);
-    print(data['endDate']);
+    // print(request);
+    // print(data['showName']);
+    // print(data['startDate']);
+    // print(data['endDate']);
   }
 
   @override
@@ -95,7 +116,7 @@ class _AddShowState extends State<AddShow> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              show[index],
+                              show[index].toString(),
                               style: TextStyle(color: Colors.black),
                             ),
                             Icon(
@@ -214,47 +235,58 @@ class _AddShowState extends State<AddShow> {
     showCupertinoModalPopup(
       context: context,
       builder: (context) {
-        return Container(
-          height: 400,
-          width: double.infinity,
-          color: Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              Container(
-                height: 300,
+        return FutureBuilder<ShowType>(
+          future: getShowType(),
+          builder: (BuildContext context, AsyncSnapshot<ShowType> snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            if (snapshot.hasData) {
+              return Container(
+                height: 400,
                 width: double.infinity,
-                child: CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  itemExtent: 30,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
-                  children: show
-                      .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
-                      .toList(),
-                  onSelectedItemChanged: (index) {
-                    setState(() {
-                      this.index = index;
-                      final item = show[index];
-                      print('selected $item');
-                    });
-                  },
-                  diameterRatio: 1,
-                  useMagnifier: true,
-                  magnification: 1.3,
+                color: Color.fromARGB(255, 255, 255, 255),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 300,
+                      width: double.infinity,
+                      child: CupertinoPicker(
+                        backgroundColor: Colors.white,
+                        itemExtent: 30,
+                        scrollController:
+                            FixedExtentScrollController(initialItem: 0),
+                        children: shows
+                             .map((item) => Center(
+                                child: Text(
+                                  item.toString(),
+                                  style: TextStyle(fontSize: 16),
+                                 ),
+                                ))
+                            .toList(),
+                        onSelectedItemChanged: (index) {
+                          setState(() {
+                            this.index = index;
+                            final item = show[index];
+                            print('selected $item');
+                          });
+                        },
+                        diameterRatio: 1,
+                        useMagnifier: true,
+                        magnification: 1.3,
+                      ),
+                    ),
+                    CupertinoButton(
+                      child: Text('ยืนยัน'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
                 ),
-              ),
-              CupertinoButton(
-                child: Text('ยืนยัน'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
+              );
+            } else {
+              return new Center(child: new CircularProgressIndicator());
+            }
+          },
         );
-      },
+       },
     );
   }
 
@@ -307,11 +339,9 @@ class _AddShowState extends State<AddShow> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                      
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),
-                        
                         use24hFormat: true,
                         onDateTimeChanged: (val) {
                           setState(() {

@@ -34,12 +34,12 @@ class _ShowScreenState extends State<ShowScreen> {
     var data = await http.get(Uri.parse("$endPoint/api/getShow"),
         headers: {"authorization": 'Bearer $token'});
     var jsonData = jsonDecode(data.body);
-    print(data.body);
-    print(jsonData);
+    // print(data.body);
+    // print(jsonData);
 
     final List<Appointment> appointments = <Appointment>[];
 
-    print('before loop');
+    // print('before loop');
     for (var data in jsonData) {
       Appointment meetingData = Appointment(
           subject: data['showName'],
@@ -52,7 +52,7 @@ class _ShowScreenState extends State<ShowScreen> {
       appointments.add(meetingData);
       
     }
-    print('after loop');
+    // print('after loop');
    
     return appointments;
   }

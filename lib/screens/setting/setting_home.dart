@@ -100,7 +100,9 @@ class _MySettingHomeState extends State<MySettingHome> {
                               ),
                                   // Navigator.push(context, MaterialPageRoute(builder: (context) => CollCaretaker())
                                   // );
-                                    
+                                    // 1. flac active -inactive
+                              //2. field
+                              //บทที่5 noteไว้ใน 5.2
                           //          MaterialPageRoute materialPageRoute = MaterialPageRoute(
                           //     builder: (BuildContext context) => CountryScreens());
                           // Navigator.of(context).push(materialPageRoute);

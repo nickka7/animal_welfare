@@ -7,7 +7,6 @@ import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_employee.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_visitors.dart';
-import 'package:animal_welfare/screens/role/researcher/research_firstpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';

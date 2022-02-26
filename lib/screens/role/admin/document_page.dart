@@ -87,24 +87,23 @@ class _DocumentPageState extends State<DocumentPage> {
         {
           return Colors.amber;
         }
-        break;
+       
 
       case 'pdf':
         {
           return Colors.blue;
         }
-        break;
+        
 
       case 'docx':
         {
           return Colors.orange;
         }
-        break;
       default:
         {
           return Colors.grey;
         }
-        break;
+       
     }
   }
 }

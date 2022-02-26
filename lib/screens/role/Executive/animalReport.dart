@@ -43,6 +43,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
   final vaccine = ['บาดทะยัก', 'พิษสุนัขบ้า'];
 
   final storage = new FlutterSecureStorage();
+  
 
   List<AnimalReport> report = [];
 

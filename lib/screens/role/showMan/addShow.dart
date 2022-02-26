@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/show.dart';
-import 'package:animal_welfare/model/showType.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

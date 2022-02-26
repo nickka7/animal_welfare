@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:animal_welfare/api/research.dart';
+import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/model/research.dart';
 import 'package:animal_welfare/screens/role/researcher/research_HistoryDetail.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/researcher/research_addresearch.dart';
-import 'package:animal_welfare/screens/role/showMan/addShow.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
 class ResearchHistory extends StatefulWidget {
@@ -31,12 +35,26 @@ class _ResearchHistoryState extends State<ResearchHistory> {
 
     setState(() => this.research = research);
   }
+    late final SlidableController slidableController;
+  final storage = new FlutterSecureStorage();
+  String endPoint = Constant().endPoint;
+  final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
 
   String formatDateFromString(String? date) {
     var parseDate = DateTime.parse(date!);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formattedDate = formatter.format(parseDate);
     return formattedDate;
+  }
+
+  Future deleteBreeding(String researchID) async {
+    print(researchID);
+    String? token = await storage.read(key: 'token');
+    var response = await http.delete(
+        Uri.parse('$endPoint/api/deleteResearchData/$researchID'),
+        headers: {"authorization": 'Bearer $token'});
+    var jsonResponse = await json.decode(response.body);
+    print(jsonResponse['message']);
   }
 
   @override

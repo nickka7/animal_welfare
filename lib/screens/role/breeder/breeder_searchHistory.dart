@@ -1,10 +1,14 @@
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:animal_welfare/api/breeding.dart';
+import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/model/breeding.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_HistoryDetail.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_addbreeding.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import '../../../haxColor.dart';
 
@@ -21,6 +25,10 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
     init();
     super.initState();
   }
+  late final SlidableController slidableController;
+  final storage = new FlutterSecureStorage();
+  String endPoint = Constant().endPoint;
+  final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
 
   List<Data> breeding = [];
   String query = '';
@@ -36,6 +44,16 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formattedDate = formatter.format(parseDate);
     return formattedDate;
+  }
+
+    Future deleteBreeding(String breedingID) async {
+    print(breedingID);
+    String? token = await storage.read(key: 'token');
+    var response = await http.delete(
+        Uri.parse('$endPoint/api/deleteBreedingData/$breedingID'),
+        headers: {"authorization": 'Bearer $token'});
+    var jsonResponse = await json.decode(response.body);
+    print(jsonResponse['message']);
   }
 
   @override
@@ -78,11 +96,37 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
       ),
       );
   Widget buildListView() => ListView.builder(
+    
       itemCount: breeding.length,
       shrinkWrap: true,
       physics: ScrollPhysics(),
       itemBuilder: (context, index) {
-        return Padding(
+        return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+
+        secondaryActions: <Widget>[
+                          
+                          IconSlideAction(
+                            caption: 'ลบ',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                              deleteBreeding(
+                                      '${breeding[index].breedingID}')
+                                  .then((value) => breeding.removeAt(index))
+                                  .then((value) => setState(() {}))
+                                  .then((value) => ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar));
+                            },
+                          ),
+                          IconSlideAction(
+                            caption: 'ปิด',
+                            color: Colors.grey,
+                            icon: Icons.close,
+                            onTap: () {},
+                          ),
+                        ], child:  Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           child: Card(
             elevation: 5,
@@ -151,7 +195,8 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
                   ),
                 )),
           ),
-        );
+        ),
+                      );
       });
 
   Widget buildSearch() => SearchWidget(

@@ -8,18 +8,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-class AddWork extends StatefulWidget {
-  const AddWork({ Key? key }) : super(key: key);
+class AddEven extends StatefulWidget {
+  const AddEven({ Key? key }) : super(key: key);
 
   @override
-  _AddWorkState createState() => _AddWorkState();
+  _AddEvenState createState() => _AddEvenState();
 }
 
-class _AddWorkState extends State<AddWork> {
+class _AddEvenState extends State<AddEven> {
 
     final _formKey = GlobalKey<FormState>();
-  TextEditingController userIDController = TextEditingController();
-  TextEditingController scheduleNameController = TextEditingController();
+  //TextEditingController userIDController = TextEditingController();
+  TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
@@ -42,16 +42,16 @@ class _AddWorkState extends State<AddWork> {
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
-          'userID' : data['userID'],
-          'scheduleName': data['scheduleName'],
+         // 'userID' : data['userID'],
+          'calendarName': data['calendarName'],
           'location': data['location'],
           'startDate': data['startDate'],
           'endDate': data['endDate'],
         }));
 
     print(request);
-    print(data['userID']);
-    print(data['scheduleName']);
+   // print(data['userID']);
+    print(data['calendarName']);
     print(data['startDate']);
     print(data['endDate']);
   }
@@ -63,7 +63,7 @@ class _AddWorkState extends State<AddWork> {
       appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'เพิ่มงานให้พนักงาน',
+            'เพิ่มกิจกรรมในสวนสัตว์',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
@@ -79,40 +79,18 @@ class _AddWorkState extends State<AddWork> {
               key: _formKey,
               child: Column(
                 children: [
+                  
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'รหัสพนักงาน',
+                        'กิจกรรม',
                         style: TextStyle(fontSize: 18),
                       )),
                   TextFormField(
-                    controller: userIDController,
+                    controller: calendarNameController,
                     validator: (String? input) {
                       if (input!.isEmpty) {
-                        return "กรุณากรอกรหัสพนักงาน";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'งานที่มอบหมาย',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  TextFormField(
-                    controller: scheduleNameController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกงานที่ต้องการมอบหมาย";
+                        return "กรุณากรอกกิจกรรม";
                       }
                       return null;
                     },
@@ -151,7 +129,7 @@ class _AddWorkState extends State<AddWork> {
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'วัน-เวลาที่เริ่มงาน',
+                        'วัน-เวลาที่เริ่มกิจกรรม',
                         style: TextStyle(fontSize: 18),
                       )),
                   Container(
@@ -182,7 +160,7 @@ class _AddWorkState extends State<AddWork> {
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'วัน-เวลาที่งานจบ',
+                        'วัน-เวลาที่กิจกรรมจบ',
                         style: TextStyle(fontSize: 18),
                       )),
                   Container(
@@ -218,21 +196,57 @@ class _AddWorkState extends State<AddWork> {
                         bool pass = _formKey.currentState!.validate();
                         if (pass) {
                           Map<String, String> data = {
-                            "userID": userIDController.text,
-                            "scheduleName": scheduleNameController.text,
+                           // "userID": userIDController.text,
+                            "calendarName": calendarNameController.text,
                            "location": locationController.text,
                             "startDate": startDate.toString(),
                             "endDate": endDate.toString()
                           };
-                          uploadData(
-                                  '${Constant().endPoint}/api/postSchedule', data)
+                           showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.lightGreen[400],
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'ยืนยันการเพิ่มกิจกรรม',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text(
+                                        'ยกเลิก',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                    CupertinoDialogAction(
+                                        child: Text(
+                                          'ยืนยัน',
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                      onPressed: () {
+                                            uploadData(
+                                  '${Constant().endPoint}/api/postEvent', data)
                               .then((value) {
                             Navigator.of(context).pop();
+                            Navigator.of(context).pop();
                             final snackBar = SnackBar(
-                                content: Text('เพิ่มงานเรียบร้อยแล้ว'));
+                                content: Text('เพิ่มกิจกรรมเรียบร้อยแล้ว'));
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
-                          });
+                          }
+                           );
+                                        })                                  ],
+                                );
+                              });  
+                        
                         }
                       },
                       child: Text('เสร็จสิ้น',

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/VacHis.dart';
+import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -18,19 +19,46 @@ class VetVaccineHistory extends StatefulWidget {
 }
 
 class _VetVaccineHistoryState extends State<VetVaccineHistory> {
-   final storage = new FlutterSecureStorage();
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
 
-  Future<VacHis> getVacHis() async {
+  final storage = new FlutterSecureStorage();
+  List<Data> vaccine = [];
+  String query = '';
+
+  Future<List<Data>> getAllvaccinate(String query) async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
+    final allvaccinate;
     var response = await http.get(
         Uri.parse(
             '$endPoint/api/getVaccineHistory?animalID=${widget.animalID}'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
-    var jsonData = VacHis.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
+    if (response.statusCode == 200) {
+      allvaccinate = json.decode(response.body);
+      final List vaccine = allvaccinate['data'];
+      // print('bioo $bio');
+      return vaccine.map((json) => Data.fromJson(json)).where((allvaccinate) {
+        final allvaccinateIDLower = allvaccinate.vaccinateID;
+        final allvaccinateNameLower = allvaccinate.vaccineName;
+        final searchLower = query;
+        return allvaccinateIDLower!.contains(searchLower) ||
+            allvaccinateNameLower!.contains(searchLower);
+      }).toList();
+    } else {
+      print('not 200');
+      throw Exception();
+    }
+  }
+
+  Future init() async {
+    final vaccine = await getAllvaccinate(query);
+
+    setState(() => this.vaccine = vaccine);
   }
 
   String formatDateFromString(String date) {
@@ -40,11 +68,6 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
     return formattedDate;
   }
 
-  @override
-  void initState() {
-    getVacHis();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,23 +94,22 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
           ],
         )),
         child: ListView(
-          children: [buildListview()],
+          children: [
+            buildSearch(),
+            buildListview()],
         ),
       ),
     );
   }
 
   Widget buildListview() {
-    return FutureBuilder<VacHis>(
-      future: getVacHis(),
-      builder: (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
-        if (snapshot.hasData) {
+    
           return ListView.builder(
-              itemCount: snapshot.data!.data!.length,
+              itemCount: vaccine.length,
               shrinkWrap: true,
               physics: ScrollPhysics(),
               itemBuilder: (context, index) {
-                final animal = snapshot.data!.data![index];
+                final vaccinate = vaccine[index];
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -109,7 +131,15 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      'วัคซีน : ${animal.vaccineName}',
+                                      'รหัสหารฉีดวัคซีน : ${vaccinate.vaccinateID}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'วัคซีน : ${vaccinate.vaccineName}',
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 16),
                                     ),
@@ -117,7 +147,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                                   Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Text(
-                                      'เวลา : ${animal.time}',
+                                      'เวลา : ${vaccinate.time}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 16),
@@ -126,7 +156,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'วันที่ : ${formatDateFromString(animal.date.toString())}',
+                                      'วันที่ : ${formatDateFromString(vaccinate.date.toString())}',
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 16),
                                     ),
@@ -141,12 +171,22 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                   ),
                 );
               });
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+       
+  }
+    Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: "รหัสการฉีดวัคซีน,รหัสสัตว์",
+        onChanged: searchAnimal,
+      );
+
+  void searchAnimal(String query) async {
+    final vaccine = await getAllvaccinate(query );
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.vaccine = vaccine;
+    });
   }
 }

@@ -96,7 +96,10 @@ class _RepairNoticeState extends State<RepairNotice> {
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
+                  ), SizedBox(
+                    height: 20,
                   ),
+                  
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -118,7 +121,7 @@ class _RepairNoticeState extends State<RepairNotice> {
                                 color: Colors.green.shade800, width: 2))),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   Container(
                       height: 200,

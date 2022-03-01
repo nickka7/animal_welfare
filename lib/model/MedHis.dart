@@ -10,7 +10,7 @@ class MedHis {
       String? status, 
       dynamic errorMessage, 
       Latest? latest, 
-      List<Data>? data,}){
+      List<Medical>? data,}){
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
@@ -26,7 +26,7 @@ class MedHis {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(Medical.fromJson(v));
       });
     }
   }
@@ -34,13 +34,13 @@ class MedHis {
   String? _status;
   dynamic _errorMessage;
   Latest? _latest;
-  List<Data>? _data;
+  List<Medical>? _data;
 
   String? get resultCode => _resultCode;
   String? get status => _status;
   dynamic get errorMessage => _errorMessage;
   Latest? get latest => _latest;
-  List<Data>? get data => _data;
+  List<Medical>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -63,8 +63,8 @@ class MedHis {
 /// date : "2021-12-13T17:00:00.000Z"
 /// time : "07:00:00"
 
-class Data {
-  Data({
+class Medical {
+  Medical({
       String? medicalID, 
       String? medicalName, 
       String? date, 
@@ -75,7 +75,7 @@ class Data {
     _time = time;
 }
 
-  Data.fromJson(dynamic json) {
+  Medical.fromJson(dynamic json) {
     _medicalID = json['medicalID'];
     _medicalName = json['medicalName'];
     _date = json['date'];

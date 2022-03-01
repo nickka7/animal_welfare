@@ -15,7 +15,8 @@ import 'package:intl/intl.dart';
 class VetAnimalData extends StatefulWidget {
   final Bio getanimal;
   final String? animalID;
-  const VetAnimalData({Key? key, required this.getanimal, this.animalID}) : super(key: key);
+  const VetAnimalData({Key? key, required this.getanimal, this.animalID})
+      : super(key: key);
 
   @override
   _VetAnimalDataState createState() => _VetAnimalDataState();
@@ -31,9 +32,9 @@ class _VetAnimalDataState extends State<VetAnimalData> {
         Uri.parse(
             '$endPoint/api/getMedicalHistory?animalID=${widget.animalID}'),
         headers: {"authorization": 'Bearer $token'});
-    print(response.body);
+    //print(response.body);
     var jsonData = MedHis.fromJson(jsonDecode(response.body));
-    print('$jsonData');
+    // print('$jsonData');
     return jsonData;
   }
 
@@ -51,15 +52,16 @@ class _VetAnimalDataState extends State<VetAnimalData> {
   }
 
   String formatDateFromString(String? date) {
-    if(date == 'ไม่มีประวัติ'){
+    if (date == 'ไม่มีประวัติ') {
       return 'ไม่มีประวัติ';
     }
     var parseDate = DateTime.parse(date!);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formattedDate = formatter.format(parseDate);
-    print('57 $formattedDate');
+    print(' $formattedDate');
     return formattedDate;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,7 +167,6 @@ class _VetAnimalDataState extends State<VetAnimalData> {
               ),
               _buildfont('ANIMAL ID : ', '${widget.getanimal.animalID}'),
               _buildfont('ชนิด : ', '${widget.getanimal.typeName}'),
-              _buildfont('รหัสกรง : ', '${widget.getanimal.age}'),
               _buildfont('เพศ : ', '${widget.getanimal.gender}'),
               _buildfont('อายุ : ', '${widget.getanimal.age} ปี'),
               _buildfont('น้ำหนัก : ', '${widget.getanimal.weight} กิโลกรัม'),
@@ -180,133 +181,149 @@ class _VetAnimalDataState extends State<VetAnimalData> {
   //ประวัติการรักษาล่าสุด
   Widget medicalHistory() {
     return FutureBuilder<MedHis>(
-          future: getMedHis(),
-          builder:
-              (BuildContext context, AsyncSnapshot<MedHis> snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            if (snapshot.hasData) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: _heading('ประวัติการรักษาล่าสุด', 35.0, 185.0)),
-              SizedBox(
-                height: 10,
-              ),
-              _buildfont('วันที่ : ', '${formatDateFromString((snapshot.data?.latest?.date  ?? 'ไม่มีประวัติ').toString())}'),
-              _buildfont('การรักษา : ', '${snapshot.data?.latest?.medicalName ?? 'ไม่มีประวัติ'}'),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  VetMedicalHistory(animalID: widget.animalID,
-                            )));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 220,
-                      ),
-                      Container(
+      future: getMedHis(),
+      builder: (BuildContext context, AsyncSnapshot<MedHis> snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        if (snapshot.hasData) {
+          return Card(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: _heading('ประวัติการรักษาล่าสุด', 35.0, 185.0)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _buildfont('วันที่ : ',
+                        '${formatDateFromString((snapshot.data?.latest?.date ?? 'ไม่มีประวัติ').toString())}'),
+                    _buildfont('การรักษา : ',
+                        '${snapshot.data?.latest?.medicalName ?? 'ไม่มีประวัติ'}'),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VetMedicalHistory(
+                                        animalID: widget.animalID,
+                                      )));
+                        },
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('ดูเพิ่มเติม',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                )),
-                            Icon(
-                              Icons.navigate_next_outlined,
-                              color: Colors.green,
+                            SizedBox(
+                              width: 220,
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Text('ดูเพิ่มเติม',
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      )),
+                                  Icon(
+                                    Icons.navigate_next_outlined,
+                                    color: Colors.green,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          ),
-        ),
-      ),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          return new Center(child: new CircularProgressIndicator());
+        }
+      },
     );
-      } else {
-              return new Center(child: new CircularProgressIndicator());
-            }
-          },
-        );
   }
 
-  //ประวัติการฉีดวัคซีนล่าสุด
   Widget vaccineHistory() {
     return FutureBuilder<VacHis>(
-          future: getVacHis(),
-          builder:
-              (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            if (snapshot.hasData) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: _heading('ประวัติการฉีดวัคซีนล่าสุด', 35.0, 210.0)),
-              SizedBox(
-                height: 10,
-              ),
-              _buildfont('วันที่ : ', '${formatDateFromString((snapshot.data?.latest?.date ?? 'ไม่มีประวัติ').toString())}'),
-              _buildfont('วัคซีน : ', '${snapshot.data?.latest?.vaccineName ?? 'ไม่มีประวัติ'}'),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  VetVaccineHistory(animalID:widget.animalID,)));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 220,
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Text('ดูเพิ่มเติม',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                )),
-                            Icon(
-                              Icons.navigate_next_outlined,
-                              color: Colors.green,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          ),
-        ),
-      ),
-    );
-     } else {
-              return new Center(child: new CircularProgressIndicator());
-            }
-          },
-        );
+        future: getVacHis(),
+        builder: (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          if (snapshot.hasData) {
+            return Text('data');
+          
+           } else {
+          return new Center(child: new CircularProgressIndicator());
+        }
+      
+        });
   }
+  //ประวัติการฉีดวัคซีนล่าสุด
+  // Widget vaccineHistory() {
+  //   return FutureBuilder<VacHis>(
+  //         future: getVacHis(),
+  //         builder:
+  //             (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
+  //           if (snapshot.hasError) print(snapshot.error);
+  //           if (snapshot.hasData) {
+  //   return Card(
+  //     elevation: 5,
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+  //       child: Container(
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //           children: [
+  //             Align(
+  //                 alignment: Alignment.topLeft,
+  //                 child: _heading('ประวัติการฉีดวัคซีนล่าสุด', 35.0, 210.0)),
+  //             SizedBox(
+  //               height: 10,
+  //             ),
+  //            _buildfont('วันที่ : ', '${formatDateFromString((snapshot.data?.latest?.date ?? 'ไม่มีประวัติ').toString())}'),
+  //            _buildfont('วัคซีน : ', '${snapshot.data?.latest?.vaccineName ?? 'ไม่มีประวัติ'.toString()}'),
+  //             TextButton(
+  //                 onPressed: () {
+  //                   // Navigator.push(
+  //                   //     context,
+  //                   //     MaterialPageRoute(
+  //                   //         builder: (context) =>  VetVaccineHistory(animalID:widget.animalID,)));
+  //                 },
+  //                 child: Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                   children: [
+  //                     SizedBox(
+  //                       width: 220,
+  //                     ),
+  //                     Container(
+  //                       child: Row(
+  //                         children: [
+  //                           Text('ดูเพิ่มเติม',
+  //                               style: TextStyle(
+  //                                 color: Colors.green,
+  //                               )),
+  //                           Icon(
+  //                             Icons.navigate_next_outlined,
+  //                             color: Colors.green,
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 )),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //    } else {
+  //             return new Center(child: new CircularProgressIndicator());
+  //           }
+  //         },
+  //       );
+  // }
 
   //ขนาดและรูปแบบฟ้อนใน card
   Widget _buildfont(var title, var data) {

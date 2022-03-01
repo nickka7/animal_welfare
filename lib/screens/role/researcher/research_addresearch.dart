@@ -29,9 +29,6 @@ class _AddResearchState extends State<AddResearch> {
       TextEditingController(); //รายละเอียดงานวิจัย
 
   int index = 0;
-
-
-
   List animalType = [];
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
@@ -123,12 +120,12 @@ class _AddResearchState extends State<AddResearch> {
                                         width: 2))),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                'ชื่อชนิดสัตว์',
+                                'ชนิดสัตว์',
                                 style: TextStyle(fontSize: 18),
                               )),
                           Container(
@@ -158,7 +155,7 @@ class _AddResearchState extends State<AddResearch> {
                                 )),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
                           
                           Align(
@@ -195,10 +192,41 @@ class _AddResearchState extends State<AddResearch> {
                                     "animalType": animalType[index].toString(),
                                     "detail": detailController.text
                                   };
-                                  uploadData(
+                                  showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: Colors.lightGreen[400],
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'ยืนยันการเพิ่มงานวิจัย',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text(
+                                        'ยกเลิก',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                    CupertinoDialogAction(
+                                        child: Text(
+                                          'ยืนยัน',
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                        onPressed: () {
+                                          uploadData(
                                           '${Constant().endPoint}/api/postResearchData',
                                           data)
                                       .then((value) {
+                                    Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     final snackBar = SnackBar(
                                         content: Text(
@@ -206,6 +234,11 @@ class _AddResearchState extends State<AddResearch> {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                   });
+                                         
+                                        })                                  ],
+                                );
+                              });
+                                  
                                 }
                               },
                               child: Text('เสร็จสิ้น',

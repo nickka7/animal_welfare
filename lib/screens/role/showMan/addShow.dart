@@ -73,6 +73,7 @@ class _AddShowState extends State<AddShow> {
   Future<String?> uploadData(url, data) async {
     // print(file!.path);
     String? token = await storage.read(key: 'token');
+    // ignore: unused_local_variable
     var request = http.post(Uri.parse(url),
         headers: <String, String>{
           "authorization": 'Bearer $token',

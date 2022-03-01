@@ -1,8 +1,10 @@
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/screens/role/admin/addWork.dart';
+import 'package:animal_welfare/screens/role/admin/addEven.dart';
+import 'package:animal_welfare/screens/role/admin/addAnimal.dart';
+import 'package:animal_welfare/screens/role/admin/addNews.dart';
+import 'package:animal_welfare/screens/role/admin/admin_repairHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'admin_uploadDocument.dart';
 
 class AdminFirstpage extends StatefulWidget {
@@ -13,13 +15,11 @@ class AdminFirstpage extends StatefulWidget {
 }
 
 class _AdminFirstpageState extends State<AdminFirstpage> {
-
   DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
-     
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
           centerTitle: true,
           title: Text(
             'งาน',
@@ -29,8 +29,8 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
             icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
-      ),
-      body: Container(
+        ),
+        body: Container(
             color: HexColor('#697825'),
             child: Column(
               children: [
@@ -77,23 +77,17 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 25),
-                      child: Column(
-                        children: [
-                          uplodeDoc(),
-                          addWork()
-                        ],
+                      child: ListView(
+                        children: [uplodeDoc(), addActivity(),repair(),addAnimal()],
                       ),
                     ),
                   ),
                 ),
-                
               ],
-            ))
-            
-            );
+            )));
   }
 
- Widget uplodeDoc() {
+  Widget uplodeDoc() {
     return Container(
         child: Column(
       children: [
@@ -105,8 +99,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => UploadDocument()),
+                  MaterialPageRoute(builder: (context) => UploadDocument()),
                 );
               },
               child: Padding(
@@ -131,7 +124,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
     ));
   }
 
-Widget addWork() {
+  Widget addActivity() {
     return Container(
         child: Column(
       children: [
@@ -143,8 +136,7 @@ Widget addWork() {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => AddWork()),
+                  MaterialPageRoute(builder: (context) => AddEven()),
                 );
               },
               child: Padding(
@@ -152,7 +144,7 @@ Widget addWork() {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('เพิ่มงานให้พนักงาน',
+                    Text('เพิ่มกิจกรรมในสวนสัตว์',
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                     Icon(
                       Icons.navigate_next,
@@ -169,6 +161,117 @@ Widget addWork() {
     ));
   }
 
+  Widget addNews() {
+    return Container(
+        child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddNews()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('เพิ่มข่าว',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ));
+  }
+
+  Widget addAnimal() {
+    return Container(
+        child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddAnimal()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('เพิ่มสัตว์ในสวนสัตว์',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ));
+  }
+  Widget repair() {
+    return Container(
+        child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminRepairHistory()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('ดูแลการแจ้งซ่อม',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ));
+  }
   // Widget _heading(var title, double h, double w) {
   //   return Container(
   //     height: h,

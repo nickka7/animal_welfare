@@ -126,7 +126,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                                 width: 8,
                               ),
                               Text(
-                                'ความกดอากาศ ${responseApi.data![0].airpressure} km/hr',
+                                'ความชื้น ${responseApi.data![0].moisture} %',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
@@ -140,7 +140,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                                 width: 8,
                               ),
                               Text(
-                                'ความชื้น ${responseApi.data![0].moisture} %',
+                                'ความกดอากาศ ${responseApi.data![0].airpressure} hPa',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),

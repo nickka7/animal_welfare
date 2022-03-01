@@ -1,7 +1,8 @@
 import 'dart:convert';
-
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/MedHis.dart';
+import 'package:animal_welfare/screens/role/veterinarian/vet_addMedical.dart';
+import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,32 +20,52 @@ class VetMedicalHistory extends StatefulWidget {
 }
 
 class _VetMedicalHistoryState extends State<VetMedicalHistory> {
-  final storage = new FlutterSecureStorage();
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
 
-  Future<MedHis> getAnimal() async {
+  final storage = new FlutterSecureStorage();
+  List<Medical> medHis = [];
+  String query = '';
+
+  Future<List<Medical>> getAllMedical(String query) async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
+    final allmedical;
     var response = await http.get(
         Uri.parse(
             '$endPoint/api/getMedicalHistory?animalID=${widget.animalID}'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
-    var jsonData = MedHis.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
+    if (response.statusCode == 200) {
+      allmedical = json.decode(response.body);
+      final List medical = allmedical['data'];
+      // print('bioo $bio');
+      return medical.map((json) => Medical.fromJson(json)).where((medical) {
+        final medicalLower = medical.medicalName!;
+        final searchLower = query;
+        return medicalLower.contains(searchLower);
+      }).toList();
+    } else {
+      print('not 200');
+      throw Exception();
+    }
   }
+
+  Future init() async {
+    final medHis = await getAllMedical(query);
+
+    setState(() => this.medHis = medHis);
+  }
+
 
   String formatDateFromString(String date) {
     var parseDate = DateTime.parse(date);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formattedDate = formatter.format(parseDate);
     return formattedDate;
-  }
-
-  @override
-  void initState() {
-    getAnimal();
-    super.initState();
   }
 
   @override
@@ -72,82 +93,96 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
           ],
         )),
         child: ListView(
-          children: [buildListview()],
+          children: [buildSearch(), buildListview()],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddMedical()),
+          ).then((value) => setState(() {}));
+        },
+        backgroundColor: HexColor("#697825"),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   Widget buildListview() {
-    return FutureBuilder<MedHis>(
-      future: getAnimal(),
-      builder: (BuildContext context, AsyncSnapshot<MedHis> snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-              itemCount: snapshot.data!.data!.length,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemBuilder: (context, index) {
-                final animal = snapshot.data!.data![index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 70,
-                            width: 280,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'การรักษา : ${animal.medicalName}',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text(
-                                      'เวลา : ${animal.time}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'วันที่ : ${formatDateFromString(animal.date.toString())}',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                ],
+    return ListView.builder(
+        itemCount: medHis.length,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemBuilder: (context, index) {
+          final animal = medHis[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Card(
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 70,
+                      width: 280,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'การรักษา : ${animal.medicalName}',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                             ),
-                          ),
-                        ],
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                'เวลา : ${animal.time}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'วันที่ : ${formatDateFromString(animal.date.toString())}',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              });
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            ),
           );
-        }
-      },
-    );
+        });
+  }
+
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: "รหัสการรักษา,การรักษา,รหัสสัตว์",
+        onChanged: searchAnimal,
+      );
+
+  void searchAnimal(String query) async {
+    final medHis = await getAllMedical(query );
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.medHis = medHis;
+    });
   }
 }

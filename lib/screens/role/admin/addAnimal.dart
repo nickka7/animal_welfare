@@ -1,19 +1,23 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:animal_welfare/constant.dart';
-import 'package:animal_welfare/haxColor.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AddBreeding extends StatefulWidget {
-  const AddBreeding({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:animal_welfare/constant.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import '../../../haxColor.dart';
+
+class AddAnimal extends StatefulWidget {
+  const AddAnimal({Key? key}) : super(key: key);
 
   @override
-  _AddBreedingState createState() => _AddBreedingState();
+  _AddAnimalState createState() => _AddAnimalState();
 }
 
-class _AddBreedingState extends State<AddBreeding> {
+class _AddAnimalState extends State<AddAnimal> {
   Future<void>? api;
 
   @override
@@ -22,22 +26,45 @@ class _AddBreedingState extends State<AddBreeding> {
     api = getAnimalType();
   }
 
+  File? file; //dart.io
   final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController =
-      TextEditingController(); //ชื่อการเพาะพันธุ์
-  TextEditingController detailController =
-      TextEditingController(); //รายละเอียดการเพาะพันธุ์
+  TextEditingController nameController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+  // bool _validate = false;
+  Future<Null> chooseImage(ImageSource source) async {
+    try {
+      var object = await ImagePicker().pickImage(
+        source: source,
+      ); //maxHeight: 1000, maxWidth: 1000
+      setState(() {
+        file = File(object!.path);
+      });
+    } catch (e) {
+      print('${e}123');
+    }
+  }
+
+  final storage = new FlutterSecureStorage();
+
+  Future<String?> uploadImageAndData(filepath, url, data) async {
+    print(file!.path);
+    String? token = await storage.read(key: 'token');
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    request.fields['requestMessage'] = data['maintenanceDetail'];
+    request.fields['location'] = data['location'];
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+    };
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
+    var res = await request.send();
+    print('${res.reasonPhrase}test');
+    return res.reasonPhrase;
+  }
 
   int index = 0;
-
-  int index1 = 0;
-  final status = [
-    'pass',
-    'failed',
-  ];
-
   List animalType = [];
-  final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
 
   Future<bool> getAnimalType() async {
@@ -56,36 +83,13 @@ class _AddBreedingState extends State<AddBreeding> {
     return true;
   }
 
-  Future<String?> uploadData(url, data) async {
-    // print(file!.path);
-    String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          'breedingName': data['breedingName'],
-          'animalType': data['animalType'],
-          'status': data['status'],
-          'detail': data['detail'],
-          
-        }));
-
-    print(request);
-    // print(data['showName']);
-    // print(data['startDate']);
-    // print(data['endDate']);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'เพิ่มการเพาะพันธุ์',
+          'เพิ่มสัตว์ในสวนสัตว์',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -109,14 +113,14 @@ class _AddBreedingState extends State<AddBreeding> {
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                'ชื่อการเพาะพันธุ์',
+                                'ชื่อ',
                                 style: TextStyle(fontSize: 18),
                               )),
                           TextFormField(
                             controller: nameController,
                             validator: (String? input) {
                               if (input!.isEmpty) {
-                                return "กรุณากรอกชื่อการเพาะพันธุ์";
+                                return "กรุณากรอกชื่อ";
                               }
                               return null;
                             },
@@ -130,10 +134,11 @@ class _AddBreedingState extends State<AddBreeding> {
                           SizedBox(
                             height: 20,
                           ),
+                         
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                'ชื่อชนิดสัตว์',
+                                'ชนิดสัตว์',
                                 style: TextStyle(fontSize: 18),
                               )),
                           Container(
@@ -162,53 +167,20 @@ class _AddBreedingState extends State<AddBreeding> {
                                   ],
                                 )),
                           ),
-                          SizedBox(
+                           SizedBox(
                             height: 20,
                           ),
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                'สถานะ',
-                                style: TextStyle(fontSize: 18),
-                              )),
-                          Container(
-                            height: 58,
-                            width: double.infinity,
-                            child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                      width: 1, color: Colors.black45),
-                                ),
-                                onPressed: () {
-                                  _statusPicker(context);
-                                },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      status[index1],
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.black,
-                                    )
-                                  ],
-                                )),
-                          ),
-                          SizedBox(height: 20),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'รายละเอียด',
+                                'น้ำหนัก',
                                 style: TextStyle(fontSize: 18),
                               )),
                           TextFormField(
-                            controller: detailController,
+                            controller: weightController,
                             validator: (String? input) {
                               if (input!.isEmpty) {
-                                return "กรุณากรอกรายละเอียด";
+                                return "กรุณากรอกนำหนัก";
                               }
                               return null;
                             },
@@ -219,6 +191,30 @@ class _AddBreedingState extends State<AddBreeding> {
                                         color: Colors.green.shade800,
                                         width: 2))),
                           ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                              height: 200,
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    side: BorderSide(
+                                        width: 2, color: Colors.green),
+                                  ),
+                                  // color: Colors.green.shade800,
+                                  child: Center(
+                                    child: file == null
+                                        ? Icon(
+                                            Icons.camera_alt_outlined,
+                                            size: 40,
+                                          )
+                                        : Image.file(file!),
+                                  ),
+                                  onPressed: () => _onButtonPress())),
                           SizedBox(height: 70),
                           Container(
                             height: 50,
@@ -228,58 +224,58 @@ class _AddBreedingState extends State<AddBreeding> {
                                 bool pass = _formKey.currentState!.validate();
                                 if (pass) {
                                   Map<String, String> data = {
-                                    "breedingName": nameController.text,
+                                    "Animalname": nameController.text,
                                     "animalType": animalType[index].toString(),
-                                    "status": status[index1].toString(),
-                                    "detail": detailController.text
+                                    "weight": weightController.text,
                                   };
                                   showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.lightGreen[400],
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  content: Text(
-                                    'ยืนยันการเพิ่มการเพาะพันธุ์',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      child: Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    CupertinoDialogAction(
-                                        child: Text(
-                                          'ยืนยัน',
-                                          style: TextStyle(color: Colors.green),
-                                        ),
-                                        onPressed: () {
-                                          uploadData(
-                                          '${Constant().endPoint}/api/postMaintenanceData',
-                                          data)
-                                      .then((value) {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    final snackBar = SnackBar(
-                                        content: Text(
-                                            'เพิ่มการเพาะพันธุ์เรียบร้อยแล้ว'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  });
-                                         
-                                        })                                  ],
-                                );
-                              });
-                                  
+                                      context: context,
+                                      builder: (context) {
+                                        return CupertinoAlertDialog(
+                                          title: CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor:
+                                                Colors.lightGreen[400],
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'ยืนยันเพิ่มสัตว์',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Text(
+                                                'ยกเลิก',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            CupertinoDialogAction(
+                                                child: Text(
+                                                  'ยืนยัน',
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                ),
+                                                onPressed: () {
+                                                  print('before upload image');
+                                                  uploadImageAndData(
+                                                          file!.path,
+                                                          '${Constant().endPoint}/api/postMaintenance',
+                                                          data)
+                                                      .then((value) {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                    //  Navigator.of(context).pop();
+                                                  });
+                                                })
+                                          ],
+                                        );
+                                      });
                                 }
                               },
                               child: Text('เสร็จสิ้น',
@@ -353,51 +349,30 @@ class _AddBreedingState extends State<AddBreeding> {
     );
   }
 
-  void _statusPicker(context) {
-    showCupertinoModalPopup(
+  void _onButtonPress() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10.0),
+        topRight: Radius.circular(10.0),
+      )),
       context: context,
-      builder: (context) {
-        return Container(
-          height: 400,
-          width: double.infinity,
-          color: Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              Container(
-                height: 300,
-                width: double.infinity,
-                child: CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  itemExtent: 30,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
-                  children: status
-                      .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
-                      .toList(),
-                  onSelectedItemChanged: (index1) {
-                    setState(() {
-                      this.index1 = index1;
-                      final item = status[index1];
-                      print('selected $item');
-                    });
-                  },
-                  diameterRatio: 1,
-                  useMagnifier: true,
-                  magnification: 1.3,
-                ),
-              ),
-              CupertinoButton(
-                child: Text('ยืนยัน'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      },
+      builder: (context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text('Camera'),
+              onTap: () => chooseImage(ImageSource.camera),
+            ),
+            ListTile(
+              title: Text('Gallery'),
+              onTap: () => chooseImage(ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

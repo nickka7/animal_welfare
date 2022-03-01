@@ -1,4 +1,5 @@
 import 'package:animal_welfare/screens/role/admin/repair_status_update.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -9,8 +10,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+
 class AdminRepairHistory extends StatefulWidget {
-  const AdminRepairHistory({ Key? key }) : super(key: key);
+  const AdminRepairHistory({Key? key}) : super(key: key);
 
   @override
   _AdminRepairHistoryState createState() => _AdminRepairHistoryState();
@@ -23,10 +25,8 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
     getAllMaintenance();
     scrollController.addListener(() {
       loadMore();
-
     });
   }
-
 
   ScrollController scrollController = ScrollController();
   int page = 1;
@@ -57,7 +57,7 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
   }
 
   void getAllMaintenance() async {
-     setState(() {
+    setState(() {
       isFirstLoadRunning = true;
     });
     token = await storage.read(key: 'token');
@@ -123,8 +123,26 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
     }
   }
 
+  Future<String?> updateStatus(url) async {
+    String? token = await storage.read(key: 'token');
+    var request = http.MultipartRequest('PUT', Uri.parse(url));
+    //ถ้าไม่ได้เลือกรูปก็ไม่ต้องอัพรูป
 
-  
+    // request.fields['status'] = data['status'];
+    // request.fields['location'] = data['location'];
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+      // "Content-Disposition": "attachment;filename=1.png",
+      // "Content-Type": "image/png"
+    };
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
+    var res = await request.send();
+    print('${res.reasonPhrase}test');
+    return res.reasonPhrase;
+  }
+
+  final snackBar = SnackBar(content: Text('ซ่อมแล้ว'));
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +150,7 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'ประวัติการแจ้งซ่อม123',
+            'ประวัติการแจ้งซ่อม',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
@@ -289,23 +307,73 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
                             color: Colors.green,
                             icon: Icons.build_rounded,
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => StatusUpdate(
-                              //             maintenanceID:
-                              //                 '${listRepair[index].maintenanceID}',
-                              //             location:
-                              //                 '${listRepair[index].location}',
-                              //             maintenanceDetail:
-                              //                 '${listRepair[index].requestMessage}',
-                              //                  status: '${listRepair[index].status}',
-                              //           )),
-                              // ).then((value) =>
-                              //     onGoBack()); //หลังจาก call back เรียก setState
+                              updateStatus(
+                                '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=ซ่อมแล้ว',
+                              ).then((value) => showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CupertinoAlertDialog(
+                                      title: CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: Colors.lightGreen[400],
+                                        child: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: Text(
+                                        'ยืนยันการแก้ไข',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: Text(
+                                            'ยกเลิก',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                        CupertinoDialogAction(
+                                            child: Text(
+                                              'ยืนยัน',
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            onPressed: () {
+                                              updateStatus(
+                                                '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=ซ่อมแล้ว',
+                                              ).then((value) => Navigator.pop(context))
+                                                  .then((value) =>
+                                                      setState(() {}))
+                                                  .then((value) =>
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackBar));
+                                            })
+                                      ],
+                                    );
+                                  }));
+
+                              //   .then((value) => setState(() {}))
+                              //   .then((value) => ScaffoldMessenger.of(context)
+                              // .showSnackBar(snackBar));
                             },
                           ),
-                          
+                          // IconSlideAction(
+                          //   caption: 'รอดำเนินการ',
+                          //   color: Colors.red,
+                          //   icon: Icons.build_rounded,
+                          //   onTap: () {
+                          //     updateStatus(
+                          //             '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=รอดำเนินการ',
+                          //             )
+                          //         .then((value) => setState(() {}))
+                          //         .then((value) => ScaffoldMessenger.of(context)
+                          //       .showSnackBar(snackBar));
+                          //   },
+                          // ),
                           IconSlideAction(
                             caption: 'ปิด',
                             color: Colors.grey,
@@ -323,7 +391,6 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
                     child: CircularProgressIndicator(),
                   ),
                 ),
-              
             ],
           );
   }

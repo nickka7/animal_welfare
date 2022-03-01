@@ -23,7 +23,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
     HomePage(payload: widget.payload),
     DownloadFile(),
     WarnNotifications(),
-    MyMainProfile(),
+    MyMainProfile(payload: widget.payload),
   ];
   @override
   Widget build(BuildContext context) {

@@ -165,233 +165,240 @@ class _AdminRepairHistoryState extends State<AdminRepairHistory> {
     return isFirstLoadRunning
         ? Center(child: CircularProgressIndicator())
         : Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: listRepair.length,
-                    itemBuilder: (context, index) {
-                      return Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 140,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: HexColor('#697825'), width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Stack(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 150,
-                                        width: 80,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8),
-                                          child: Image.network(
-                                            '${listRepair[index].image}',
-                                            height: 113,
-                                            width: 120,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Container(
-                                          height: 90,
-                                          width: 232,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: ListView.builder(
+              controller: scrollController,
+              itemCount: listRepair.length,
+              itemBuilder: (context, index) {
+                return Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: 0.25,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 140,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                            color: HexColor('#697825'), width: 1),
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Stack(
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 150,
+                                  width: 80,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8),
+                                    child: Image.network(
+                                      '${listRepair[index].image}',
+                                      height: 113,
+                                      width: 120,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.only(left: 10),
+                                  child: Container(
+                                    height: 90,
+                                    width: 232,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          child: Row(
                                             children: [
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Flexible(
-                                                      child: Text(
-                                                        "รหัสการแจ้งซ่อม : ${listRepair[index].maintenanceID}",
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Flexible(
-                                                      child: Text(
-                                                        "ปัญหาที่ชำรุด : ${listRepair[index].requestMessage}",
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Flexible(
-                                                      child: Text(
-                                                        "สถานที่ : ${listRepair[index].location}",
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Flexible(
-                                                      child: Text(
-                                                        "สถานะ : ${listRepair[index].status}",
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                              Flexible(
+                                                child: Text(
+                                                  "รหัสการแจ้งซ่อม : ${listRepair[index]
+                                                      .maintenanceID}",
+                                                  overflow: TextOverflow
+                                                      .ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Container(
-                                        child: Text(
-                                      formatDateFromString(
-                                          '${listRepair[index].createDtm}'),
-                                      style: TextStyle(fontSize: 12),
-                                    )),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        //เลื่อนเพื่อแก้ไข ลบ ข้อมูล
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'ซ่อมแล้ว',
-                            color: Colors.green,
-                            icon: Icons.build_rounded,
-                            onTap: () {
-                              updateStatus(
-                                '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=ซ่อมแล้ว',
-                              ).then((value) => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return CupertinoAlertDialog(
-                                      title: CircleAvatar(
-                                        radius: 30,
-                                        backgroundColor: Colors.lightGreen[400],
-                                        child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      content: Text(
-                                        'ยืนยันการแก้ไข',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      actions: [
-                                        CupertinoDialogAction(
-                                          child: Text(
-                                            'ยกเลิก',
-                                            style: TextStyle(color: Colors.red),
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "ปัญหาที่ชำรุด : ${listRepair[index]
+                                                      .requestMessage}",
+                                                  overflow: TextOverflow
+                                                      .ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
                                         ),
-                                        CupertinoDialogAction(
-                                            child: Text(
-                                              'ยืนยัน',
-                                              style: TextStyle(
-                                                  color: Colors.green),
-                                            ),
-                                            onPressed: () {
-                                              updateStatus(
-                                                '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=ซ่อมแล้ว',
-                                              ).then((value) => Navigator.pop(context))
-                                                  .then((value) =>
-                                                      setState(() {}))
-                                                  .then((value) =>
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackBar));
-                                            })
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "สถานที่ : ${listRepair[index]
+                                                      .location}",
+                                                  overflow: TextOverflow
+                                                      .ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  "สถานะ : ${listRepair[index]
+                                                      .status}",
+                                                  overflow: TextOverflow
+                                                      .ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
-                                    );
-                                  }));
-
-                              //   .then((value) => setState(() {}))
-                              //   .then((value) => ScaffoldMessenger.of(context)
-                              // .showSnackBar(snackBar));
-                            },
-                          ),
-                          // IconSlideAction(
-                          //   caption: 'รอดำเนินการ',
-                          //   color: Colors.red,
-                          //   icon: Icons.build_rounded,
-                          //   onTap: () {
-                          //     updateStatus(
-                          //             '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=รอดำเนินการ',
-                          //             )
-                          //         .then((value) => setState(() {}))
-                          //         .then((value) => ScaffoldMessenger.of(context)
-                          //       .showSnackBar(snackBar));
-                          //   },
-                          // ),
-                          IconSlideAction(
-                            caption: 'ปิด',
-                            color: Colors.grey,
-                            icon: Icons.close,
-                            onTap: () {},
-                          ),
-                        ],
-                      );
-                    }),
-              ),
-              if (isLoadMoreRunning == true)
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 40),
-                  child: Center(
-                    child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                  child: Text(
+                                    formatDateFromString(
+                                        '${listRepair[index].createDtm}'),
+                                    style: TextStyle(fontSize: 12),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-            ],
-          );
+
+                  //เลื่อนเพื่อแก้ไข ลบ ข้อมูล
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      caption: 'ซ่อมแล้ว',
+                      color: Colors.green,
+                      icon: Icons.build_rounded,
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.lightGreen[400],
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: Text(
+                                  'ยืนยันการเปลี่ยนสถานะ',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                      'ยกเลิก',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                  CupertinoDialogAction(
+                                      child: Text(
+                                        'ยืนยัน',
+                                        style: TextStyle(
+                                            color: Colors.green),
+                                      ),
+                                      onPressed: () {
+                                        updateStatus(
+                                          '${Constant()
+                                              .endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index]
+                                              .maintenanceID}&status=ซ่อมแล้ว',
+                                        )
+                                            .then((value) =>
+                                            Navigator.pop(context))
+                                            .then((value) =>
+                                            setState(() {
+                                              getAllMaintenance();
+                                              page = 1;
+                                            }))
+                                            .then((value) =>
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar));
+                                      })
+                                ],
+                              );
+                            });
+
+                        //   .then((value) => setState(() {}))
+                        //   .then((value) => ScaffoldMessenger.of(context)
+                        // .showSnackBar(snackBar));
+                      },
+                    ),
+                    // IconSlideAction(
+                    //   caption: 'รอดำเนินการ',
+                    //   color: Colors.red,
+                    //   icon: Icons.build_rounded,
+                    //   onTap: () {
+                    //     updateStatus(
+                    //             '${Constant().endPoint}/api/updateStatusMaintenance?maintenanceID=${listRepair[index].maintenanceID}&status=รอดำเนินการ',
+                    //             )
+                    //         .then((value) => setState(() {}))
+                    //         .then((value) => ScaffoldMessenger.of(context)
+                    //       .showSnackBar(snackBar));
+                    //   },
+                    // ),
+                    IconSlideAction(
+                      caption: 'ปิด',
+                      color: Colors.grey,
+                      icon: Icons.close,
+                      onTap: () {},
+                    ),
+                  ],
+                );
+              }),
+        ),
+        if (isLoadMoreRunning == true)
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 40),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+      ],
+    );
   }
 }

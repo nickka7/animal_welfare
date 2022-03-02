@@ -1,5 +1,3 @@
-// import 'dart:html';
-
 import 'package:animal_welfare/screens/profile/colleague_breeder.dart';
 import 'package:animal_welfare/screens/profile/colleague_caretaker.dart';
 import 'package:animal_welfare/screens/profile/colleague_researcher.dart';
@@ -14,7 +12,8 @@ import 'package:animal_welfare/haxColor.dart';
 
 
 class MyMainProfile extends StatefulWidget {
-  const MyMainProfile({ Key? key }) : super(key: key);
+  final payload;
+  const MyMainProfile({ Key? key, this.payload }) : super(key: key);
 
   @override
   _MyMainProfileState createState() => _MyMainProfileState();
@@ -89,7 +88,7 @@ class _MyMainProfileState extends State<MyMainProfile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('ชื่อ',
+                    Text('${widget.payload['firstName']}',
                     style: TextStyle(
                       color: HexColor("#1273EB"),
                       fontSize: 24.0,

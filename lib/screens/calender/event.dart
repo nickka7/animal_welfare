@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/calender/addWork.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 // import 'package:animal_welfare/model/calendar_test.dart';
@@ -119,6 +121,17 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddWork()),
+                          ).then((value) =>
+                              setState(() {}));
+                        },
+                        backgroundColor: HexColor("#697825"),
+                        child: const Icon(Icons.add),
       ),
     );
   }

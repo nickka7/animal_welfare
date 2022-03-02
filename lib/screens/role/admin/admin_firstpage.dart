@@ -2,6 +2,7 @@ import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/admin/addEven.dart';
 import 'package:animal_welfare/screens/role/admin/addAnimal.dart';
 import 'package:animal_welfare/screens/role/admin/addNews.dart';
+import 'package:animal_welfare/screens/role/admin/admin_allAnimal.dart';
 import 'package:animal_welfare/screens/role/admin/admin_repairHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -211,7 +212,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddAnimal()),
+                      builder: (context) => Allanimal()),
                 );
               },
               child: Padding(
@@ -219,7 +220,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('เพิ่มสัตว์ในสวนสัตว์',
+                    Text('สัตว์ทั้งหมดในสวนสัตว์',
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                     Icon(
                       Icons.navigate_next,

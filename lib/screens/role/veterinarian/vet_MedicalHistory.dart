@@ -60,7 +60,6 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
     setState(() => this.medHis = medHis);
   }
 
-
   String formatDateFromString(String date) {
     var parseDate = DateTime.parse(date);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -100,7 +99,10 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddMedical()),
+            MaterialPageRoute(
+                builder: (context) => AddMedical(
+                      animalID: '${widget.animalID}',
+                    )),
           ).then((value) => setState(() {}));
         },
         backgroundColor: HexColor("#697825"),
@@ -176,7 +178,7 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
       );
 
   void searchAnimal(String query) async {
-    final medHis = await getAllMedical(query );
+    final medHis = await getAllMedical(query);
 
     if (!mounted) return;
 

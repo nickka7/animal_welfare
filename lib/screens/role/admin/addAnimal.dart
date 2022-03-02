@@ -18,12 +18,15 @@ class AddAnimal extends StatefulWidget {
 }
 
 class _AddAnimalState extends State<AddAnimal> {
-  Future<void>? api;
+  final snackBar = SnackBar(content: Text('เพิ่มสัตว์เรียบร้อยแล้ว'));
 
+  Future<void>? api;
+  Future<void>? apicage;
   @override
   void initState() {
     super.initState();
     api = getAnimalType();
+    apicage = getCage();
   }
 
   File? file; //dart.io
@@ -51,8 +54,12 @@ class _AddAnimalState extends State<AddAnimal> {
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
-    request.fields['requestMessage'] = data['maintenanceDetail'];
-    request.fields['location'] = data['location'];
+    request.fields['animalName'] = data['animalName'];
+    request.fields['animalType'] = data['animalType'];
+    request.fields['weight'] = data['weight'];
+    request.fields['age'] = data['age'];
+    request.fields['gender'] = data['gender'];
+    request.fields['cage'] = data['cage'];
     Map<String, String> headers = {
       "authorization": "Bearer $token",
     };
@@ -63,8 +70,20 @@ class _AddAnimalState extends State<AddAnimal> {
     return res.reasonPhrase;
   }
 
-  int index = 0;
+  int animalTypeIndex = 0;
+  int cageindex = 0;
+  int genderindex = 0;
+  int ageindex = 0;
+
   List animalType = [];
+  List cage = [];
+  final gender = [
+    'ผู้',
+    'เมีย',
+  ];
+
+  final age = List<String>.generate(100, (i) => '$i');
+
   String endPoint = Constant().endPoint;
 
   Future<bool> getAnimalType() async {
@@ -73,12 +92,28 @@ class _AddAnimalState extends State<AddAnimal> {
         headers: {"authorization": 'Bearer $token'});
     // print('response.body ${response.body}');
 
-    List jsonData2 = json.decode(response.body)['data'];
+    List jsonData = json.decode(response.body)['data'];
 
-    for (int i = 0; i < jsonData2.length; i++) {
-      animalType.add(jsonData2[i]['typeName']);
+    for (int i = 0; i < jsonData.length; i++) {
+      animalType.add(jsonData[i]['typeName']);
     }
     print(animalType);
+
+    return true;
+  }
+
+  Future<bool> getCage() async {
+    String? token = await storage.read(key: 'token');
+    var response = await http.get(Uri.parse('$endPoint/api/getAllCageID'),
+        headers: {"authorization": 'Bearer $token'});
+    // print('response.body ${response.body}');
+
+    List jsonData = json.decode(response.body)['data'];
+
+    for (int i = 0; i < jsonData.length; i++) {
+      cage.add(jsonData[i]['cageID']);
+    }
+    print(cage);
 
     return true;
   }
@@ -134,7 +169,6 @@ class _AddAnimalState extends State<AddAnimal> {
                           SizedBox(
                             height: 20,
                           ),
-                         
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
@@ -157,7 +191,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      animalType[index].toString(),
+                                      animalType[animalTypeIndex].toString(),
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     Icon(
@@ -167,7 +201,77 @@ class _AddAnimalState extends State<AddAnimal> {
                                   ],
                                 )),
                           ),
-                           SizedBox(
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'เพศ',
+                                style: TextStyle(fontSize: 18),
+                              )),
+                          Container(
+                            height: 58,
+                            width: double.infinity,
+                            child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: Colors.black45),
+                                ),
+                                onPressed: () {
+                                  _sexPicker(context);
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      gender[genderindex].toString(),
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black,
+                                    )
+                                  ],
+                                )),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'อายุ (ปี)',
+                                style: TextStyle(fontSize: 18),
+                              )),
+                          Container(
+                            height: 58,
+                            width: double.infinity,
+                            child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: Colors.black45),
+                                ),
+                                onPressed: () {
+                                  _agePicker(context);
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      age[ageindex].toString(),
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black,
+                                    )
+                                  ],
+                                )),
+                          ),
+                          SizedBox(
                             height: 20,
                           ),
                           Align(
@@ -180,7 +284,7 @@ class _AddAnimalState extends State<AddAnimal> {
                             controller: weightController,
                             validator: (String? input) {
                               if (input!.isEmpty) {
-                                return "กรุณากรอกนำหนัก";
+                                return "กรุณากรอกน้ำหนัก";
                               }
                               return null;
                             },
@@ -192,7 +296,43 @@ class _AddAnimalState extends State<AddAnimal> {
                                         width: 2))),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 20,
+                          ),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'กรง',
+                                style: TextStyle(fontSize: 18),
+                              )),
+                              cageID(),
+                          // Container(
+                          //   height: 58,
+                          //   width: double.infinity,
+                          //   child: OutlinedButton(
+                          //       style: OutlinedButton.styleFrom(
+                          //         side: BorderSide(
+                          //             width: 1, color: Colors.black45),
+                          //       ),
+                          //       onPressed: () {
+                          //         _animalPicker(context);
+                          //       },
+                          //       child: Row(
+                          //         mainAxisAlignment:
+                          //             MainAxisAlignment.spaceBetween,
+                          //         children: [
+                          //           Text(
+                          //             animalType[animalTypeIndex].toString(),
+                          //             style: TextStyle(color: Colors.black),
+                          //           ),
+                          //           Icon(
+                          //             Icons.arrow_drop_down,
+                          //             color: Colors.black,
+                          //           )
+                          //         ],
+                          //       )),
+                          // ),
+                          SizedBox(
+                            height: 20,
                           ),
                           Container(
                               height: 200,
@@ -216,76 +356,93 @@ class _AddAnimalState extends State<AddAnimal> {
                                   ),
                                   onPressed: () => _onButtonPress())),
                           SizedBox(height: 70),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                bool pass = _formKey.currentState!.validate();
-                                if (pass) {
-                                  Map<String, String> data = {
-                                    "Animalname": nameController.text,
-                                    "animalType": animalType[index].toString(),
-                                    "weight": weightController.text,
-                                  };
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return CupertinoAlertDialog(
-                                          title: CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor:
-                                                Colors.lightGreen[400],
-                                            child: Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          content: Text(
-                                            'ยืนยันเพิ่มสัตว์',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                'ยกเลิก',
-                                                style: TextStyle(
-                                                    color: Colors.red),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 25),
+                            child: Container(
+                              height: 50,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  bool pass = _formKey.currentState!.validate();
+                                  if (pass) {
+                                    Map<String, String> data = {
+                                      "animalName": nameController.text,
+                                      "animalType": animalType[animalTypeIndex]
+                                          .toString(),
+                                      "age": age[ageindex].toString(),
+                                      "gender": gender[ageindex].toString(),
+                                      "cage": cage[cageindex].toString(),
+                                      "weight": weightController.text,
+                                    };
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CupertinoAlertDialog(
+                                            title: CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor:
+                                                  Colors.lightGreen[400],
+                                              child: Icon(
+                                                Icons.check,
+                                                color: Colors.white,
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
                                             ),
-                                            CupertinoDialogAction(
+                                            content: Text(
+                                              'ยืนยันการเพิ่มสัตว์',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            actions: [
+                                              CupertinoDialogAction(
                                                 child: Text(
-                                                  'ยืนยัน',
+                                                  'ยกเลิก',
                                                   style: TextStyle(
-                                                      color: Colors.green),
+                                                      color: Colors.red),
                                                 ),
-                                                onPressed: () {
-                                                  print('before upload image');
-                                                  uploadImageAndData(
-                                                          file!.path,
-                                                          '${Constant().endPoint}/api/postMaintenance',
-                                                          data)
-                                                      .then((value) {
-                                                    Navigator.of(context).pop();
-                                                    Navigator.of(context).pop();
-                                                    //  Navigator.of(context).pop();
-                                                  });
-                                                })
-                                          ],
-                                        );
-                                      });
-                                }
-                              },
-                              child: Text('เสร็จสิ้น',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(25.0)),
-                                  primary: HexColor('#697825')),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                              CupertinoDialogAction(
+                                                  child: Text(
+                                                    'ยืนยัน',
+                                                    style: TextStyle(
+                                                        color: Colors.green),
+                                                  ),
+                                                  onPressed: () {
+                                                    print(
+                                                        'before upload image');
+                                                    uploadImageAndData(
+                                                            file!.path,
+                                                            '${Constant().endPoint}/api/postAnimalData',
+                                                            data)
+                                                        .then((value) {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.of(context)
+                                                          .pop();
+
+                                                      final snackBar = SnackBar(
+                                                        content: Text(
+                                                            'เพิ่มสัตว์เรียบร้อยแล้ว'));
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackBar);
+                                                    });
+                                                    
+                                                  })
+                                            ],
+                                          );
+                                        });
+                                  }
+                                },
+                                child: Text('เสร็จสิ้น',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
+                                    primary: HexColor('#697825')),
+                              ),
                             ),
                           ),
                         ],
@@ -299,6 +456,42 @@ class _AddAnimalState extends State<AddAnimal> {
             }
           }),
     );
+  }
+
+  cageID() {
+    return FutureBuilder<void>(
+        future: apicage,
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          if (snapshot.hasData) {
+            return Container(
+              height: 58,
+              width: double.infinity,
+              child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(width: 1, color: Colors.black45),
+                  ),
+                  onPressed: () {
+                    _cagePicker(context);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        cage[cageindex].toString(),
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black,
+                      )
+                    ],
+                  )),
+            );
+          } else {
+            return new Center(child: new CircularProgressIndicator());
+          }
+        });
   }
 
   void _animalPicker(context) {
@@ -328,8 +521,152 @@ class _AddAnimalState extends State<AddAnimal> {
                       .toList(),
                   onSelectedItemChanged: (index) {
                     setState(() {
-                      this.index = index;
+                      this.animalTypeIndex = index;
                       final item = animalType[index];
+                      print('selected $item');
+                    });
+                  },
+                  diameterRatio: 1,
+                  useMagnifier: true,
+                  magnification: 1.3,
+                ),
+              ),
+              CupertinoButton(
+                child: Text('ยืนยัน'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _cagePicker(context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 400,
+          width: double.infinity,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: 300,
+                width: double.infinity,
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 40,
+                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  children: cage
+                      .map((item) => Center(
+                            child: Text(
+                              item.toString(),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ))
+                      .toList(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      this.cageindex = index;
+                      final item = cage[index];
+                      print('selected $item');
+                    });
+                  },
+                  diameterRatio: 1,
+                  useMagnifier: true,
+                  magnification: 1.3,
+                ),
+              ),
+              CupertinoButton(
+                child: Text('ยืนยัน'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _sexPicker(context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 400,
+          width: double.infinity,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: 300,
+                width: double.infinity,
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 40,
+                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  children: gender
+                      .map((item) => Center(
+                            child: Text(
+                              item.toString(),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ))
+                      .toList(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      this.genderindex = index;
+                      final item = gender[index];
+                      print('selected $item');
+                    });
+                  },
+                  diameterRatio: 1,
+                  useMagnifier: true,
+                  magnification: 1.3,
+                ),
+              ),
+              CupertinoButton(
+                child: Text('ยืนยัน'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _agePicker(context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 400,
+          width: double.infinity,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: 300,
+                width: double.infinity,
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 40,
+                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  children: age
+                      .map((item) => Center(
+                            child: Text(
+                              item.toString(),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ))
+                      .toList(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      this.ageindex = index;
+                      final item = age[index];
                       print('selected $item');
                     });
                   },

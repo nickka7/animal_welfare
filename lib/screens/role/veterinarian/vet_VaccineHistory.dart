@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/VacHis.dart';
+import 'package:animal_welfare/model/vaccineHIs.dart';
+import 'package:animal_welfare/screens/role/veterinarian/vet_addVaccinate.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,10 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
       final List vaccine = allvaccinate['data'];
       // print('bioo $bio');
       return vaccine.map((json) => Data.fromJson(json)).where((allvaccinate) {
-        final allvaccinateIDLower = allvaccinate.vaccinateID;
+        final allvaccinateIDLower = allvaccinate.vaccinateID.toString();
         final allvaccinateNameLower = allvaccinate.vaccineName;
         final searchLower = query;
-        return allvaccinateIDLower!.contains(searchLower) ||
+        return allvaccinateIDLower.contains(searchLower) ||
             allvaccinateNameLower!.contains(searchLower);
       }).toList();
     } else {
@@ -68,14 +69,13 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
     return formattedDate;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'ประวัติการรักษา',
+          'ประวัติการฉีดวัคซีน',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -94,93 +94,101 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
           ],
         )),
         child: ListView(
-          children: [
-            buildSearch(),
-            buildListview()],
+          children: [buildSearch(), buildListview()],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddVaccinate(
+                      animalID: '${widget.animalID}',
+                    )),
+          ).then((value) => setState(() {}));
+        },
+        backgroundColor: HexColor("#697825"),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   Widget buildListview() {
-    
-          return ListView.builder(
-              itemCount: vaccine.length,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemBuilder: (context, index) {
-                final vaccinate = vaccine[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 70,
-                            width: 280,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'รหัสหารฉีดวัคซีน : ${vaccinate.vaccinateID}',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'วัคซีน : ${vaccinate.vaccineName}',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text(
-                                      'เวลา : ${vaccinate.time}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'วันที่ : ${formatDateFromString(vaccinate.date.toString())}',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                ],
+    return ListView.builder(
+        itemCount: vaccine.length,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemBuilder: (context, index) {
+          final vaccinate = vaccine[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Card(
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 90,
+                      width: 280,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'รหัสการฉีดวัคซีน : ${vaccinate.vaccinateID}',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                             ),
-                          ),
-                        ],
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'วัคซีน : ${vaccinate.vaccineName}',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                'เวลา : ${vaccinate.time}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'วันที่ : ${formatDateFromString(vaccinate.date.toString())}',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              });
-       
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
-    Widget buildSearch() => SearchWidget(
+
+  Widget buildSearch() => SearchWidget(
         text: query,
         hintText: "รหัสการฉีดวัคซีน,รหัสสัตว์",
         onChanged: searchAnimal,
       );
 
   void searchAnimal(String query) async {
-    final vaccine = await getAllvaccinate(query );
+    final vaccine = await getAllvaccinate(query);
 
     if (!mounted) return;
 

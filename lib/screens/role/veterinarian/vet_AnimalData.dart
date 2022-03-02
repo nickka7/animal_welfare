@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/MedHis.dart';
-import 'package:animal_welfare/model/VacHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
-import 'package:animal_welfare/model/vHIs.dart';
+import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_MedicalHistory.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_VaccineHistory.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +38,7 @@ class _VetAnimalDataState extends State<VetAnimalData> {
     return jsonData;
   }
 
- Future<VacHiss> getVacHis() async {
+ Future<VacHis> getVacHis() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(
@@ -47,7 +46,7 @@ class _VetAnimalDataState extends State<VetAnimalData> {
             '$endPoint/api/getVaccineHistory?animalID=${widget.animalID}'),
         headers: {"authorization": 'Bearer $token'});
     //print(response.body);
-    var jsonData = VacHiss.fromJson(jsonDecode(response.body));
+    var jsonData = VacHis.fromJson(jsonDecode(response.body));
      print('123 $jsonData');
     return jsonData;
   }
@@ -208,11 +207,12 @@ class _VetAnimalDataState extends State<VetAnimalData> {
                         '${snapshot.data?.latest?.medicalName ?? 'ไม่มีประวัติ'}'),
                     TextButton(
                         onPressed: () {
+                          var index;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => VetMedicalHistory(
-                                        animalID: widget.animalID,
+                                        getBio: widget.getanimal,
                                       )));
                         },
                         child: Row(
@@ -248,94 +248,13 @@ class _VetAnimalDataState extends State<VetAnimalData> {
       },
     );
   }
-
-// Widget vaccineHistory() {
-//     return FutureBuilder<VacHis>(
-//       future: getVacHis(),
-//       builder: (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
-//         if (snapshot.hasError) print(snapshot.error);
-//         if (snapshot.hasData) {
-//           return Card(
-//             elevation: 5,
-//             child: Padding(
-//               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-//               child: Container(
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     Align(
-//                         alignment: Alignment.topLeft,
-//                         child: _heading('ประวัติการรักษาล่าสุด', 35.0, 185.0)),
-//                     SizedBox(
-//                       height: 10,
-//                     ),
-//                     // _buildfont('วันที่ : ',
-//                     //     '${formatDateFromString((snapshot.data?.latest?.date ?? 'ไม่มีประวัติ').toString())}'),
-//                     _buildfont('การรักษา : ',
-//                         '${snapshot.data?.latest?.vaccineName ?? 'ไม่มีประวัติ'}'),
-//                     TextButton(
-//                         onPressed: () {
-//                           // Navigator.push(
-//                           //     context,
-//                           //     MaterialPageRoute(
-//                           //         builder: (context) => VetMedicalHistory(
-//                           //               animalID: widget.animalID,
-//                           //             )));
-//                         },
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                           children: [
-//                             SizedBox(
-//                               width: 220,
-//                             ),
-//                             Container(
-//                               child: Row(
-//                                 children: [
-//                                   Text('ดูเพิ่มเติม',
-//                                       style: TextStyle(
-//                                         color: Colors.green,
-//                                       )),
-//                                   Icon(
-//                                     Icons.navigate_next_outlined,
-//                                     color: Colors.green,
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ],
-//                         )),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         } else {
-//           return new Center(child: new CircularProgressIndicator());
-//         }
-//       },
-//     );
-//   }
-
-  Widget vaccineHis() {
-    return FutureBuilder<VacHiss>(
-        future: getVacHis(),
-        builder: (BuildContext context, AsyncSnapshot<VacHiss> snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          if (snapshot.hasData) {
-            return Text('data');
-          
-           } else {
-          return new Center(child: new CircularProgressIndicator());
-        }
-      
-        });
-  }
+  
   //ประวัติการฉีดวัคซีนล่าสุด
   Widget vaccineHistory() {
-    return FutureBuilder<VacHiss>(
+    return FutureBuilder<VacHis>(
           future: getVacHis(),
           builder:
-              (BuildContext context, AsyncSnapshot<VacHiss> snapshot) {
+              (BuildContext context, AsyncSnapshot<VacHis> snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData) {
     return Card(
@@ -356,10 +275,10 @@ class _VetAnimalDataState extends State<VetAnimalData> {
              _buildfont('วัคซีน : ', '${snapshot.data?.latest?.vaccineName ?? 'ไม่มีประวัติ'}'),
               TextButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) =>  VetVaccineHistory(animalID:widget.animalID,)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  VetVaccineHistory(animalID:widget.animalID,)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

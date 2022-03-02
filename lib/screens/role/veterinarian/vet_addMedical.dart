@@ -42,6 +42,8 @@ class _AddMedicalState extends State<AddMedical> {
     // print(data['endDate']);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +157,9 @@ class _AddMedicalState extends State<AddMedical> {
                                               .then((value) {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
-                                            setState(() {});
+                                            setState(() {
+
+                                            });
                                             final snackBar = SnackBar(
                                                 content: Text(
                                                     'เพิ่มการรักษาเรียบร้อยแล้ว'));

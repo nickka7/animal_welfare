@@ -4,8 +4,8 @@
 /// latest : {"vaccinateID":15,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02"}
 /// data : [{"vaccinateID":15,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02","time":"12:56:14"},{"vaccinateID":17,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02","time":"13:03:11"},{"vaccinateID":18,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02","time":"13:05:44"},{"vaccinateID":1,"vaccineName":"พิษสุนัขบ้า","date":"2021-12-02","time":"10:00:00"},{"vaccinateID":11,"vaccineName":"บาดทะยัก","date":"2021-12-01","time":"10:00:00"},{"vaccinateID":4,"vaccineName":"บาดทะยัก","date":"2021-11-01","time":"11:00:00"}]
 
-class VacHiss {
-  VacHiss({
+class VacHis {
+  VacHis({
       String? resultCode, 
       String? status, 
       dynamic errorMessage, 
@@ -18,7 +18,7 @@ class VacHiss {
     _data = data;
 }
 
-  VacHiss.fromJson(dynamic json) {
+  VacHis.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
     _status = json['status'];
     _errorMessage = json['errorMessage'];

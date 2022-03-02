@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/MedHis.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_addMedical.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +13,8 @@ import 'package:intl/intl.dart';
 import '../../../constant.dart';
 
 class VetMedicalHistory extends StatefulWidget {
-  final String? animalID;
-  const VetMedicalHistory({Key? key, required this.animalID}) : super(key: key);
+  final Bio getBio;
+  const VetMedicalHistory({Key? key, required this.getBio}) : super(key: key);
 
   @override
   _VetMedicalHistoryState createState() => _VetMedicalHistoryState();
@@ -36,7 +37,7 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
     final allmedical;
     var response = await http.get(
         Uri.parse(
-            '$endPoint/api/getMedicalHistory?animalID=${widget.animalID}'),
+            '$endPoint/api/getMedicalHistory?animalID=${widget.getBio.animalID}'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
     if (response.statusCode == 200) {
@@ -101,7 +102,7 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
             context,
             MaterialPageRoute(
                 builder: (context) => AddMedical(
-                      animalID: '${widget.animalID}',
+                      animalID: '${widget.getBio}',
                     )),
           ).then((value) => setState(() {}));
         },

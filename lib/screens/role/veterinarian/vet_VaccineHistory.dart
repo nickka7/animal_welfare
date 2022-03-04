@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_addVaccinate.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
@@ -13,7 +14,8 @@ import '../../../constant.dart';
 
 class VetVaccineHistory extends StatefulWidget {
   final String? animalID;
-  const VetVaccineHistory({Key? key, required this.animalID}) : super(key: key);
+  final Bio getanimal;
+  const VetVaccineHistory({Key? key, required this.animalID, required this.getanimal}) : super(key: key);
 
   @override
   _VetVaccineHistoryState createState() => _VetVaccineHistoryState();
@@ -27,10 +29,10 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
   }
 
   final storage = new FlutterSecureStorage();
-  List<Data> vaccine = [];
+  List<DataVaccinate> vaccine = [];
   String query = '';
 
-  Future<List<Data>> getAllvaccinate(String query) async {
+  Future<List<DataVaccinate>> getAllvaccinate(String query) async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     final allvaccinate;
@@ -43,7 +45,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
       allvaccinate = json.decode(response.body);
       final List vaccine = allvaccinate['data'];
       // print('bioo $bio');
-      return vaccine.map((json) => Data.fromJson(json)).where((allvaccinate) {
+      return vaccine.map((json) => DataVaccinate.fromJson(json)).where((allvaccinate) {
         final allvaccinateIDLower = allvaccinate.vaccinateID.toString();
         final allvaccinateNameLower = allvaccinate.vaccineName;
         final searchLower = query;
@@ -83,7 +85,16 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Container(
+      body:RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => VetVaccineHistory( animalID: widget.animalID, getanimal: widget.getanimal,),
+              transitionDuration: Duration(milliseconds: 400),
+            ),
+          ),
+      
+      child : Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -96,14 +107,14 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
         child: ListView(
           children: [buildSearch(), buildListview()],
         ),
-      ),
+      ),),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddVaccinate(
-                      animalID: '${widget.animalID}',
+                       getanimal: widget.getanimal,
                     )),
           ).then((value) => setState(() {}));
         },

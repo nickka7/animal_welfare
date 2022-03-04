@@ -63,6 +63,7 @@ class _VetAnimalDataState extends State<VetAnimalData> {
     return formattedDate;
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +79,18 @@ class _VetAnimalDataState extends State<VetAnimalData> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: ListView(
+      body: RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => VetAnimalData(getanimal: widget.getanimal,),
+              transitionDuration: Duration(milliseconds: 400),
+            ),
+          ),
+      
+      child :
+      
+      ListView(
         children: [
           Stack(children: [
             picture(),
@@ -107,7 +119,7 @@ class _VetAnimalDataState extends State<VetAnimalData> {
             ),
           ]),
         ],
-      ),
+      ),),
     );
   }
 
@@ -207,7 +219,6 @@ class _VetAnimalDataState extends State<VetAnimalData> {
                         '${snapshot.data?.latest?.medicalName ?? 'ไม่มีประวัติ'}'),
                     TextButton(
                         onPressed: () {
-                          var index;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -278,7 +289,7 @@ class _VetAnimalDataState extends State<VetAnimalData> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>  VetVaccineHistory(animalID:widget.animalID,)));
+                            builder: (context) =>  VetVaccineHistory(animalID:widget.animalID, getanimal: widget.getanimal,)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

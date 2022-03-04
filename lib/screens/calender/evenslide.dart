@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/calender/addWork.dart';
+import 'package:animal_welfare/screens/calender/eventDetail.dart';
 import 'package:animal_welfare/screens/role/showMan/addShow.dart';
-import 'package:animal_welfare/screens/role/showMan/showDetail.dart';
 import 'package:animal_welfare/screens/role/showMan/updartShow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,14 +13,14 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
 
-class ShowScreen extends StatefulWidget {
+class EventSlide extends StatefulWidget {
+  const EventSlide({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() {
-    return _ShowScreenState();
-  }
+  State<EventSlide> createState() => _EventSlideState();
 }
 
-class _ShowScreenState extends State<ShowScreen> {
+class _EventSlideState extends State<EventSlide> {
   @override
   void initState() {
     getDataFromWeb();
@@ -35,7 +36,7 @@ class _ShowScreenState extends State<ShowScreen> {
   Future<List<Appointment>> getDataFromWeb() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
-    var data = await http.get(Uri.parse("$endPoint/api/getShow"),
+    var data = await http.get(Uri.parse("$endPoint/api/getCalendar"),
         headers: {"authorization": 'Bearer $token'});
     var jsonData = jsonDecode(data.body);
     // print(data.body);
@@ -46,13 +47,13 @@ class _ShowScreenState extends State<ShowScreen> {
     // print('before loop');
     for (var data in jsonData) {
       Appointment meetingData = Appointment(
-          subject: data['showName'],
-          startTime: _convertDateFromString(data['startDate']),
-          endTime: _convertDateFromString(data['endDate']),
-          location: data['location'],
-          color: Colors.green,
-          id: data['showID'],
-          notes: data['totalAudience']);
+        id: data['showID'],
+        subject: data['calendarName'],
+        startTime: _convertDateFromString(data['startDate']),
+        endTime: _convertDateFromString(data['endDate']),
+        location: data['location'],
+        color: Colors.green,
+      );
 
       appointments.add(meetingData);
     }
@@ -69,7 +70,7 @@ class _ShowScreenState extends State<ShowScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'รอบการแสดง',
+          'ปฏิทินกิจกรรม',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -77,16 +78,15 @@ class _ShowScreenState extends State<ShowScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: RefreshIndicator(
+      body:  RefreshIndicator(
         onRefresh: () => Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (a, b, c) => ShowScreen(),
+              pageBuilder: (a, b, c) => EventSlide(),
               transitionDuration: Duration(milliseconds: 400),
             ),
           ),
-    child :
-      FutureBuilder<List<Appointment>>(
+    child :FutureBuilder<List<Appointment>>(
         future: getDataFromWeb(),
         builder:
             (BuildContext context, AsyncSnapshot<List<Appointment>> snapshot) {
@@ -94,19 +94,21 @@ class _ShowScreenState extends State<ShowScreen> {
             return SafeArea(
               child: Column(
                 children: <Widget>[
-                  Expanded(flex: 1,
+                  Expanded(
+                    flex: 3,
                     child: SfCalendar(
+                      initialSelectedDate: DateTime.now(),
                       dataSource: _DataSource(snapshot.data!),
                       view: CalendarView.month,
-                      viewHeaderHeight: 40,
+                      viewHeaderHeight: 50,
                       showNavigationArrow: true,
                       monthViewSettings:
-                          MonthViewSettings(numberOfWeeksInView: 1),
+                          MonthViewSettings(numberOfWeeksInView: 4),
                       onTap: calendarTapped,
                     ),
                   ),
                   Expanded(
-                      flex: 4,
+                      flex: 3,
                       child: Container(
                           // color: Colors.black12,
                           child: ListView.separated(
@@ -125,16 +127,17 @@ class _ShowScreenState extends State<ShowScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ShowDetail(subject:
+                                          builder: (context) => EventDetail(
+                                                subject:
                                                     appointments[index].subject,
                                                 end:
                                                     appointments[index].endTime,
                                                 location: appointments[index]
                                                     .location,
                                                 start: appointments[index]
-                                                    .startTime, audience:appointments[index]
-                                                    .notes, id: appointments[index].id,)),
-                                    ).then((value) => setState(() {}));
+                                                    .startTime,
+                                              )),
+                                    );
                                   },
                                   child: ListTile(
                                     leading: Column(
@@ -168,11 +171,12 @@ class _ShowScreenState extends State<ShowScreen> {
                                       ],
                                     ),
                                     trailing: Container(
-                                        child:
-                                            Text('${appointments[index].notes}',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))),
+                                        child: Text(
+                                            '${appointments[index].location}',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ))),
                                     title: Container(
                                         child: Text(
                                             '${appointments[index].subject}',
@@ -183,6 +187,39 @@ class _ShowScreenState extends State<ShowScreen> {
                                   ),
                                 )),
                             secondaryActions: <Widget>[
+                                IconSlideAction(
+                            caption: 'แก้ไข',
+                            color: Colors.green,
+                            icon: Icons.build_rounded,
+                            onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => RepairNoticeUpdate(
+                              //             maintenanceID:
+                              //                 '${listRepair[index].maintenanceID}',
+                              //             location:
+                              //                 '${listRepair[index].location}',
+                              //             maintenanceDetail:
+                              //                 '${listRepair[index].requestMessage}',
+                              //           )),
+                              // ).then((value) =>
+                              //     onGoBack()); //หลังจาก call back เรียก setState
+                            },
+                          ),
+                          IconSlideAction(
+                            caption: 'ลบ',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                            //   deleteMaintenance(
+                            //           '${listRepair[index].maintenanceID}')
+                            //       .then((value) => listRepair.removeAt(index))
+                            //       .then((value) => setState(() {}))
+                            //       .then((value) => ScaffoldMessenger.of(context)
+                            //           .showSnackBar(snackBar));
+                             },
+                          ),
                               IconSlideAction(
                                 caption: 'ปิด',
                                 color: Colors.grey,
@@ -212,7 +249,7 @@ class _ShowScreenState extends State<ShowScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddShow()),
+            MaterialPageRoute(builder: (context) => AddWork()),
           ).then((value) => setState(() {}));
         },
         backgroundColor: HexColor("#697825"),

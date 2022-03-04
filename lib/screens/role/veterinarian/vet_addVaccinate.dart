@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:animal_welfare/model/vaccine.dart';
-import 'package:animal_welfare/model/vaccineHIs.dart';
+import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
-import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AddVaccinate extends StatefulWidget {
-  final String animalID;
-
-  const AddVaccinate({Key? key, required this.animalID}) : super(key: key);
+  final Bio getanimal;
+  const AddVaccinate(
+      {Key? key, required this.getanimal})
+      : super(key: key);
 
   @override
   _AddVaccinateState createState() => _AddVaccinateState();
@@ -32,7 +32,6 @@ class _AddVaccinateState extends State<AddVaccinate> {
 
   int index = 0;
   List vaccineID = [];
-  List vaccineName = [];
 
   Future<bool> getVaccine() async {
     String? token = await storage.read(key: 'token');
@@ -41,22 +40,35 @@ class _AddVaccinateState extends State<AddVaccinate> {
     //print('response.body ${response.body}');
 
     List jsonData = json.decode(response.body)['data'];
-
-    // print(jsonData);
-    for (int i = 0; i < jsonData.length; i++) {
-      vaccineID.add(
-        jsonData[i]['vaccineID'],
-      );
-      vaccineName.add(
-        jsonData[i]['vaccineName'],
-      );
+    if (jsonData.length != 0) {
+      for (int i = 0; i < jsonData.length; i++) {
+        vaccineID.add(
+            '${jsonData[i]['vaccineID']} ${jsonData[i]['vaccineName'] ?? 'ไม่มี'} ');
+      }
+      print(vaccineID);
+    } else {
+      vaccineID.add('ไม่มีวัคซีน');
     }
 
-    print(vaccineID);
+    print(' ${vaccineID}');
+    //print(vaccineName);
 
     return true;
   }
 
+  Future<String?> uploadData(url, data) async {
+    // print(file!.path);
+    String? token = await storage.read(key: 'token');
+    var request = http.post(Uri.parse(url),
+        headers: <String, String>{
+          "authorization": 'Bearer $token',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        //   headers: {"authorization": 'Bearer $token'},
+        body: jsonEncode(<String, String>{
+          'vaccineID': data['vaccineID'],
+        }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +96,50 @@ class _AddVaccinateState extends State<AddVaccinate> {
                     child: Column(
                       children: [
                         Card(
-                          child: Column(
-                            children: [Text('data')],
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: _heading('ข้อมูล', 35.0, 80.0)),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  _buildfont('ANIMAL ID : ',
+                                      '${widget.getanimal.animalID}'),
+                                  _buildfont('ชนิด : ',
+                                      '${widget.getanimal.typeName}'),
+                                  _buildfont(
+                                      'เพศ : ', '${widget.getanimal.gender}'),
+                                  _buildfont(
+                                      'อายุ : ', '${widget.getanimal.age} ปี'),
+                                  _buildfont('น้ำหนัก : ',
+                                      '${widget.getanimal.weight} กิโลกรัม'),
+                                  _buildfont(
+                                      'กรง : ', '${widget.getanimal.cageID} ')
+                                ],
+                              ),
+                            ),
                           ),
                         ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'วัคซีน',
+                              style: TextStyle(fontSize: 18),
+                            )),
                         Container(
                           height: 58,
                           width: double.infinity,
@@ -104,7 +156,8 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    vaccineID[index].toString(),
+                                    
+                                    '${vaccineID[index]}',
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   Icon(
@@ -113,7 +166,76 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                   )
                                 ],
                               )),
-                        )
+                        ),
+                        SizedBox(height: 70),
+                        Container(
+                          height: 50,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              
+                              Map<String, String> data = {
+                                "vaccineID": vaccineID[index].substring(0, 6),
+                              };
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CupertinoAlertDialog(
+                                      title: CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor: Colors.lightGreen[400],
+                                        child: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: Text(
+                                        'ยืนยันการเพิ่มการรักษา',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: Text(
+                                            'ยกเลิก',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                        CupertinoDialogAction(
+                                            child: Text(
+                                              'ยืนยัน',
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            onPressed: () {
+                                              uploadData(
+                                                      '${Constant().endPoint}/api/postVaccineData/?animalID=${widget.getanimal.animalID}&status=ใช้แล้ว',
+                                                      data)
+                                                  .then((value) {
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                 // setState(() {});
+                                                final snackBar = SnackBar(
+                                                    content: Text(
+                                                        'เพิ่มการฉีดวัคซีนเรียบร้อยแล้ว'));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              });
+                                            })
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Text('เสร็จสิ้น',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25.0)),
+                                primary: HexColor('#697825')),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -144,7 +266,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                   children: vaccineID.map((item) {
                     return Center(
                       child: Text(
-                        '${item.toString()} ${vaccineName[0]}',
+                        '${item.toString()}',
                         style: TextStyle(fontSize: 16),
                       ),
                     );
@@ -152,8 +274,8 @@ class _AddVaccinateState extends State<AddVaccinate> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
-                      final item = vaccineID[index];
-
+                      final item = '${vaccineID[index]}';
+                      //var result = vaccineID[index].substring(0, 6);
                       print('selected $item');
                     });
                   },
@@ -170,6 +292,46 @@ class _AddVaccinateState extends State<AddVaccinate> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildfont(var title, var data) {
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            data,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.normal),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _heading(var title, double h, double w) {
+    return Container(
+      height: h,
+      width: w,
+      decoration: BoxDecoration(
+          color: HexColor("#697825"),
+          borderRadius: BorderRadius.all(Radius.circular(45))),
+      child: Center(
+        child: Text(
+          title,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 }

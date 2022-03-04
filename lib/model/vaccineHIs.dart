@@ -10,7 +10,7 @@ class VacHis {
       String? status, 
       dynamic errorMessage, 
       Latest? latest, 
-      List<Data>? data,}){
+      List<DataVaccinate>? data,}){
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
@@ -26,7 +26,7 @@ class VacHis {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(DataVaccinate.fromJson(v));
       });
     }
   }
@@ -34,13 +34,13 @@ class VacHis {
   String? _status;
   dynamic _errorMessage;
   Latest? _latest;
-  List<Data>? _data;
+  List<DataVaccinate>? _data;
 
   String? get resultCode => _resultCode;
   String? get status => _status;
   dynamic get errorMessage => _errorMessage;
   Latest? get latest => _latest;
-  List<Data>? get data => _data;
+  List<DataVaccinate>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -63,8 +63,8 @@ class VacHis {
 /// date : "2022-03-02"
 /// time : "12:56:14"
 
-class Data {
-  Data({
+class DataVaccinate {
+  DataVaccinate({
       int? vaccinateID, 
       String? vaccineName, 
       String? date, 
@@ -75,7 +75,7 @@ class Data {
     _time = time;
 }
 
-  Data.fromJson(dynamic json) {
+  DataVaccinate.fromJson(dynamic json) {
     _vaccinateID = json['vaccinateID'];
     _vaccineName = json['vaccineName'];
     _date = json['date'];

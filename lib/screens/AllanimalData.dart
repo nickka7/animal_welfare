@@ -29,23 +29,25 @@ class _AnimalDataState extends State<AnimalData> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Column(
-        children: [
-          Stack(children: [
-            _picture(),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 210, bottom: 8, left: 10, right: 10),
-              child: Container(
-                child: Column(
-                  children: [
-                    _information(),
-                  ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(children: [
+              _picture(),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 210, bottom: 8, left: 10, right: 10),
+                child: Container(
+                  child: Column(
+                    children: [
+                      _information(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ]),
-        ],
+            ]),
+          ],
+        ),
       ),
     );
   }

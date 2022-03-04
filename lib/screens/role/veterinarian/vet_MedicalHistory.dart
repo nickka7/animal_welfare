@@ -11,6 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../../constant.dart';
+import '../../../main.dart';
 
 class VetMedicalHistory extends StatefulWidget {
   final Bio getBio;
@@ -42,6 +43,7 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
     print(response.body);
     if (response.statusCode == 200) {
       allmedical = json.decode(response.body);
+     
       final List medical = allmedical['data'];
       // print('bioo $bio');
       return medical.map((json) => Medical.fromJson(json)).where((medical) {
@@ -82,7 +84,15 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Container(
+      body: RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => VetMedicalHistory(getBio: widget.getBio,),
+              transitionDuration: Duration(milliseconds: 400),
+            ),
+          ),
+    child :  Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -95,14 +105,14 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
         child: ListView(
           children: [buildSearch(), buildListview()],
         ),
-      ),
+      ),),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddMedical(
-                      animalID: '${widget.getBio}',
+                      getanimal: widget.getBio,
                     )),
           ).then((value) => setState(() {}));
         },

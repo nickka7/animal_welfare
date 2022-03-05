@@ -113,84 +113,72 @@ class _ShowScreenState extends State<ShowScreen> {
                         padding: const EdgeInsets.all(2),
                         itemCount: appointments.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return Slidable(
-                            actionPane: SlidableDrawerActionPane(),
-                            actionExtentRatio: 0.25,
-                            child: Container(
-                                padding: EdgeInsets.all(2),
-                                height: 60,
-                                color: appointments[index].color,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ShowDetail(subject:
-                                                    appointments[index].subject,
-                                                end:
-                                                    appointments[index].endTime,
-                                                location: appointments[index]
-                                                    .location,
-                                                start: appointments[index]
-                                                    .startTime, audience:appointments[index]
-                                                    .notes, id: appointments[index].id,)),
-                                    ).then((value) => setState(() {}));
-                                  },
-                                  child: ListTile(
-                                    leading: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          appointments[index].isAllDay
-                                              ? ''
-                                              : '${DateFormat('hh:mm a').format(appointments[index].startTime)}',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                              height: 1.7),
-                                        ),
-                                        Text(
-                                          appointments[index].isAllDay
-                                              ? 'All day'
-                                              : '',
-                                          style: TextStyle(
-                                              height: 0.5, color: Colors.white),
-                                        ),
-                                        Text(
-                                          appointments[index].isAllDay
-                                              ? ''
-                                              : '${DateFormat('hh:mm a').format(appointments[index].endTime)}',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    trailing: Container(
-                                        child:
-                                            Text('${appointments[index].notes}',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))),
-                                    title: Container(
-                                        child: Text(
-                                            '${appointments[index].subject}',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white))),
+                          return Container(
+                              padding: EdgeInsets.all(2),
+                              height: 60,
+                              color: appointments[index].color,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ShowDetail(subject:
+                                                  appointments[index].subject,
+                                              end:
+                                                  appointments[index].endTime,
+                                              location: appointments[index]
+                                                  .location,
+                                              start: appointments[index]
+                                                  .startTime, audience:appointments[index]
+                                                  .notes, id: appointments[index].id,)),
+                                  ).then((value) => setState(() {}));
+                                },
+                                child: ListTile(
+                                  leading: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        appointments[index].isAllDay
+                                            ? ''
+                                            : '${DateFormat('hh:mm a').format(appointments[index].startTime)}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                            height: 1.7),
+                                      ),
+                                      Text(
+                                        appointments[index].isAllDay
+                                            ? 'All day'
+                                            : '',
+                                        style: TextStyle(
+                                            height: 0.5, color: Colors.white),
+                                      ),
+                                      Text(
+                                        appointments[index].isAllDay
+                                            ? ''
+                                            : '${DateFormat('hh:mm a').format(appointments[index].endTime)}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                    ],
                                   ),
-                                )),
-                            secondaryActions: <Widget>[
-                              IconSlideAction(
-                                caption: 'ปิด',
-                                color: Colors.grey,
-                                icon: Icons.close,
-                                onTap: () {},
-                              ),
-                            ],
-                          );
+                                  trailing: Container(
+                                      child:
+                                          Text('${appointments[index].notes}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ))),
+                                  title: Container(
+                                      child: Text(
+                                          '${appointments[index].subject}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white))),
+                                ),
+                              ));
                         },
                         separatorBuilder: (BuildContext context, int index) =>
                             const Divider(

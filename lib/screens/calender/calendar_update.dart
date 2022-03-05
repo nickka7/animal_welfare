@@ -1,107 +1,106 @@
-import 'dart:convert';
-import 'package:animal_welfare/constant.dart';
-import 'package:animal_welfare/haxColor.dart';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-class AddWork extends StatefulWidget {
-  const AddWork({ Key? key }) : super(key: key);
+import 'package:intl/intl.dart';
+import '../../haxColor.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:animal_welfare/constant.dart';
+
+class CalendarUpdate extends StatefulWidget {
+  final String subject;
+  final String? location;
+  final DateTime start;
+  final DateTime end;
+  final Object? id;
+  const CalendarUpdate(
+      {Key? key,
+      required this.subject,
+      required this.location,
+      required this.start,
+      required this.end,
+      required this.id})
+      : super(key: key);
 
   @override
-  _AddWorkState createState() => _AddWorkState();
+  State<CalendarUpdate> createState() => _CalendarUpdateState();
 }
 
-class _AddWorkState extends State<AddWork> {
-  
-    final _formKey = GlobalKey<FormState>();
-  //TextEditingController userIDController = TextEditingController();
+class _CalendarUpdateState extends State<CalendarUpdate> {
   TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  // TextEditingController startDateController = TextEditingController();
-  // TextEditingController endDateController = TextEditingController();
 
 
   DateTime startDate = DateTime.now();
+
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
-  
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadData(url, data) async {
-    // print(file!.path);
     String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-         // 'userID' : data['userID'],
-          'scheduleName': data['scheduleName'],
-          'location': data['location'],
-          'startDate': data['startDate'],
-          'endDate': data['endDate'],
-        }));
+    var request = http.MultipartRequest('PUT', Uri.parse(url));
+    //ถ้าไม่ได้เลือกรูปก็ไม่ต้องอัพรูป
 
-    print(request);
-   // print(data['userID']);
-    print(data['scheduleName']);
-    print(data['startDate']);
-    print(data['endDate']);
+    request.fields['scheduleName'] = data['scheduleName'];
+    request.fields['location'] = data['location'];
+    request.fields['startDate'] = data['startDate'];
+    request.fields['endDate'] = data['endDate'];
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+      // "Content-Disposition": "attachment;filename=1.png",
+      // "Content-Type": "image/png"
+    };
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
+    var res = await request.send();
+    print('${res.reasonPhrase}test');
+    return res.reasonPhrase;
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'เพิ่มงาน',
-            style: TextStyle(color: Colors.white),
-          ),
-          leading: IconButton(
-            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        centerTitle: true,
+        title: Text(
+          'CalendarID: ${widget.id}',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-       body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Container(
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
             child: Form(
-              key: _formKey,
+              // key: _formKey,
               child: Column(
                 children: [
-                  
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'งาน',
+                        'กิจกรรม',
                         style: TextStyle(fontSize: 18),
                       )),
                   TextFormField(
                     controller: calendarNameController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกงาน";
-                      }
-                      return null;
-                    },
                     decoration: InputDecoration(
+                        hintText: '${widget.subject}',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
-                   Align(
+                  Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         'สถานที่',
@@ -109,14 +108,9 @@ class _AddWorkState extends State<AddWork> {
                       )),
                   TextFormField(
                     controller: locationController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกสถานที่";
-                      }
-                      return null;
-                    },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        hintText: '${widget.location}',
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
@@ -138,7 +132,9 @@ class _AddWorkState extends State<AddWork> {
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
+                        
                           _showDatePicker1(context);
+                          
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,63 +185,58 @@ class _AddWorkState extends State<AddWork> {
                   Container(
                     height: 50,
                     width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
                     child: ElevatedButton(
                       onPressed: () {
-                        bool pass = _formKey.currentState!.validate();
-                        if (pass) {
-                          Map<String, String> data = {
-                           // "userID": userIDController.text,
-                            "scheduleName": calendarNameController.text,
-                           "location": locationController.text,
-                            "startDate": startDate.toString(),
-                            "endDate": endDate.toString()
-                          };
-                           showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: Colors.lightGreen[400],
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
+                        Map<String, String> data = {
+                          "scheduleName": calendarNameController.text,
+                          "location": locationController.text,
+                          "startDate": startDate.toString(),
+                          "endDate": endDate.toString()
+                        };
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.lightGreen[400],
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: Text(
+                                  'ยืนยันการแก้ไข',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                      'ยกเลิก',
+                                      style: TextStyle(color: Colors.red),
                                     ),
+                                    onPressed: () => Navigator.pop(context),
                                   ),
-                                  content: Text(
-                                    'ยืนยันการเพิ่มกิจกรรม',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  actions: [
-                                    CupertinoDialogAction(
+                                  CupertinoDialogAction(
                                       child: Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(color: Colors.red),
+                                        'ยืนยัน',
+                                        style: TextStyle(color: Colors.green),
                                       ),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    CupertinoDialogAction(
-                                        child: Text(
-                                          'ยืนยัน',
-                                          style: TextStyle(color: Colors.green),
-                                        ),
                                       onPressed: () {
-                                            uploadData(
-                                  '${Constant().endPoint}/api/postMySchedule', data)
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            final snackBar = SnackBar(
-                                content: Text('เพิ่มงานเรียบร้อยแล้ว'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                           );
-                                        })                                  ],
-                                );
-                              });  
-                        
-                        }
+                                        uploadData(
+                                                '${Constant().endPoint}/api/updateMySchedule/${widget.id}',
+                                                data)
+                                            .then((value) {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        });
+                                      })
+                                ],
+                              );
+                            });
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -261,9 +252,9 @@ class _AddWorkState extends State<AddWork> {
           ),
         ),
       ),
-      
     );
   }
+
   void _showDatePicker1(ctx) {
     // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(
@@ -278,12 +269,13 @@ class _AddWorkState extends State<AddWork> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                       use24hFormat: true,
+                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: DateTime.now(),
+                        initialDateTime: widget.start,
                         onDateTimeChanged: (val) {
                           setState(() {
+                            
                             startDate = val;
                             print(startDate);
                           });
@@ -313,10 +305,10 @@ class _AddWorkState extends State<AddWork> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                       use24hFormat: true,
+                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: DateTime.now(),
+                        initialDateTime: widget.end,
                         onDateTimeChanged: (val) {
                           setState(() {
                             endDate = val;

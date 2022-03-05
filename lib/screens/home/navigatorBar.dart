@@ -22,7 +22,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
 
     HomePage(payload: widget.payload),
     DownloadFile(),
-    WarnNotifications(),
+    //WarnNotifications(),
     MyMainProfile(payload: widget.payload),
   ];
   @override
@@ -41,13 +41,13 @@ class _NavigatorBarState extends State<NavigatorBar> {
             icon: Icon(Icons.document_scanner_outlined, size: 30),
             label: 'เอกสาร',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.notifications_none, size: 30),
+          //   label: 'แจ้งเตือน',
+          // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_none, size: 30),
-            label: 'แจ้งเตือน',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline, size: 30),
-            label: 'โปรไฟล์',
+            icon: Icon(Icons.menu, size: 30),
+            label: 'เมนู',
           ),
         ],
         currentIndex: _selectedIndex,

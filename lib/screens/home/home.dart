@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/evenslide.dart';
-import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
-import 'package:animal_welfare/screens/meeting/meeting_booking.dart';
-import 'package:animal_welfare/screens/meeting/meeting_history.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
-import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_main.dart';
 //import 'package:animal_welfare/screens/role/Executive/report.dart';
 import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';
@@ -15,8 +11,6 @@ import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
 import 'package:animal_welfare/screens/role/showMan/show.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
-import 'package:animal_welfare/screens/setting/setting_home.dart';
-import 'package:animal_welfare/screens/timecheck/time_check.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_welfare/haxColor.dart';
@@ -143,12 +137,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(children: [
           Wrap(
             children: [
-              _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
+          //    _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
               _buildButton(
                   Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
-              _buildButtonmim(
-                  Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
-              _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
+              // _buildButtonmim(
+              //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
+             // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
               buildButton(),
             ],

@@ -33,7 +33,6 @@ class _CalendarUpdateState extends State<CalendarUpdate> {
 
 
   DateTime startDate = DateTime.now();
-
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 

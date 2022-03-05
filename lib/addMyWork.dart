@@ -73,9 +73,7 @@ class _addMyWorkState extends State<addMyWork> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           NotificationApi.showNotification(
-              title: 'title',
-              body: 'body',
-              payload: 'pppp');
+              title: 'title', body: 'body', payload: 'pppp');
         },
         tooltip: 'Increment',
         child: Icon(Icons.send),

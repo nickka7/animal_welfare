@@ -1,6 +1,5 @@
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/admin/addEven.dart';
-import 'package:animal_welfare/screens/role/admin/addAnimal.dart';
 import 'package:animal_welfare/screens/role/admin/addNews.dart';
 import 'package:animal_welfare/screens/role/admin/admin_allAnimal.dart';
 import 'package:animal_welfare/screens/role/admin/admin_repairHistory.dart';

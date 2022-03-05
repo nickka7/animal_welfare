@@ -143,12 +143,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(children: [
           Wrap(
             children: [
-              _buildButton(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
+              _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
               _buildButton(
                   Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
-              _buildButton(
+              _buildButtonmim(
                   Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
-              _buildButton(Icons.settings, 'ตั้งค่า', MySettingHome()),
+              _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
               buildButton(),
             ],
@@ -277,6 +277,44 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
                 width: 50,
                 child: Icon(icon, size: 40, color: Colors.green[600]),
+              ),
+              Container(
+                //  margin: const EdgeInsets.only(top: 8),
+                child: Text(
+                  label,
+                  style: Theme.of(context).textTheme.button,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _buildButtonmim(IconData icon, String label, var page) {
+    return Container(
+      width: 130,
+      height: 90,
+      child: TextButton(
+        onPressed: () {
+          setState(
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => page),
+              );
+            },
+          );
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                child: Icon(icon, size: 40, color: Colors.grey),
               ),
               Container(
                 //  margin: const EdgeInsets.only(top: 8),

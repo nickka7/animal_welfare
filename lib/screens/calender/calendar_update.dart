@@ -33,8 +33,8 @@ class _CalendarUpdateState extends State<CalendarUpdate> {
   TextEditingController locationController = TextEditingController();
 
 
-  DateTime startDate = DateTime.now();
 
+  DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
@@ -60,7 +60,6 @@ class _CalendarUpdateState extends State<CalendarUpdate> {
     //   return res.reasonPhrase;
     // }
 
-    print(widget.id);
 
     String? token = await storage.read(key: 'token');
     var request = http.put(Uri.parse(url),

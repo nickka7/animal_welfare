@@ -15,11 +15,11 @@ class AnimalReport {
     });
 
     String typename;
-    int percent;
+    double percent;
 
     factory AnimalReport.fromJson(Map<String, dynamic> json) => AnimalReport(
         typename: json["typename"] == null ? null : json["typename"],
-        percent: json["percent"] == null ? null : json["percent"],
+        percent: json["percent"] == null ? null : json["percent"].toDouble(),
     );
 
     Map<String, dynamic> toJson() => {

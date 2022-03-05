@@ -6,17 +6,17 @@
 
 class VacHis {
   VacHis({
-      String? resultCode, 
-      String? status, 
-      dynamic errorMessage, 
-      Latest? latest, 
-      List<Data>? data,}){
+    String? resultCode,
+    String? status,
+    dynamic errorMessage,
+    Latest? latest,
+    List<Data>? data,}){
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
     _latest = latest;
     _data = data;
-}
+  }
 
   VacHis.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
@@ -65,15 +65,15 @@ class VacHis {
 
 class Data {
   Data({
-      String? vaccinateID, 
-      String? vaccineName, 
-      String? date, 
-      String? time,}){
+    String? vaccinateID,
+    String? vaccineName,
+    String? date,
+    String? time,}){
     _vaccinateID = vaccinateID;
     _vaccineName = vaccineName;
     _date = date;
     _time = time;
-}
+  }
 
   Data.fromJson(dynamic json) {
     _vaccinateID = json['vaccinateID'];
@@ -108,13 +108,13 @@ class Data {
 
 class Latest {
   Latest({
-      String? vaccinateID, 
-      String? vaccineName, 
-      String? date,}){
+    String? vaccinateID,
+    String? vaccineName,
+    String? date,}){
     _vaccinateID = vaccinateID;
     _vaccineName = vaccineName;
     _date = date;
-}
+  }
 
   Latest.fromJson(dynamic json) {
     _vaccinateID = json['vaccinateID'];

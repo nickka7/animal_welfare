@@ -45,8 +45,8 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                     base64.decode(base64.normalize(token.split(".")[1]))
                 )
             );
-            print(payload);
-            print(payload['userID']);
+            // print(payload);
+            // print(payload['userID']);
             String firstName = jsonResponse['user']['firstName'];
             String roles = jsonResponse['user']['role'];
             // print(firstName.runtimeType);

@@ -6,6 +6,7 @@ import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 
 class VetSearch extends StatefulWidget {
+  
   const VetSearch({Key? key}) : super(key: key);
 
   @override

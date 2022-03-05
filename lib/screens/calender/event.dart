@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/calender/addWork.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 // import 'package:animal_welfare/model/calendar_test.dart';
@@ -98,21 +99,21 @@ class _CalendarScreenTestState extends State<CalendarScreenTest> {
             return SafeArea(
               child: Container(
                   child: SfCalendar(
-                view: CalendarView.month,
-                viewHeaderHeight: 50,
-                //  showDatePickerButton: true,
-                initialSelectedDate: DateTime.now(),
-                showNavigationArrow: true,
-                monthViewSettings: MonthViewSettings(
+                                view: CalendarView.month,
+                                viewHeaderHeight: 50,
+                                //  showDatePickerButton: true,
+                                initialSelectedDate: DateTime.now(),
+                                showNavigationArrow: true,
+                                monthViewSettings: MonthViewSettings(
                   showAgenda: true,
                   agendaViewHeight: 300,
                   agendaItemHeight: 60,
-                ),
-                // initialDisplayDate: DateTime(2017, 6, 01, 9, 0, 0),
-                // initialSelectedDate: DateTime.now(),
-                dataSource: MeetingDataSource(snapshot.data!),
-                 onTap: calendarTapped,
-              )),
+                                ),
+                                // initialDisplayDate: DateTime(2017, 6, 01, 9, 0, 0),
+                                // initialSelectedDate: DateTime.now(),
+                                dataSource: MeetingDataSource(snapshot.data!),
+                                 onTap: calendarTapped,
+                              )),
             );
           } else {
             return 

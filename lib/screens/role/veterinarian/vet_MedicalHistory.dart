@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/MedHis.dart';
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_addMedical.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,10 +11,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../../constant.dart';
+import '../../../main.dart';
 
 class VetMedicalHistory extends StatefulWidget {
-  final String? animalID;
-  const VetMedicalHistory({Key? key, required this.animalID}) : super(key: key);
+  final Bio getBio;
+  const VetMedicalHistory({Key? key, required this.getBio}) : super(key: key);
 
   @override
   _VetMedicalHistoryState createState() => _VetMedicalHistoryState();
@@ -36,11 +38,12 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
     final allmedical;
     var response = await http.get(
         Uri.parse(
-            '$endPoint/api/getMedicalHistory?animalID=${widget.animalID}'),
+            '$endPoint/api/getMedicalHistory?animalID=${widget.getBio.animalID}'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
     if (response.statusCode == 200) {
       allmedical = json.decode(response.body);
+     
       final List medical = allmedical['data'];
       // print('bioo $bio');
       return medical.map((json) => Medical.fromJson(json)).where((medical) {
@@ -81,7 +84,15 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Container(
+      body: RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => VetMedicalHistory(getBio: widget.getBio,),
+              transitionDuration: Duration(milliseconds: 400),
+            ),
+          ),
+    child :  Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -94,14 +105,14 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
         child: ListView(
           children: [buildSearch(), buildListview()],
         ),
-      ),
+      ),),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddMedical(
-                      animalID: '${widget.animalID}',
+                      getanimal: widget.getBio,
                     )),
           ).then((value) => setState(() {}));
         },

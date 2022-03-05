@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:animal_welfare/model/news.dart';
+import 'package:animal_welfare/screens/calender/evenslide.dart';
 import 'package:animal_welfare/screens/calender/event.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
 import 'package:animal_welfare/screens/meeting/meeting_booking.dart';
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               _buildButton(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
               _buildButton(
-                  Icons.calendar_today, 'ปฏิทินกิจกรรม', CalendarScreenTest()),
+                  Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
               _buildButton(
                   Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
               _buildButton(Icons.settings, 'ตั้งค่า', MySettingHome()),

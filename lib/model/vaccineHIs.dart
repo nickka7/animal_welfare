@@ -4,13 +4,13 @@
 /// latest : {"vaccinateID":15,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02"}
 /// data : [{"vaccinateID":15,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02","time":"12:56:14"},{"vaccinateID":17,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02","time":"13:03:11"},{"vaccinateID":18,"vaccineName":"พิษสุนัขบ้า","date":"2022-03-02","time":"13:05:44"},{"vaccinateID":1,"vaccineName":"พิษสุนัขบ้า","date":"2021-12-02","time":"10:00:00"},{"vaccinateID":11,"vaccineName":"บาดทะยัก","date":"2021-12-01","time":"10:00:00"},{"vaccinateID":4,"vaccineName":"บาดทะยัก","date":"2021-11-01","time":"11:00:00"}]
 
-class VacHiss {
-  VacHiss({
+class VacHis {
+  VacHis({
       String? resultCode, 
       String? status, 
       dynamic errorMessage, 
       Latest? latest, 
-      List<Data>? data,}){
+      List<DataVaccinate>? data,}){
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
@@ -18,7 +18,7 @@ class VacHiss {
     _data = data;
 }
 
-  VacHiss.fromJson(dynamic json) {
+  VacHis.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
     _status = json['status'];
     _errorMessage = json['errorMessage'];
@@ -26,7 +26,7 @@ class VacHiss {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(DataVaccinate.fromJson(v));
       });
     }
   }
@@ -34,13 +34,13 @@ class VacHiss {
   String? _status;
   dynamic _errorMessage;
   Latest? _latest;
-  List<Data>? _data;
+  List<DataVaccinate>? _data;
 
   String? get resultCode => _resultCode;
   String? get status => _status;
   dynamic get errorMessage => _errorMessage;
   Latest? get latest => _latest;
-  List<Data>? get data => _data;
+  List<DataVaccinate>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -63,8 +63,8 @@ class VacHiss {
 /// date : "2022-03-02"
 /// time : "12:56:14"
 
-class Data {
-  Data({
+class DataVaccinate {
+  DataVaccinate({
       int? vaccinateID, 
       String? vaccineName, 
       String? date, 
@@ -75,7 +75,7 @@ class Data {
     _time = time;
 }
 
-  Data.fromJson(dynamic json) {
+  DataVaccinate.fromJson(dynamic json) {
     _vaccinateID = json['vaccinateID'];
     _vaccineName = json['vaccineName'];
     _date = json['date'];

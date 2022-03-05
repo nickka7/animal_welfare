@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
@@ -8,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AddMedical extends StatefulWidget {
-  final String animalID;
-  const AddMedical({Key? key, required this.animalID}) : super(key: key);
+  final Bio getanimal;
+  const AddMedical({Key? key, required this.getanimal}) : super(key: key);
 
   @override
   _AddMedicalState createState() => _AddMedicalState();
@@ -42,6 +43,8 @@ class _AddMedicalState extends State<AddMedical> {
     // print(data['endDate']);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +67,45 @@ class _AddMedicalState extends State<AddMedical> {
               key: _formKey,
               child: Column(
                 children: [
+                  Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: _heading('ข้อมูล', 35.0, 80.0)),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  _buildfont('ANIMAL ID : ',
+                                      '${widget.getanimal.animalID}'),
+                                  _buildfont('ชนิด : ',
+                                      '${widget.getanimal.typeName}'),
+                                  _buildfont(
+                                      'เพศ : ', '${widget.getanimal.gender}'),
+                                  _buildfont(
+                                      'อายุ : ', '${widget.getanimal.age} ปี'),
+                                  _buildfont('น้ำหนัก : ',
+                                      '${widget.getanimal.weight} กิโลกรัม'),
+                                  _buildfont(
+                                      'กรง : ', '${widget.getanimal.cageID} ')
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -150,12 +192,14 @@ class _AddMedicalState extends State<AddMedical> {
                                         ),
                                         onPressed: () {
                                           uploadData(
-                                                  '${Constant().endPoint}/api/postMedicalData/${widget.animalID}',
+                                                  '${Constant().endPoint}/api/postMedicalData/${widget.getanimal.animalID}',
                                                   data)
                                               .then((value) {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
-                                            setState(() {});
+                                            // setState(() {
+
+                                            // });
                                             final snackBar = SnackBar(
                                                 content: Text(
                                                     'เพิ่มการรักษาเรียบร้อยแล้ว'));
@@ -180,6 +224,45 @@ class _AddMedicalState extends State<AddMedical> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+  Widget _buildfont(var title, var data) {
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            data,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.normal),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _heading(var title, double h, double w) {
+    return Container(
+      height: h,
+      width: w,
+      decoration: BoxDecoration(
+          color: HexColor("#697825"),
+          borderRadius: BorderRadius.all(Radius.circular(45))),
+      child: Center(
+        child: Text(
+          title,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
       ),
     );

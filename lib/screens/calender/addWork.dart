@@ -236,7 +236,7 @@ class _AddWorkState extends State<AddWork> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                             final snackBar = SnackBar(
-                                content: Text('เพิ่มกิจกรรมเรียบร้อยแล้ว'));
+                                content: Text('เพิ่มงานเรียบร้อยแล้ว'));
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
                           }

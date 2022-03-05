@@ -60,25 +60,25 @@ class _CalendarUpdateState extends State<CalendarUpdate> {
     //   return res.reasonPhrase;
     // }
 
-//     print(widget.id);
-//
-//     String? token = await storage.read(key: 'token');
-//     var request = http.put(Uri.parse(url),
-//         headers: <String, String>{
-//           "authorization": 'Bearer $token',
-//           'Content-Type': 'application/json; charset=UTF-8',
-//         },
-//         //   headers: {"authorization": 'Bearer $token'},
-//         body: jsonEncode(<String, String>{
-//           // 'userID' : data['userID'],
-//           'scheduleName': data['scheduleName'],
-//           'location': data['location'],
-//           'startDate': data['startDate'],
-//           'endDate': data['endDate'],
-//         }));
-// print(data['scheduleName']);
-//     print('aaaa ${request}');
-//   }
+    print(widget.id);
+
+    String? token = await storage.read(key: 'token');
+    var request = http.put(Uri.parse(url),
+        headers: <String, String>{
+          "authorization": 'Bearer $token',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        //   headers: {"authorization": 'Bearer $token'},
+        body: jsonEncode(<String, String>{
+          // 'userID' : data['userID'],
+          'scheduleName': data['scheduleName'],
+          'location': data['location'],
+          'startDate': data['startDate'],
+          'endDate': data['endDate'],
+        }));
+print(data['scheduleName']);
+    print('aaaa ${request}');
+  }
 
   @override
   Widget build(BuildContext context) {

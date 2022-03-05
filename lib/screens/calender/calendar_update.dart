@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,25 +41,44 @@ class _CalendarUpdateState extends State<CalendarUpdate> {
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadData(url, data) async {
-    String? token = await storage.read(key: 'token');
-    var request = http.MultipartRequest('PUT', Uri.parse(url));
-    //ถ้าไม่ได้เลือกรูปก็ไม่ต้องอัพรูป
+    //   String? token = await storage.read(key: 'token');
+    //   var request = http.MultipartRequest('PUT', Uri.parse(url));
+    //
+    //   request.fields['calendarName'] = data['scheduleName'];
+    //   request.fields['location'] = data['location'];
+    //   request.fields['startDate'] = data['startDate'];
+    //   request.fields['endDate'] = data['endDate'];
+    //   Map<String, String> headers = {
+    //     "authorization": "Bearer $token",
+    //     // "Content-Disposition": "attachment;filename=1.png",
+    //     // "Content-Type": "image/png"
+    //   };
+    //   request.headers
+    //       .addAll(headers); //['authorization'] = data['Bearer $token'];
+    //   var res = await request.send();
+    //   print('${res.reasonPhrase}test');
+    //   return res.reasonPhrase;
+    // }
 
-    request.fields['scheduleName'] = data['scheduleName'];
-    request.fields['location'] = data['location'];
-    request.fields['startDate'] = data['startDate'];
-    request.fields['endDate'] = data['endDate'];
-    Map<String, String> headers = {
-      "authorization": "Bearer $token",
-      // "Content-Disposition": "attachment;filename=1.png",
-      // "Content-Type": "image/png"
-    };
-    request.headers
-        .addAll(headers); //['authorization'] = data['Bearer $token'];
-    var res = await request.send();
-    print('${res.reasonPhrase}test');
-    return res.reasonPhrase;
-  }
+//     print(widget.id);
+//
+//     String? token = await storage.read(key: 'token');
+//     var request = http.put(Uri.parse(url),
+//         headers: <String, String>{
+//           "authorization": 'Bearer $token',
+//           'Content-Type': 'application/json; charset=UTF-8',
+//         },
+//         //   headers: {"authorization": 'Bearer $token'},
+//         body: jsonEncode(<String, String>{
+//           // 'userID' : data['userID'],
+//           'scheduleName': data['scheduleName'],
+//           'location': data['location'],
+//           'startDate': data['startDate'],
+//           'endDate': data['endDate'],
+//         }));
+// print(data['scheduleName']);
+//     print('aaaa ${request}');
+//   }
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:animal_welfare/api/research.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/model/research.dart';
+import 'package:animal_welfare/screens/calender/evenslide.dart';
 import 'package:animal_welfare/screens/role/researcher/research_HistoryDetail.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/researcher/research_addresearch.dart';
@@ -35,7 +36,8 @@ class _ResearchHistoryState extends State<ResearchHistory> {
 
     setState(() => this.research = research);
   }
-    late final SlidableController slidableController;
+
+  late final SlidableController slidableController;
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
   final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
@@ -59,15 +61,23 @@ class _ResearchHistoryState extends State<ResearchHistory> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('ข้อมูลงานวิจัยสัตว์'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
+      appBar: AppBar(
+        title: Text('ข้อมูลงานวิจัยสัตว์'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => ResearchHistory(),
+            transitionDuration: Duration(milliseconds: 400),
           ),
         ),
-        body: Container(
+        child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -79,112 +89,108 @@ class _ResearchHistoryState extends State<ResearchHistory> {
           )),
           child: ListView(
             children: [
-               buildSearch(),
+              buildSearch(),
               buildListView(),
-              
             ],
           ),
-          
         ),
-        floatingActionButton: FloatingActionButton(
-        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddResearch()),
-                          ).then((value) =>
-                              setState(() {}));
-                        },
-                        backgroundColor: HexColor("#697825"),
-                        child: const Icon(Icons.add),
+        
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddResearch()),
+            ).then((value) => setState(() {}));
+          },
+          backgroundColor: HexColor("#697825"),
+          child: const Icon(Icons.add),
+        ),
       );
 
-  Widget buildListView() =>
-             ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: research.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Card(
-                    elevation: 5,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ResearchHistoryDetail(
-                                    getResearch: research[index] )),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget buildListView() => ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: research.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Card(
+              elevation: 5,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResearchHistoryDetail(
+                              getResearch: research[index])),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 90,
+                          width: 300,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
-                                height: 90,
-                                width: 300,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        'รหัสงานวิจัย : ${research[index].researchID}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'ชื่องานวิจัย : ${research[index].researchName}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'ชนิด : ${research[index].typeName}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'อัพเดตล่าสุด  ${formatDateFromString(research[index].date)}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                  ],
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'รหัสงานวิจัย : ${research[index].researchID}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
                                 ),
                               ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'ชื่องานวิจัย : ${research[index].researchName}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'ชนิด : ${research[index].typeName}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'อัพเดตล่าสุด  ${formatDateFromString(research[index].date)}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
-                        )),
-                  ),
-                );
-              },
-            );
-         
-    Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: "รหัสการวิจัย,ชื่อการวิจัย,ชนิดของสัตว์",
-    onChanged: searchResearch,
-  );
+                        ),
+                        Icon(
+                          Icons.navigate_next,
+                          color: Colors.black,
+                          size: 40,
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        },
+      );
+
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: "รหัสการวิจัย,ชื่อการวิจัย,ชนิดของสัตว์",
+        onChanged: searchResearch,
+      );
 
   void searchResearch(String query) async {
     final research = await ResearchApi.getResearch(query);
@@ -197,4 +203,3 @@ class _ResearchHistoryState extends State<ResearchHistory> {
     });
   }
 }
- 

@@ -123,52 +123,54 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
       builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 8),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: _heading('สัตว์ทั้งหมด', 35.0, 120.0)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 10.0),
-                  child: Card(
-                    elevation: 5,
-                    // ignore: deprecated_member_use
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchAllAnimal()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                  'จำนวนสัตว์ทั้งหมด ${snapshot.data?.data?.amount} ตัว',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black)),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
-                            ],
-                          ),
-                        )),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, left: 8),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: _heading('สัตว์ทั้งหมด', 35.0, 120.0)),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: researchData(),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 10.0),
+                    child: Card(
+                      elevation: 5,
+                      // ignore: deprecated_member_use
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchAllAnimal()),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    'จำนวนสัตว์ทั้งหมด ${snapshot.data?.data?.amount} ตัว',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black)),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.black,
+                                  size: 40,
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: researchData(),
+                  ),
+                ],
+              ),
             ),
           );
         } else {

@@ -4,6 +4,7 @@ import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/Schedule.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/weather.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_allAnimal.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -244,6 +245,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                         )),
                   ),
                 ),
+               addAnimal()
               ],
             ),
           );
@@ -254,6 +256,43 @@ Future<AllAnimalsWithRole> getAnimal() async {
         }
       },
     );
+  }
+  Widget addAnimal() {
+    return Container(
+        child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Card(
+            elevation: 5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Allanimal()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('สัตว์ทั้งหมดในสวนสัตว์',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.black,
+                      size: 40,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ));
   }
   
   Widget _heading(var title, double h, double w) {

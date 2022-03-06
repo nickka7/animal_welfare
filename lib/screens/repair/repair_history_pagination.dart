@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/repair/repair_notice_update.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -329,18 +330,58 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
                             },
                           ),
                           IconSlideAction(
-                            caption: 'ลบ',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () {
-                              deleteMaintenance(
-                                      '${listRepair[index].maintenanceID}')
+                                  caption: 'ลบ',
+                                  color: Colors.red,
+                                  icon: Icons.delete,
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CupertinoAlertDialog(
+                                            title: CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor:
+                                                  Colors.lightGreen[400],
+                                              child: Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            content: Text(
+                                              'ยืนยันการลบ',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                child: Text(
+                                                  'ยกเลิก',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                              CupertinoDialogAction(
+                                                  child: Text(
+                                                    'ยืนยัน',
+                                                    style: TextStyle(
+                                                        color: Colors.green),
+                                                  ),
+                                                  onPressed: () {
+                                                    deleteMaintenance(
+                                      '${listRepair[index].maintenanceID}').then((value) => Navigator.pop(context),)
                                   .then((value) => listRepair.removeAt(index))
                                   .then((value) => setState(() {}))
                                   .then((value) => ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar));
-                            },
-                          ),
+                                                  })
+                                            ],
+                                          );
+                                        });
+                                  },
+                                ),
+                          
+                          
                           IconSlideAction(
                             caption: 'ปิด',
                             color: Colors.grey,

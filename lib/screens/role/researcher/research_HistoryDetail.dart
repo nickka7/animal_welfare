@@ -117,7 +117,7 @@ class _ResearchHistoryDetailState extends State<ResearchHistoryDetail> {
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        '${widget.getResearch.researchDetail}',
+                        '${widget.getResearch.researchDetail ?? ''}',
                         style: TextStyle(fontSize: 16),
                       )),
                 ],

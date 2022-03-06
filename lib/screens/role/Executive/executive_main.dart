@@ -22,26 +22,26 @@ class CeoHome extends StatefulWidget {
 }
 
 class _CeoHomeState extends State<CeoHome> {
-  DateTime myDateTime = DateTime.now();
+  // DateTime myDateTime = DateTime.now();
 
-  @override
-  void initState() {
-    getAnimal();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   getAnimal();
+  //   super.initState();
+  // }
 
-  final storage = new FlutterSecureStorage();
+  // final storage = new FlutterSecureStorage();
 
-  Future<AllAnimals> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
-  }
+  // Future<AllAnimals> getAnimal() async {
+  //   String? token = await storage.read(key: 'token');
+  //   String endPoint = Constant().endPoint;
+  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
+  //       headers: {"authorization": 'Bearer $token'});
+  //   print(response.body);
+  //   var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
+  //   print('$jsonData');
+  //   return jsonData;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,136 +69,136 @@ class _CeoHomeState extends State<CeoHome> {
         // )),
         // margin: EdgeInsets.all(8.0),
         child: Column(
-          children: [
-            Container(
+           children: [
+          //   Container(
               
-              height: 320,
-             // color: Colors.white,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Container(
-                      height: 130,
-                      child: TextButton(
-                        child: buildStatCard(
-                            'จำนวนผู้เข้าชมสวนสัตว์', 5, 'คน', HexColor("#9B7401")),
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => QuantityVisitors()),
-                          ),
-                        },
-                      ),
-                    ),
-                  ),
-                   Container(
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      width: 200,
-                      child: TextButton(
-                        child: buildStatCard('เจ้าหน้าที่\nที่มาปฏิบัติงาน', 5,
-                            'คน', HexColor("#3B5998")),
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => QuantityEmployee()),
-                          ),
-                        },
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    child: Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        width: 190,
-                        child: FutureBuilder<AllAnimals>(
-                          future: getAnimal(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<AllAnimals> snapshot) {
-                            if (snapshot.hasData) {
-                              return TextButton(
-                                child: buildStatCard(
-                                    'จำนวนสัตว์',
-                                    snapshot.data!.data!.amount,
-                                    'ตัว',
-                                    HexColor("#28B446")),
-                                onPressed: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            SearchAllAnimal()),
-                                  ),
-                                },
-                              );
-                            } else {
-                              return new Center(
-                                child: new CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        )),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                      'อัพเดทข้อมูลล่าสุด : ${DateFormat("dd/MM/yyyy HH:mm").format(myDateTime)}',
+          //     height: 320,
+          //    // color: Colors.white,
+          //     child: Column(
+          //       children: [
+          //         Flexible(
+          //           child: Container(
+          //             height: 130,
+          //             child: TextButton(
+          //               child: buildStatCard(
+          //                   'จำนวนผู้เข้าชมสวนสัตว์', 5, 'คน', HexColor("#9B7401")),
+          //               onPressed: () => {
+          //                 Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) => QuantityVisitors()),
+          //                 ),
+          //               },
+          //             ),
+          //           ),
+          //         ),
+          //          Container(
+          //     child: Row(
+          //       children: [
+          //         Flexible(
+          //           child: Container(
+          //             height: MediaQuery.of(context).size.height * 0.2,
+          //             width: 200,
+          //             child: TextButton(
+          //               child: buildStatCard('เจ้าหน้าที่\nที่มาปฏิบัติงาน', 5,
+          //                   'คน', HexColor("#3B5998")),
+          //               onPressed: () => {
+          //                 Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) => QuantityEmployee()),
+          //                 ),
+          //               },
+          //             ),
+          //           ),
+          //         ),
+          //         Flexible(
+          //           child: Container(
+          //               height: MediaQuery.of(context).size.height * 0.2,
+          //               width: 190,
+          //               child: FutureBuilder<AllAnimals>(
+          //                 future: getAnimal(),
+          //                 builder: (BuildContext context,
+          //                     AsyncSnapshot<AllAnimals> snapshot) {
+          //                   if (snapshot.hasData) {
+          //                     return TextButton(
+          //                       child: buildStatCard(
+          //                           'จำนวนสัตว์',
+          //                           snapshot.data!.data!.amount,
+          //                           'ตัว',
+          //                           HexColor("#28B446")),
+          //                       onPressed: () => {
+          //                         Navigator.push(
+          //                           context,
+          //                           MaterialPageRoute(
+          //                               builder: (context) =>
+          //                                   SearchAllAnimal()),
+          //                         ),
+          //                       },
+          //                     );
+          //                   } else {
+          //                     return new Center(
+          //                       child: new CircularProgressIndicator(),
+          //                     );
+          //                   }
+          //                 },
+          //               )),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          //   Padding(
+          //     padding:
+          //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.end,
+          //       children: <Widget>[
+          //         Text(
+          //             'อัพเดทข้อมูลล่าสุด : ${DateFormat("dd/MM/yyyy HH:mm").format(myDateTime)}',
                      
-                      textAlign: TextAlign.right)
-                ],
-              ),
-            ),
-                ],
-              ),
-            ),
-           SizedBox(height: 15,),
+          //             textAlign: TextAlign.right)
+          //       ],
+          //     ),
+          //   ),
+          //       ],
+          //     ),
+          //   ),
+          //  SizedBox(height: 15,),
             
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-              child: Card(
-                  color: HexColor('#697825'),
-                elevation: 5,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AnimalReportTest()),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('รายงานการเข้างานของพนักงาน',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.white)),
-                        Icon(
-                          Icons.navigate_next,
-                          color: Colors.white,
-                          size: 40,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
+          //   Padding(
+          //     padding:
+          //         const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          //     child: Card(
+          //         color: HexColor('#697825'),
+          //       elevation: 5,
+          //       child: TextButton(
+          //         onPressed: () {
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => AnimalReportTest()),
+          //           );
+          //         },
+          //         child: Padding(
+          //           padding: const EdgeInsets.all(8.0),
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: [
+          //               Text('รายงานการเข้างานของพนักงาน',
+          //                   style:
+          //                       TextStyle(fontSize: 16, color: Colors.white)),
+          //               Icon(
+          //                 Icons.navigate_next,
+          //                 color: Colors.white,
+          //                 size: 40,
+          //               )
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
               child: Card(
@@ -231,7 +231,7 @@ class _CeoHomeState extends State<CeoHome> {
                 ),
               ),
             ),
-          ],
+        ],
         ),
       ),
     );

@@ -14,7 +14,7 @@ class AddResearch extends StatefulWidget {
 }
 
 class _AddResearchState extends State<AddResearch> {
- Future<void>? api;
+  Future<void>? api;
 
   @override
   void initState() {
@@ -23,8 +23,7 @@ class _AddResearchState extends State<AddResearch> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController =
-      TextEditingController(); //ชื่อการวิจัย
+  TextEditingController nameController = TextEditingController(); //ชื่อการวิจัย
   TextEditingController detailController =
       TextEditingController(); //รายละเอียดงานวิจัย
 
@@ -62,7 +61,6 @@ class _AddResearchState extends State<AddResearch> {
           'researchName': data['researchName'],
           'animalType': data['animalType'],
           'detail': data['detail'],
-          
         }));
 
     print(request);
@@ -157,27 +155,59 @@ class _AddResearchState extends State<AddResearch> {
                           SizedBox(
                             height: 20,
                           ),
-                          
+
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 'รายละเอียด',
                                 style: TextStyle(fontSize: 18),
                               )),
-                          TextFormField(
-                            controller: detailController,
-                            validator: (String? input) {
-                              if (input!.isEmpty) {
-                                return "กรุณากรอกรายละเอียด";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.green.shade800,
-                                        width: 2))),
+                          // TextFormField(
+                          //   controller: detailController,
+                          //   validator: (String? input) {
+                          //     if (input!.isEmpty) {
+                          //       return "กรุณากรอกรายละเอียด";
+                          //     }
+                          //     return null;
+                          //   },
+                          //   decoration: InputDecoration(
+                          //       border: OutlineInputBorder(),
+                          //       focusedBorder: OutlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //               color: Colors.green.shade800,
+                          //               width: 2))),
+                          // ),
+                          Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black45,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            padding: EdgeInsets.all(10.0),
+                            child: new ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: 200.0,
+                              ),
+                              child: new Scrollbar(
+                                child: new SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  reverse: true,
+                                  child: SizedBox(
+                                    height: 190.0,
+                                    child: new TextField(
+                                      controller: detailController,
+                                      maxLines: 100,
+                                      decoration: new InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'เพิ่มรายละเอียดที่นี่',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                           SizedBox(height: 70),
                           Container(
@@ -193,52 +223,56 @@ class _AddResearchState extends State<AddResearch> {
                                     "detail": detailController.text
                                   };
                                   showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.lightGreen[400],
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  content: Text(
-                                    'ยืนยันการเพิ่มงานวิจัย',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      child: Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    CupertinoDialogAction(
-                                        child: Text(
-                                          'ยืนยัน',
-                                          style: TextStyle(color: Colors.green),
-                                        ),
-                                        onPressed: () {
-                                          uploadData(
-                                          '${Constant().endPoint}/api/postResearchData',
-                                          data)
-                                      .then((value) {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    final snackBar = SnackBar(
-                                        content: Text(
-                                            'เพิ่มงานวิจัยเรียบร้อยแล้ว'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  });
-                                         
-                                        })                                  ],
-                                );
-                              });
-                                  
+                                      context: context,
+                                      builder: (context) {
+                                        return CupertinoAlertDialog(
+                                          title: CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor:
+                                                Colors.lightGreen[400],
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'ยืนยันการเพิ่มงานวิจัย',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Text(
+                                                'ยกเลิก',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            CupertinoDialogAction(
+                                                child: Text(
+                                                  'ยืนยัน',
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                ),
+                                                onPressed: () {
+                                                  uploadData(
+                                                          '${Constant().endPoint}/api/postResearchData',
+                                                          data)
+                                                      .then((value) {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                    final snackBar = SnackBar(
+                                                        content: Text(
+                                                            'เพิ่มงานวิจัยเรียบร้อยแล้ว'));
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackBar);
+                                                  });
+                                                })
+                                          ],
+                                        );
+                                      });
                                 }
                               },
                               child: Text('เสร็จสิ้น',
@@ -311,5 +345,4 @@ class _AddResearchState extends State<AddResearch> {
       },
     );
   }
-
 }

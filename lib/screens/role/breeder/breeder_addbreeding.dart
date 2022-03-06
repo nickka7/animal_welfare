@@ -198,28 +198,60 @@ class _AddBreedingState extends State<AddBreeding> {
                                 )),
                           ),
                           SizedBox(height: 20),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'รายละเอียด',
-                                style: TextStyle(fontSize: 18),
-                              )),
-                          TextFormField(
-                            controller: detailController,
-                            validator: (String? input) {
-                              if (input!.isEmpty) {
-                                return "กรุณากรอกรายละเอียด";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.green.shade800,
-                                        width: 2))),
+                           Align(
+                               alignment: Alignment.topLeft,
+                               child: Text(
+                                 'รายละเอียด',
+                                 style: TextStyle(fontSize: 18),
+                               )),
+                          //  TextFormField(
+                          //    controller: detailController,
+                          //    validator: (String? input) {
+                          //      if (input!.isEmpty) {
+                          //        return "กรุณากรอกรายละเอียด";
+                          //     }
+                          //     return null;
+                          //   },
+                          //   decoration: InputDecoration(
+                          //       border: OutlineInputBorder(),
+                          //       focusedBorder: OutlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //               color: Colors.green.shade800,
+                          //               width: 2))),
+                          // ),
+                           Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black45,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            padding: EdgeInsets.all(10.0),
+                            child: new ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: 200.0,
+                              ),
+                              child: new Scrollbar(
+                                child: new SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  reverse: true,
+                                  child: SizedBox(
+                                    height: 190.0,
+                                    child: new TextField(
+                                      controller: detailController,
+                                      maxLines: 100,
+                                      decoration: new InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'เพิ่มรายละเอียดที่นี่',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                          SizedBox(height: 70),
+                          SizedBox(height: 50),
                           Container(
                             height: 50,
                             width: double.infinity,
@@ -264,7 +296,7 @@ class _AddBreedingState extends State<AddBreeding> {
                                         ),
                                         onPressed: () {
                                           uploadData(
-                                          '${Constant().endPoint}/api/postMaintenanceData',
+                                          '${Constant().endPoint}/api/postBreedingData',
                                           data)
                                       .then((value) {
                                     Navigator.of(context).pop();
@@ -292,6 +324,7 @@ class _AddBreedingState extends State<AddBreeding> {
                                   primary: HexColor('#697825')),
                             ),
                           ),
+                          SizedBox(height: 20,)
                         ],
                       ),
                     ),

@@ -66,7 +66,15 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Container(
+        body:RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => BreederSearchHistory(),
+            transitionDuration: Duration(milliseconds: 400),
+          ),
+        ),
+        child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -82,7 +90,7 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
               buildListView(),
             ],
           ),
-        ),
+        ),),
          floatingActionButton: FloatingActionButton(
         onPressed: () {
                           Navigator.push(

@@ -1,7 +1,7 @@
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/admin/addEven.dart';
 import 'package:animal_welfare/screens/role/admin/addNews.dart';
-import 'package:animal_welfare/screens/role/admin/admin_allAnimal.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_allAnimal.dart';
 import 'package:animal_welfare/screens/role/admin/admin_repairHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -78,7 +78,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 25),
                       child: ListView(
-                        children: [uplodeDoc(), addActivity(),repair(),addAnimal()],
+                        children: [uplodeDoc(), addActivity(),repair()],
                       ),
                     ),
                   ),
@@ -198,43 +198,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
     ));
   }
 
-  Widget addAnimal() {
-    return Container(
-        child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          child: Card(
-            elevation: 5,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Allanimal()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('สัตว์ทั้งหมดในสวนสัตว์',
-                        style: TextStyle(fontSize: 16, color: Colors.black)),
-                    Icon(
-                      Icons.navigate_next,
-                      color: Colors.black,
-                      size: 40,
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ));
-  }
+  
   Widget repair() {
     return Container(
         child: Column(

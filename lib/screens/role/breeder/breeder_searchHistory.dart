@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:animal_welfare/screens/role/breeder/breeding_updatebreeding.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/api/breeding.dart';
 import 'package:animal_welfare/constant.dart';
@@ -114,19 +116,73 @@ class _BreederSearchHistoryState extends State<BreederSearchHistory> {
                         actionExtentRatio: 0.25,
 
         secondaryActions: <Widget>[
-                          
+                           IconSlideAction(
+                                  caption: 'แก้ไข',
+                                  color: Colors.green,
+                                  icon: Icons.build_rounded,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UpdateBreeding(getBreeding: breeding[index],
+                                               
+                                              )),
+                                    );
+                                  },
+                                ),
                           IconSlideAction(
                             caption: 'ลบ',
                             color: Colors.red,
                             icon: Icons.delete,
                             onTap: () {
-                              deleteBreeding(
+                              showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CupertinoAlertDialog(
+                                          title: CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor:
+                                                Colors.lightGreen[400],
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'ยืนยันการลบการเพาะพันธุ์',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Text(
+                                                'ยกเลิก',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            CupertinoDialogAction(
+                                                child: Text(
+                                                  'ยืนยัน',
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                ),
+                                                onPressed: () {
+                                                   deleteBreeding(
                                       '${breeding[index].breedingID}')
-                                  .then((value) => breeding.removeAt(index))
+                                  .then((value) => breeding.removeAt(index)).then((value) => Navigator.pop(context))
                                   .then((value) => setState(() {}))
                                   .then((value) => ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar));
-                            },
+                                                })
+                                          ],
+                                        );
+                                      });
+                                }
+                              
+                             
+                            
                           ),
                           IconSlideAction(
                             caption: 'ปิด',

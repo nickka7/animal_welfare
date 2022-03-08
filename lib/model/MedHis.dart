@@ -6,17 +6,18 @@
 
 class MedHis {
   MedHis({
-      String? resultCode, 
-      String? status, 
-      dynamic errorMessage, 
-      Latest? latest, 
-      List<Medical>? data,}){
+    String? resultCode,
+    String? status,
+    dynamic errorMessage,
+    Latest? latest,
+    List<Medical>? data,
+  }) {
     _resultCode = resultCode;
     _status = status;
     _errorMessage = errorMessage;
     _latest = latest;
     _data = data;
-}
+  }
 
   MedHis.fromJson(dynamic json) {
     _resultCode = json['resultCode'];
@@ -55,7 +56,6 @@ class MedHis {
     }
     return map;
   }
-
 }
 
 /// medicalID : "M001"
@@ -65,29 +65,35 @@ class MedHis {
 
 class Medical {
   Medical({
-      String? medicalID, 
-      String? medicalName, 
-      String? date, 
-      String? time,}){
+    String? medicalID,
+    String? medicalName,
+    String? detail,
+    String? date,
+    String? time,
+  }) {
     _medicalID = medicalID;
     _medicalName = medicalName;
+    _detail = detail;
     _date = date;
     _time = time;
-}
+  }
 
   Medical.fromJson(dynamic json) {
     _medicalID = json['medicalID'];
     _medicalName = json['medicalName'];
+    _detail = json['detail'];
     _date = json['date'];
     _time = json['time'];
   }
   String? _medicalID;
   String? _medicalName;
+  String? _detail;
   String? _date;
   String? _time;
 
   String? get medicalID => _medicalID;
   String? get medicalName => _medicalName;
+  String? get detail => _detail;
   String? get date => _date;
   String? get time => _time;
 
@@ -96,10 +102,10 @@ class Medical {
     map['medicalID'] = _medicalID;
     map['medicalName'] = _medicalName;
     map['date'] = _date;
+    map['date'] = _date;
     map['time'] = _time;
     return map;
   }
-
 }
 
 /// medicalName : "การตรวจสุขภาพสุขใจ ครั้งที่2"
@@ -107,11 +113,12 @@ class Medical {
 
 class Latest {
   Latest({
-      String? medicalName, 
-      String? date,}){
+    String? medicalName,
+    String? date,
+  }) {
     _medicalName = medicalName;
     _date = date;
-}
+  }
 
   Latest.fromJson(dynamic json) {
     _medicalName = json['medicalName'];
@@ -129,5 +136,4 @@ class Latest {
     map['date'] = _date;
     return map;
   }
-
 }

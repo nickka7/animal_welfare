@@ -38,7 +38,6 @@ class _EventSlideState extends State<EventSlide> {
 
   Future<List<Appointment>> getDataFromWeb() async {
     String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
     var data = await http.get(Uri.parse("$endPoint/api/getCalendar"),
         headers: {"authorization": 'Bearer $token'});
     var jsonData = jsonDecode(data.body);

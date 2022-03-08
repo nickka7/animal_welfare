@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/vaccineHIs.dart';
-import 'package:animal_welfare/screens/role/veterinarian/vet_addVaccinate.dart';
+import 'package:animal_welfare/screens/role/veterinarian/vaccine/vet_addVaccinate.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import '../../../constant.dart';
+import '../../../../constant.dart';
 
 class VetVaccineHistory extends StatefulWidget {
   final String? animalID;

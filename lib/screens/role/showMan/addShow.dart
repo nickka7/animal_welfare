@@ -152,7 +152,7 @@ class _AddShowState extends State<AddShow> {
                                 )),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
                           Align(
                               alignment: Alignment.topLeft,

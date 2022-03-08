@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
@@ -8,15 +9,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AddMedical extends StatefulWidget {
+class UpdateMedical extends StatefulWidget {
+  final Medical getMedical;
   final Bio getanimal;
-  const AddMedical({Key? key, required this.getanimal}) : super(key: key);
+  const UpdateMedical(
+      {Key? key, required this.getMedical, required this.getanimal})
+      : super(key: key);
 
   @override
-  _AddMedicalState createState() => _AddMedicalState();
+  State<UpdateMedical> createState() => _UpdateMedicalState();
 }
 
-class _AddMedicalState extends State<AddMedical> {
+class _UpdateMedicalState extends State<UpdateMedical> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
@@ -26,24 +30,20 @@ class _AddMedicalState extends State<AddMedical> {
 
   Future<String?> uploadData(url, data) async {
     String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
+    var request = http.put(Uri.parse(url),
         headers: <String, String>{
           "authorization": 'Bearer $token',
           'Content-Type': 'application/json; charset=UTF-8',
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
+          // 'userID' : data['userID'],
           'medicalName': data['medicalName'],
           'detail': data['detail'],
         }));
-
-    print(request);
-    print(data['medicalName']);
-    print(data['detail']);
-    // print(data['endDate']);
+    print(data['scheduleName']);
+    print(' ${request}');
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _AddMedicalState extends State<AddMedical> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'เพิ่มการรักษา',
+          'แก้ไขการรักษา',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -68,44 +68,40 @@ class _AddMedicalState extends State<AddMedical> {
               child: Column(
                 children: [
                   Card(
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            child: Container(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Align(
-                                        alignment: Alignment.topLeft,
-                                        child: _heading('ข้อมูล', 35.0, 80.0)),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  _buildfont('ANIMAL ID : ',
-                                      '${widget.getanimal.animalID}'),
-                                  _buildfont('ชนิด : ',
-                                      '${widget.getanimal.typeName}'),
-                                  _buildfont(
-                                      'เพศ : ', '${widget.getanimal.gender}'),
-                                  _buildfont(
-                                      'อายุ : ', '${widget.getanimal.age} ปี'),
-                                  _buildfont('น้ำหนัก : ',
-                                      '${widget.getanimal.weight} กิโลกรัม'),
-                                  _buildfont(
-                                      'กรง : ', '${widget.getanimal.cageID} ')
-                                ],
-                              ),
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: _heading('ข้อมูล', 35.0, 80.0)),
                             ),
-                          ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _buildfont(
+                                'ANIMAL ID : ', '${widget.getanimal.animalID}'),
+                            _buildfont(
+                                'ชนิด : ', '${widget.getanimal.typeName}'),
+                            _buildfont('เพศ : ', '${widget.getanimal.gender}'),
+                            _buildfont('อายุ : ', '${widget.getanimal.age} ปี'),
+                            _buildfont('น้ำหนัก : ',
+                                '${widget.getanimal.weight} กิโลกรัม'),
+                            _buildfont('กรง : ', '${widget.getanimal.cageID} ')
+                          ],
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -114,13 +110,14 @@ class _AddMedicalState extends State<AddMedical> {
                       )),
                   TextFormField(
                     controller: nameController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกการรักษา";
-                      }
-                      return null;
-                    },
+                    // validator: (String? input) {
+                    //   if (input!.isEmpty) {
+                    //     return "กรุณากรอกการรักษา";
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
+                        hintText: '${widget.getMedical.medicalName}',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -132,31 +129,48 @@ class _AddMedicalState extends State<AddMedical> {
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'รายละเอียด',
+                        'รายละเอียดเพิ่มเติม',
                         style: TextStyle(fontSize: 18),
                       )),
-                  TextFormField(
-                    controller: detailController,
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
-                        return "กรุณากรอกรายละเอียด";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black45,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: EdgeInsets.all(10.0),
+                    child: new ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 200.0,
+                      ),
+                      child: new Scrollbar(
+                        child: new SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          child: SizedBox(
+                            height: 190.0,
+                            child: new TextField(
+                              controller: detailController,
+                              maxLines: 100,
+                              decoration: new InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '${widget.getMedical.detail ?? ''}',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 70),
+                  SizedBox(height: 20),
                   Container(
                     height: 50,
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        bool pass = _formKey.currentState!.validate();
-                        if (pass) {
+                       
                           Map<String, String> data = {
                             "medicalName": nameController.text,
                             "detail": detailController.text
@@ -174,7 +188,7 @@ class _AddMedicalState extends State<AddMedical> {
                                     ),
                                   ),
                                   content: Text(
-                                    'ยืนยันการเพิ่มการรักษา',
+                                    'ยืนยันการแก้ไขการรักษา',
                                     style: TextStyle(fontSize: 16),
                                   ),
                                   actions: [
@@ -192,7 +206,7 @@ class _AddMedicalState extends State<AddMedical> {
                                         ),
                                         onPressed: () {
                                           uploadData(
-                                                  '${Constant().endPoint}/api/postMedicalData/${widget.getanimal.animalID}',
+                                                  '${Constant().endPoint}/api/updateMedicalData/${widget.getMedical.medicalID}?animalID=${widget.getanimal.animalID}',
                                                   data)
                                               .then((value) {
                                             Navigator.of(context).pop();
@@ -202,7 +216,7 @@ class _AddMedicalState extends State<AddMedical> {
                                             // });
                                             final snackBar = SnackBar(
                                                 content: Text(
-                                                    'เพิ่มการรักษาเรียบร้อยแล้ว'));
+                                                    'แก้ไขการรักษาเรียบร้อยแล้ว'));
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(snackBar);
                                           });
@@ -210,7 +224,7 @@ class _AddMedicalState extends State<AddMedical> {
                                   ],
                                 );
                               });
-                        }
+                        
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -220,6 +234,7 @@ class _AddMedicalState extends State<AddMedical> {
                           primary: HexColor('#697825')),
                     ),
                   ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -228,6 +243,7 @@ class _AddMedicalState extends State<AddMedical> {
       ),
     );
   }
+
   Widget _buildfont(var title, var data) {
     return Container(
       child: Row(

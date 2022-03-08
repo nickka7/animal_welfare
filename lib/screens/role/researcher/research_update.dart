@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:animal_welfare/model/research.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
@@ -6,14 +7,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AddBreeding extends StatefulWidget {
-  const AddBreeding({Key? key}) : super(key: key);
+class UpdateResearch extends StatefulWidget {
+  final Data getResearch;
+  const UpdateResearch({Key? key, required this.getResearch}) : super(key: key);
 
   @override
-  _AddBreedingState createState() => _AddBreedingState();
+  State<UpdateResearch> createState() => _UpdateResearchState();
 }
 
-class _AddBreedingState extends State<AddBreeding> {
+class _UpdateResearchState extends State<UpdateResearch> {
   Future<void>? api;
 
   @override
@@ -23,19 +25,11 @@ class _AddBreedingState extends State<AddBreeding> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController =
-      TextEditingController(); //ชื่อการเพาะพันธุ์
+  TextEditingController nameController = TextEditingController(); //ชื่อการวิจัย
   TextEditingController detailController =
-      TextEditingController(); //รายละเอียดการเพาะพันธุ์
+      TextEditingController(); //รายละเอียดงานวิจัย
 
   int index = 0;
-
-  int index1 = 0;
-  final status = [
-    'pass',
-    'failed',
-  ];
-
   List animalType = [];
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
@@ -57,34 +51,30 @@ class _AddBreedingState extends State<AddBreeding> {
   }
 
   Future<String?> uploadData(url, data) async {
-    // print(file!.path);
     String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
+    var request = http.put(Uri.parse(url),
         headers: <String, String>{
           "authorization": 'Bearer $token',
           'Content-Type': 'application/json; charset=UTF-8',
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
-          'breedingName': data['breedingName'],
+          // 'userID' : data['userID'],
+          'researchName': data['researchName'],
           'animalType': data['animalType'],
-          'status': data['status'],
           'detail': data['detail'],
         }));
-
-    print(request);
-    print(
-      data['breedingName'],
-    );
+    print(data['scheduleName']);
+    print(' ${request}');
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'เพิ่มการเพาะพันธุ์',
+          'แก้ไขงานวิจัย',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -92,7 +82,15 @@ class _AddBreedingState extends State<AddBreeding> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: FutureBuilder<void>(
+      body:RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => UpdateResearch(getResearch: widget.getResearch,),
+            transitionDuration: Duration(milliseconds: 400),
+          ),
+        ),
+        child: FutureBuilder<void>(
           future: api,
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             if (snapshot.hasError) print(snapshot.error);
@@ -108,18 +106,19 @@ class _AddBreedingState extends State<AddBreeding> {
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                'ชื่อการเพาะพันธุ์',
+                                'ชื่องานวิจัย',
                                 style: TextStyle(fontSize: 18),
                               )),
                           TextFormField(
                             controller: nameController,
-                            validator: (String? input) {
-                              if (input!.isEmpty) {
-                                return "กรุณากรอกชื่อการเพาะพันธุ์";
-                              }
-                              return null;
-                            },
+                            // validator: (String? input) {
+                            //   if (input!.isEmpty) {
+                            //     return "กรุณากรอกชื่องานวิจัย";
+                            //   }
+                            //   return null;
+                            // },
                             decoration: InputDecoration(
+                                hintText: '${widget.getResearch.researchName}',
                                 border: OutlineInputBorder(),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -132,7 +131,7 @@ class _AddBreedingState extends State<AddBreeding> {
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                'ชื่อชนิดสัตว์',
+                                'ชนิดสัตว์',
                                 style: TextStyle(fontSize: 18),
                               )),
                           Container(
@@ -164,46 +163,28 @@ class _AddBreedingState extends State<AddBreeding> {
                           SizedBox(
                             height: 20,
                           ),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'สถานะ',
-                                style: TextStyle(fontSize: 18),
-                              )),
-                          Container(
-                            height: 58,
-                            width: double.infinity,
-                            child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                      width: 1, color: Colors.black45),
-                                ),
-                                onPressed: () {
-                                  _statusPicker(context);
-                                },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      status[index1],
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.black,
-                                    )
-                                  ],
-                                )),
-                          ),
-                          SizedBox(height: 20),
+
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 'รายละเอียด',
                                 style: TextStyle(fontSize: 18),
                               )),
-                         
+                          // TextFormField(
+                          //   controller: detailController,
+                          //   validator: (String? input) {
+                          //     if (input!.isEmpty) {
+                          //       return "กรุณากรอกรายละเอียด";
+                          //     }
+                          //     return null;
+                          //   },
+                          //   decoration: InputDecoration(
+                          //       border: OutlineInputBorder(),
+                          //       focusedBorder: OutlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //               color: Colors.green.shade800,
+                          //               width: 2))),
+                          // ),
                           Container(
                             height: 200,
                             decoration: BoxDecoration(
@@ -227,8 +208,9 @@ class _AddBreedingState extends State<AddBreeding> {
                                       controller: detailController,
                                       maxLines: 100,
                                       decoration: new InputDecoration(
+                                        hintText: '${widget.getResearch.researchDetail}',
                                         border: InputBorder.none,
-                                        hintText: 'เพิ่มรายละเอียดที่นี่',
+                                       // hintText: 'เพิ่มรายละเอียดที่นี่',
                                       ),
                                     ),
                                   ),
@@ -236,7 +218,7 @@ class _AddBreedingState extends State<AddBreeding> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 50),
+                          SizedBox(height: 70),
                           Container(
                             height: 50,
                             width: double.infinity,
@@ -245,9 +227,8 @@ class _AddBreedingState extends State<AddBreeding> {
                                 bool pass = _formKey.currentState!.validate();
                                 if (pass) {
                                   Map<String, String> data = {
-                                    "breedingName": nameController.text,
+                                    "researchName": nameController.text,
                                     "animalType": animalType[index].toString(),
-                                    "status": status[index1].toString(),
                                     "detail": detailController.text
                                   };
                                   showDialog(
@@ -264,7 +245,7 @@ class _AddBreedingState extends State<AddBreeding> {
                                             ),
                                           ),
                                           content: Text(
-                                            'ยืนยันการเพิ่มการเพาะพันธุ์',
+                                            'ยืนยันการแก้ไขงานวิจัย',
                                             style: TextStyle(fontSize: 16),
                                           ),
                                           actions: [
@@ -285,14 +266,14 @@ class _AddBreedingState extends State<AddBreeding> {
                                                 ),
                                                 onPressed: () {
                                                   uploadData(
-                                                          '${Constant().endPoint}/api/postBreedingData',
+                                                          '${Constant().endPoint}/api/updateResearchData/${widget.getResearch.researchID}',
                                                           data)
                                                       .then((value) {
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                     final snackBar = SnackBar(
                                                         content: Text(
-                                                            'เพิ่มการเพาะพันธุ์เรียบร้อยแล้ว'));
+                                                            'แก้ไขงานวิจัยเรียบร้อยแล้ว'));
                                                     ScaffoldMessenger.of(
                                                             context)
                                                         .showSnackBar(snackBar);
@@ -313,9 +294,6 @@ class _AddBreedingState extends State<AddBreeding> {
                                   primary: HexColor('#697825')),
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          )
                         ],
                       ),
                     ),
@@ -325,7 +303,7 @@ class _AddBreedingState extends State<AddBreeding> {
             } else {
               return new Center(child: new CircularProgressIndicator());
             }
-          }),
+          }),),
     );
   }
 
@@ -358,54 +336,6 @@ class _AddBreedingState extends State<AddBreeding> {
                     setState(() {
                       this.index = index;
                       final item = animalType[index];
-                      print('selected $item');
-                    });
-                  },
-                  diameterRatio: 1,
-                  useMagnifier: true,
-                  magnification: 1.3,
-                ),
-              ),
-              CupertinoButton(
-                child: Text('ยืนยัน'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _statusPicker(context) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 400,
-          width: double.infinity,
-          color: Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              Container(
-                height: 300,
-                width: double.infinity,
-                child: CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  itemExtent: 30,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
-                  children: status
-                      .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
-                      .toList(),
-                  onSelectedItemChanged: (index1) {
-                    setState(() {
-                      this.index1 = index1;
-                      final item = status[index1];
                       print('selected $item');
                     });
                   },

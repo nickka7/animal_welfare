@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:animal_welfare/api/notification_api.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,28 +8,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+
 class AddWork extends StatefulWidget {
-  const AddWork({ Key? key }) : super(key: key);
+  const AddWork({Key? key}) : super(key: key);
 
   @override
   _AddWorkState createState() => _AddWorkState();
 }
 
 class _AddWorkState extends State<AddWork> {
-  
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
   //TextEditingController userIDController = TextEditingController();
   TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+
   // TextEditingController startDateController = TextEditingController();
   // TextEditingController endDateController = TextEditingController();
-
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
-  
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadData(url, data) async {
@@ -40,7 +42,7 @@ class _AddWorkState extends State<AddWork> {
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
-         // 'userID' : data['userID'],
+          // 'userID' : data['userID'],
           'scheduleName': data['scheduleName'],
           'location': data['location'],
           'startDate': data['startDate'],
@@ -48,28 +50,27 @@ class _AddWorkState extends State<AddWork> {
         }));
 
     print(request);
-   // print(data['userID']);
+    // print(data['userID']);
     print(data['scheduleName']);
     print(data['startDate']);
     print(data['endDate']);
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'เพิ่มงาน',
-            style: TextStyle(color: Colors.white),
-          ),
-          leading: IconButton(
-            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        centerTitle: true,
+        title: Text(
+          'เพิ่มงาน',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-       body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Container(
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -77,7 +78,6 @@ class _AddWorkState extends State<AddWork> {
               key: _formKey,
               child: Column(
                 children: [
-                  
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -101,7 +101,7 @@ class _AddWorkState extends State<AddWork> {
                   SizedBox(
                     height: 30,
                   ),
-                   Align(
+                  Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         'สถานที่',
@@ -194,13 +194,13 @@ class _AddWorkState extends State<AddWork> {
                         bool pass = _formKey.currentState!.validate();
                         if (pass) {
                           Map<String, String> data = {
-                           // "userID": userIDController.text,
+                            // "userID": userIDController.text,
                             "scheduleName": calendarNameController.text,
-                           "location": locationController.text,
+                            "location": locationController.text,
                             "startDate": startDate.toString(),
                             "endDate": endDate.toString()
                           };
-                           showDialog(
+                          showDialog(
                               context: context,
                               builder: (context) {
                                 return CupertinoAlertDialog(
@@ -229,22 +229,28 @@ class _AddWorkState extends State<AddWork> {
                                           'ยืนยัน',
                                           style: TextStyle(color: Colors.green),
                                         ),
-                                      onPressed: () {
-                                            uploadData(
-                                  '${Constant().endPoint}/api/postMySchedule', data)
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            final snackBar = SnackBar(
-                                content: Text('เพิ่มงานเรียบร้อยแล้ว'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                           );
-                                        })                                  ],
+                                        onPressed: () {
+                                          NotificationService().showNotification(
+                                              Random().nextInt(1000),
+                                              "Animal Welfare",
+                                              'หมดเวลา ${calendarNameController.text}',
+                                              endDate.toString());
+                                          uploadData(
+                                                  '${Constant().endPoint}/api/postMySchedule',
+                                                  data)
+                                              .then((value) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                            final snackBar = SnackBar(
+                                                content: Text(
+                                                    'เพิ่มงานเรียบร้อยแล้ว'));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+                                          });
+                                        })
+                                  ],
                                 );
-                              });  
-                        
+                              });
                         }
                       },
                       child: Text('เสร็จสิ้น',
@@ -261,9 +267,9 @@ class _AddWorkState extends State<AddWork> {
           ),
         ),
       ),
-      
     );
   }
+
   void _showDatePicker1(ctx) {
     // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(
@@ -278,7 +284,7 @@ class _AddWorkState extends State<AddWork> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                       use24hFormat: true,
+                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),
@@ -313,7 +319,7 @@ class _AddWorkState extends State<AddWork> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                       use24hFormat: true,
+                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
                         initialDateTime: DateTime.now(),

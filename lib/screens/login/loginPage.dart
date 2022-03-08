@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animal_welfare/screens/login/select_contact.dart';
 import 'package:flutter/material.dart';
+import '../../addMyWork.dart';
 import '../../haxColor.dart';
 import '../home/navigatorBar.dart';
 import 'package:animal_welfare/api/loginApi.dart';
@@ -40,11 +41,8 @@ class _MyLoginHomeState extends State<MyLoginHome> {
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
             // TODO: ความรู้การแตก jwt token เอา payload
-            var payload = json.decode(
-                utf8.decode(
-                    base64.decode(base64.normalize(token.split(".")[1]))
-                )
-            );
+            var payload = json.decode(utf8
+                .decode(base64.decode(base64.normalize(token.split(".")[1]))));
             // print(payload);
             // print(payload['userID']);
             String firstName = jsonResponse['user']['firstName'];
@@ -52,14 +50,13 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             // print(firstName.runtimeType);
             await storage.write(key: 'token', value: token);
             Navigator.push(
-              //ตอนใช้งานจริงเปลี่ยนไปใช้ Navigator.pushReplacement ตอนนี้ใช้ push เพื่อง่ายต่อการเทส
-              context,
-              MaterialPageRoute(
-                builder: (context) => NavigatorBar(
-                    payload: payload
-                ),
-              ),
-            );
+                //ตอนใช้งานจริงเปลี่ยนไปใช้ Navigator.pushReplacement ตอนนี้ใช้ push เพื่อง่ายต่อการเทส
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NavigatorBar(
+                    payload: payload,
+                  ),
+                ));
           } else {
             displayDialog(context, "An Error Occurred",
                 "username หรือ password ไม่ถูกต้อง");
@@ -77,15 +74,15 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-       decoration: BoxDecoration(
-          gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          HexColor('#697825'),
-          Colors.white,
-        ],
-      )),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -117,7 +114,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                         },
                         decoration: InputDecoration(hintText: 'Username'),
                       ),
-        
+
                       //TextForm password
                       TextFormField(
                         controller: _passwordController,
@@ -140,10 +137,12 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500)),
                           onPressed: () => {
-                             Navigator.push(
-                                context,MaterialPageRoute(
-                                  builder: (context) => const SelectMyContact()),
-                                  ),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SelectMyContact()),
+                            ),
                           },
                         ),
                       ),
@@ -198,7 +197,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
               //                   ),
               //     },
               //   ),
-             // ),
+              // ),
             ],
           ),
         ),

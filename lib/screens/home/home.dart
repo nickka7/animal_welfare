@@ -11,6 +11,7 @@ import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
 import 'package:animal_welfare/screens/role/showMan/show.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
+import 'package:animal_welfare/screens/setting/setting_logout.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_welfare/haxColor.dart';
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     // print(jsonData);
     return jsonData;
   }
-
+  bool tappedYes = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +145,44 @@ class _HomePageState extends State<HomePage> {
               //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
              // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
+           
               buildButton(),
+              Container(
+      width: 130,
+      height: 90,
+      child: TextButton(
+        onPressed: () 
+         async {
+                                      final action = await UserLogout.yesCancelDialog(context, 'ต้องการออกจากระบบ');
+                                      if (action == DialogAction.yes) {
+                                        setState(() => UserLogout().clearTokenAndLogout(context));
+                                        } else {
+                                          setState(() => tappedYes = true);
+                                        }
+                                      },
+        
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                child: Icon(Icons.login_outlined, size: 40, color: Colors.green[600]),
+              ),
+              Container(
+                //  margin: const EdgeInsets.only(top: 8),
+                child: Text(
+                  'Logout',
+                  style: Theme.of(context).textTheme.button,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
             ],
           ),
         ]),

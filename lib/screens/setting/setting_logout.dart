@@ -10,6 +10,7 @@ class UserLogout {
   clearTokenAndLogout(
     BuildContext context,
   ) async {
+    // print("cleartkLG");
     await storage.delete(key: 'token');
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => MyLoginHome()),

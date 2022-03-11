@@ -23,7 +23,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
     HomePage(payload: widget.payload),
     DownloadFile(),
     //WarnNotifications(),
-    Menu(),
+   // Menu(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -45,10 +45,10 @@ class _NavigatorBarState extends State<NavigatorBar> {
           //   icon: Icon(Icons.notifications_none, size: 30),
           //   label: 'แจ้งเตือน',
           // ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu, size: 30),
-            label: 'เมนู',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.menu, size: 30),
+          //   label: 'เมนู',
+          // ),
         ],
         currentIndex: _selectedIndex,
         showUnselectedLabels: true,

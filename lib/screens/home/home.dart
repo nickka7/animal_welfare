@@ -21,8 +21,8 @@ import '../../constant.dart';
 
 class HomePage extends StatefulWidget {
   final payload;
- // final String? image;
-  const HomePage({Key? key,this.payload}) : super(key: key);
+  // final String? image;
+  const HomePage({Key? key, this.payload}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -48,12 +48,13 @@ class _HomePageState extends State<HomePage> {
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
         headers: {"authorization": 'Bearer $token'});
-    
+
     // print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));
     // print(jsonData);
     return jsonData;
   }
+
   bool tappedYes = false;
   @override
   Widget build(BuildContext context) {
@@ -138,51 +139,50 @@ class _HomePageState extends State<HomePage> {
         child: Column(children: [
           Wrap(
             children: [
-          //    _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
-              _buildButton(
-                  Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
+              //    _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
+              _buildButton(Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
               // _buildButtonmim(
               //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
-             // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
+              // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
-           
+
               buildButton(),
               Container(
-      width: 130,
-      height: 90,
-      child: TextButton(
-        onPressed: () 
-         async {
-                                      final action = await UserLogout.yesCancelDialog(context, 'ต้องการออกจากระบบ');
-                                      if (action == DialogAction.yes) {
-                                        setState(() => UserLogout().clearTokenAndLogout(context));
-                                        } else {
-                                          setState(() => tappedYes = true);
-                                        }
-                                      },
-        
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 50,
-                width: 50,
-                child: Icon(Icons.login_outlined, size: 40, color: Colors.green[600]),
-              ),
-              Container(
-                //  margin: const EdgeInsets.only(top: 8),
-                child: Text(
-                  'Logout',
-                  style: Theme.of(context).textTheme.button,
+                width: 130,
+                height: 90,
+                child: TextButton(
+                  onPressed: () async {
+                    final action = await UserLogout.yesCancelDialog(
+                        context, 'ต้องการออกจากระบบ');
+                    if (action == DialogAction.yes) {
+                      setState(() => UserLogout().clearTokenAndLogout(context));
+                    } else {
+                      setState(() => tappedYes = true);
+                    }
+                  },
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          child: Icon(Icons.logout_outlined,
+                              size: 40, color: Colors.green[600]),
+                        ),
+                        Container(
+                          //  margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            'Logout',
+                            style: Theme.of(context).textTheme.button,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    )
+              )
             ],
           ),
         ]),
@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => ShowScreen()),
                   );
                 }
-                 break;
+                break;
               case 'admin':
                 {
                   Navigator.push(
@@ -323,6 +323,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Widget _buildButtonmim(IconData icon, String label, var page) {
     return Container(
       width: 130,

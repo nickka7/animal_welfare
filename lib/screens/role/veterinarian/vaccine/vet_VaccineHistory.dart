@@ -4,10 +4,12 @@ import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vaccine/vet_addVaccinate.dart';
+import 'package:animal_welfare/screens/role/veterinarian/vaccine/vet_updateVaccinate.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import '../../../../constant.dart';
@@ -15,7 +17,9 @@ import '../../../../constant.dart';
 class VetVaccineHistory extends StatefulWidget {
   final String? animalID;
   final Bio getanimal;
-  const VetVaccineHistory({Key? key, required this.animalID, required this.getanimal}) : super(key: key);
+  const VetVaccineHistory(
+      {Key? key, required this.animalID, required this.getanimal})
+      : super(key: key);
 
   @override
   _VetVaccineHistoryState createState() => _VetVaccineHistoryState();
@@ -29,6 +33,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
   }
 
   final storage = new FlutterSecureStorage();
+  String endPoint = Constant().endPoint;
   List<DataVaccinate> vaccine = [];
   String query = '';
 
@@ -45,7 +50,9 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
       allvaccinate = json.decode(response.body);
       final List vaccine = allvaccinate['data'];
       // print('bioo $bio');
-      return vaccine.map((json) => DataVaccinate.fromJson(json)).where((allvaccinate) {
+      return vaccine
+          .map((json) => DataVaccinate.fromJson(json))
+          .where((allvaccinate) {
         final allvaccinateIDLower = allvaccinate.vaccinateID.toString();
         final allvaccinateNameLower = allvaccinate.vaccineName;
         final searchLower = query;
@@ -62,6 +69,21 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
     final vaccine = await getAllvaccinate(query);
 
     setState(() => this.vaccine = vaccine);
+  }
+
+  Future deleteVaccinate(String vaccinateID, data) async {
+    print(vaccinateID);
+    String? token = await storage.read(key: 'token');
+    var response = await http.delete(
+        Uri.parse(
+            '$endPoint/api/deleteVaccinateHistory/$vaccinateID?status=ยังไม่ใช้'),
+        headers: {"authorization": 'Bearer $token'},
+        body: jsonEncode(<String, String>{
+          // 'userID' : data['userID'],
+          'vaccineID': data['vaccineID'],
+        }));
+    var jsonResponse = await json.decode(response.body);
+    print(jsonResponse['message']);
   }
 
   String formatDateFromString(String date) {
@@ -85,36 +107,39 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body:RefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () => Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (a, b, c) => VetVaccineHistory( animalID: widget.animalID, getanimal: widget.getanimal,),
-              transitionDuration: Duration(milliseconds: 400),
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => VetVaccineHistory(
+              animalID: widget.animalID,
+              getanimal: widget.getanimal,
             ),
+            transitionDuration: Duration(milliseconds: 400),
           ),
-      
-      child : Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            HexColor('#697825'),
-            Colors.white,
-          ],
-        )),
-        child: ListView(
-          children: [buildSearch(), buildListview()],
         ),
-      ),),
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              HexColor('#697825'),
+              Colors.white,
+            ],
+          )),
+          child: ListView(
+            children: [buildSearch(), buildListview()],
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddVaccinate(
-                       getanimal: widget.getanimal,
+                      getanimal: widget.getanimal,
                     )),
           ).then((value) => setState(() {}));
         },
@@ -131,63 +156,144 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
         physics: ScrollPhysics(),
         itemBuilder: (context, index) {
           final vaccinate = vaccine[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: Card(
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 90,
-                      width: 280,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'รหัสการฉีดวัคซีน : ${vaccinate.vaccinateID}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+          return Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.25,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: Card(
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 90,
+                        width: 280,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'รหัสการฉีดวัคซีน : ${vaccinate.vaccinateID}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'วัคซีน : ${vaccinate.vaccineName}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'วัคซีน : ${vaccinate.vaccineName}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'เวลา : ${vaccinate.time}',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'เวลา : ${vaccinate.time}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'วันที่ : ${formatDateFromString(vaccinate.date.toString())}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'วันที่ : ${formatDateFromString(vaccinate.date.toString())}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                caption: 'แก้ไข',
+                color: Colors.green,
+                icon: Icons.build_rounded,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdateVaccinate( getanimal: widget.getanimal, getVaccinate: vaccinate,
+
+                            )),
+                  );
+                },
+              ),
+              IconSlideAction(
+                caption: 'ลบ',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.lightGreen[400],
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                          ),
+                          content: Text(
+                            'ยืนยันการลบ',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text(
+                                'ยกเลิก',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            CupertinoDialogAction(
+                                child: Text(
+                                  'ยืนยัน',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                                onPressed: () {
+                                   Map<String, String> data = {
+                            "vaccineID": vaccinate.vaccineID.toString(),
+                            
+                          };
+                                  deleteVaccinate('${vaccinate.vaccinateID}',
+                                          data)
+                                      .then((value) => vaccine.removeAt(index))
+                                      .then((value) => Navigator.pop(context))
+                                      .then((value) => setState(() {}))
+                                      .then((value) =>
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content:
+                                                      Text('ลบข้อมูลแล้ว'))));
+                                })
+                          ],
+                        );
+                      });
+                },
+              ),
+              IconSlideAction(
+                caption: 'ปิด',
+                color: Colors.grey,
+                icon: Icons.close,
+                onTap: () {},
+              ),
+            ],
           );
         });
   }

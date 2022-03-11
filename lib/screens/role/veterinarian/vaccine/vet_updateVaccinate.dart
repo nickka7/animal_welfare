@@ -1,24 +1,25 @@
 import 'dart:convert';
 
-import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
+import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
+import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AddVaccinate extends StatefulWidget {
+class UpdateVaccinate extends StatefulWidget {
   final Bio getanimal;
-  const AddVaccinate(
-      {Key? key, required this.getanimal})
-      : super(key: key);
+  final DataVaccinate getVaccinate;
+  const UpdateVaccinate({Key? key, required this.getanimal, required this.getVaccinate}) : super(key: key);
 
   @override
-  _AddVaccinateState createState() => _AddVaccinateState();
+  State<UpdateVaccinate> createState() => _UpdateVaccinateState();
 }
 
-class _AddVaccinateState extends State<AddVaccinate> {
+class _UpdateVaccinateState extends State<UpdateVaccinate> {
   final _formKey = GlobalKey<FormState>();
   Future<void>? api;
   @override
@@ -57,17 +58,19 @@ class _AddVaccinateState extends State<AddVaccinate> {
   }
 
   Future<String?> uploadData(url, data) async {
-    // print(file!.path);
     String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
+    var request = http.put(Uri.parse(url),
         headers: <String, String>{
           "authorization": 'Bearer $token',
           'Content-Type': 'application/json; charset=UTF-8',
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
+          // 'userID' : data['userID'],
           'vaccineID': data['vaccineID'],
         }));
+
+    print(request);
   }
 
   @override
@@ -76,7 +79,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'แก้ไขการฉีดวัคซีน',
+            'เพิ่มการฉีดวัคซีน',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
@@ -156,7 +159,6 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    
                                     '${vaccineID[index]}',
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -173,7 +175,6 @@ class _AddVaccinateState extends State<AddVaccinate> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              
                               Map<String, String> data = {
                                 "vaccineID": vaccineID[index].substring(0, 6),
                               };
@@ -190,7 +191,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                         ),
                                       ),
                                       content: Text(
-                                        'ยืนยันการเพิ่มการฉีดวัคซีน',
+                                        'ยืนยันการแก้ไขการฉีดวัคซีน',
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       actions: [
@@ -210,15 +211,15 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                             ),
                                             onPressed: () {
                                               uploadData(
-                                                      '${Constant().endPoint}/api/postVaccineData/?animalID=${widget.getanimal.animalID}&status=ใช้แล้ว',
+                                                      '${Constant().endPoint}/api/updateVaccineData/${widget.getVaccinate.vaccinateID}?status=ใช้แล้ว',
                                                       data)
                                                   .then((value) {
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
-                                                 // setState(() {});
+                                                // setState(() {});
                                                 final snackBar = SnackBar(
                                                     content: Text(
-                                                        'เพิ่มการฉีดวัคซีนเรียบร้อยแล้ว'));
+                                                        'แก้ไชการฉีดวัคซีนเรียบร้อยแล้ว'));
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackBar);
                                               });

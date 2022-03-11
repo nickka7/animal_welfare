@@ -43,11 +43,11 @@ class _MyAppState extends State<MyApp> {
     if (_timer != null) {
       _timer!.cancel();
     }
-    // setup action after 5 minutes
-    _timer = Timer(const Duration(seconds: 10), () => _handleInactivity());
+    // setup action after...
+    _timer = Timer(const Duration(minutes: 20), () => _handleInactivity());
   }
 
-  void _handleInactivity() async{
+  void _handleInactivity() async {
     print("handleInactivity");
     _timer?.cancel();
     _timer = null;

@@ -74,6 +74,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: double.infinity,
         decoration: BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -96,11 +97,15 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                       Center(
                         child: Container(
                             margin: EdgeInsets.all(30),
-                            width: 200.0,
+                            width: 250.0,
                             height: 200.0,
                             decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/logo/app_icon.png'),
+                                fit: BoxFit.cover,
+                              ),
                               shape: BoxShape.circle,
-                              color: Colors.black45,
+                              // color: Colors.black45,
                             )),
                       ),
                       //TextForm username

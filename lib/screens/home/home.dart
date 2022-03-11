@@ -43,6 +43,8 @@ class _HomePageState extends State<HomePage> {
   // }
 
   Future<NewsData> getNews() async {
+    // print(widget.payload['image']);
+    // print(widget.payload['firstName']);
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
@@ -99,8 +101,8 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(10.0),
                       child: CircleAvatar(
                         radius: 50.0,
-                        /* backgroundImage: NetworkImage(
-                            'https://saosuay.com/wp-content/uploads/2019/11/B347C0D7-F64C-4112-B651-17F86F466A7E-833x1024.jpeg'),*/
+                         backgroundImage: NetworkImage(
+                            '${Constant().endPoint}/${widget.payload['image']}'),
                       ),
                     ),
                     Padding(

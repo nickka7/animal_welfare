@@ -57,14 +57,15 @@ class _AddVaccinateState extends State<AddVaccinate> {
   }
 
   Future<String?> uploadData(url, data) async {
-    // print(file!.path);
+    print(data['vaccineID']);
+    print(widget.getanimal.animalID);
     String? token = await storage.read(key: 'token');
     var request = http.post(Uri.parse(url),
         headers: <String, String>{
           "authorization": 'Bearer $token',
+          // "Content-Type": "application/x-www-form-urlencoded",
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
           'vaccineID': data['vaccineID'],
         }));
@@ -156,7 +157,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    
+
                                     '${vaccineID[index]}',
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -173,9 +174,9 @@ class _AddVaccinateState extends State<AddVaccinate> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              
+
                               Map<String, String> data = {
-                                "vaccineID": vaccineID[index].substring(0, 6),
+                                "vaccineID": vaccineID[index].split(" ")[0],
                               };
                               showDialog(
                                   context: context,
@@ -210,7 +211,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                             ),
                                             onPressed: () {
                                               uploadData(
-                                                      '${Constant().endPoint}/api/postVaccineData/?animalID=${widget.getanimal.animalID}&status=ใช้แล้ว',
+                                                      '${Constant().endPoint}/api/postVaccineData/?animalID=${widget.getanimal.animalID}',
                                                       data)
                                                   .then((value) {
                                                 Navigator.of(context).pop();

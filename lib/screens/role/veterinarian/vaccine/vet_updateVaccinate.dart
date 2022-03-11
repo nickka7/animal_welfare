@@ -13,7 +13,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class UpdateVaccinate extends StatefulWidget {
   final Bio getanimal;
   final DataVaccinate getVaccinate;
-  const UpdateVaccinate({Key? key, required this.getanimal, required this.getVaccinate}) : super(key: key);
+
+  const UpdateVaccinate(
+      {Key? key, required this.getanimal, required this.getVaccinate})
+      : super(key: key);
 
   @override
   State<UpdateVaccinate> createState() => _UpdateVaccinateState();
@@ -22,6 +25,7 @@ class UpdateVaccinate extends StatefulWidget {
 class _UpdateVaccinateState extends State<UpdateVaccinate> {
   final _formKey = GlobalKey<FormState>();
   Future<void>? api;
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +55,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
       vaccineID.add('ไม่มีวัคซีน');
     }
 
-    print(' ${vaccineID}');
+    print('${vaccineID}');
     //print(vaccineName);
 
     return true;
@@ -211,7 +215,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                             ),
                                             onPressed: () {
                                               uploadData(
-                                                      '${Constant().endPoint}/api/updateVaccineData/${widget.getVaccinate.vaccinateID}?status=ใช้แล้ว',
+                                                      '${Constant().endPoint}/api/updateVaccinateData/${widget.getVaccinate.vaccinateID}',
                                                       data)
                                                   .then((value) {
                                                 Navigator.of(context).pop();

@@ -49,7 +49,9 @@ class _HomePageState extends State<HomePage> {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
-        headers: {"authorization": 'Bearer $token'});
+        headers: {"authorization": 'Bearer $token',
+          "Content-Type": "application/x-www-form-urlencoded"
+    });
 
     // print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));

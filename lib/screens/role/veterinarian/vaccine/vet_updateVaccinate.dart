@@ -79,7 +79,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'เพิ่มการฉีดวัคซีน',
+            'แก้ไขการฉีดวัคซีน',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
@@ -211,7 +211,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                             ),
                                             onPressed: () {
                                               uploadData(
-                                                      '${Constant().endPoint}/api/updateVaccineData/${widget.getVaccinate.vaccinateID}?status=ใช้แล้ว',
+                                                      '${Constant().endPoint}/api/updateVaccinateData/${widget.getVaccinate.vaccinateID}?status=ใช้แล้ว',
                                                       data)
                                                   .then((value) {
                                                 Navigator.of(context).pop();
@@ -219,7 +219,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                                 // setState(() {});
                                                 final snackBar = SnackBar(
                                                     content: Text(
-                                                        'แก้ไชการฉีดวัคซีนเรียบร้อยแล้ว'));
+                                                        'แก้ไขการฉีดวัคซีนเรียบร้อยแล้ว'));
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackBar);
                                               });

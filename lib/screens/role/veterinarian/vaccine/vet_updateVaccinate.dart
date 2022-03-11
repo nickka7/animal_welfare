@@ -83,7 +83,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'เพิ่มการฉีดวัคซีน',
+            'แก้ไขการฉีดวัคซีน',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
@@ -223,7 +223,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                                 // setState(() {});
                                                 final snackBar = SnackBar(
                                                     content: Text(
-                                                        'แก้ไชการฉีดวัคซีนเรียบร้อยแล้ว'));
+                                                        'แก้ไขการฉีดวัคซีนเรียบร้อยแล้ว'));
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackBar);
                                               });

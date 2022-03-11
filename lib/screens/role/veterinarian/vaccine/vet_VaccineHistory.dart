@@ -193,7 +193,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  'วัคซีน : ${vaccinate.vaccineName}',
+                                  'วัคซีน : ${vaccinate.vaccineID} ''${vaccinate.vaccineName}',
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 16),
                                 ),

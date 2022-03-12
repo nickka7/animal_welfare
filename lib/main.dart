@@ -40,12 +40,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initializeTimer() {
-    print("before if");
+    // print("before if");
     if (_timer != null) {
       _timer!.cancel();
     }
     // setup action after...
-    _timer = Timer(const Duration(minutes: 20), () => _handleInactivity());
+    _timer = Timer(const Duration(minutes: 30), () => _handleInactivity());
   }
 
   void _handleInactivity() async {

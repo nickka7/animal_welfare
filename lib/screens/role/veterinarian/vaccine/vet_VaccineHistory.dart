@@ -17,6 +17,7 @@ import '../../../../constant.dart';
 class VetVaccineHistory extends StatefulWidget {
   final String? animalID;
   final Bio getanimal;
+
   const VetVaccineHistory(
       {Key? key, required this.animalID, required this.getanimal})
       : super(key: key);
@@ -45,10 +46,12 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
         Uri.parse(
             '$endPoint/api/getVaccineHistory?animalID=${widget.animalID}'),
         headers: {"authorization": 'Bearer $token'});
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       allvaccinate = json.decode(response.body);
       final List vaccine = allvaccinate['data'];
+      // print(allvaccinate['data']);
+
       // print('bioo $bio');
       return vaccine
           .map((json) => DataVaccinate.fromJson(json))
@@ -72,18 +75,22 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
   }
 
   Future deleteVaccinate(String vaccinateID, data) async {
-    print(vaccinateID);
+    print('${data['vaccineID']}');
+    print(data['vaccineID'].length);
+
     String? token = await storage.read(key: 'token');
     var response = await http.delete(
         Uri.parse(
-            '$endPoint/api/deleteVaccinateHistory/$vaccinateID?status=ยังไม่ใช้'),
-        headers: {"authorization": 'Bearer $token'},
+            '$endPoint/api/deleteVaccinateHistory/$vaccinateID'),
+        headers: {
+          "authorization": 'Bearer $token',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: jsonEncode(<String, String>{
-          // 'userID' : data['userID'],
           'vaccineID': data['vaccineID'],
         }));
-    var jsonResponse = await json.decode(response.body);
-    print(jsonResponse['message']);
+    // var jsonResponse = await json.decode(response.body);
+    // print(jsonResponse['message']);
   }
 
   String formatDateFromString(String date) {
@@ -226,8 +233,9 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => UpdateVaccinate( getanimal: widget.getanimal, getVaccinate: vaccinate,
-
+                        builder: (context) => UpdateVaccinate(
+                              getanimal: widget.getanimal,
+                              getVaccinate: vaccinate,
                             )),
                   );
                 },
@@ -267,20 +275,18 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                                   style: TextStyle(color: Colors.green),
                                 ),
                                 onPressed: () {
-                                   Map<String, String> data = {
-                            "vaccineID": vaccinate.vaccineID.toString(),
-                            
-                          };
-                                  deleteVaccinate('${vaccinate.vaccinateID}',
-                                          data)
+                                  Map<String, String> data = {
+                                    "vaccineID": vaccinate.vaccineID.toString(),
+                                  };
+                                  deleteVaccinate(
+                                          '${vaccinate.vaccinateID}', data)
                                       .then((value) => vaccine.removeAt(index))
                                       .then((value) => Navigator.pop(context))
                                       .then((value) => setState(() {}))
-                                      .then((value) =>
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content:
-                                                      Text('ลบข้อมูลแล้ว'))));
+                                      .then((value) => ScaffoldMessenger.of(
+                                              context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text('ลบข้อมูลแล้ว'))));
                                 })
                           ],
                         );

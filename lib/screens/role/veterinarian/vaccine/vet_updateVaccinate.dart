@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +11,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class UpdateVaccinate extends StatefulWidget {
   final Bio getanimal;
   final DataVaccinate getVaccinate;
-  const UpdateVaccinate({Key? key, required this.getanimal, required this.getVaccinate}) : super(key: key);
+
+  const UpdateVaccinate(
+      {Key? key, required this.getanimal, required this.getVaccinate})
+      : super(key: key);
 
   @override
   State<UpdateVaccinate> createState() => _UpdateVaccinateState();
@@ -24,6 +25,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
     late FixedExtentScrollController scrollController;
 
   Future<void>? api;
+
   @override
   void initState() {
     super.initState();
@@ -59,10 +61,9 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
     } else {
       vaccineID.add('ไม่มีวัคซีน');
     }
-     //index = vaccineID.indexOf('${widget.getVaccinate.vaccineID} ${widget.getVaccinate.vaccineName}');
+
     print(vaccineID);
     //print(vaccineName);
-
     return true;
   }
 
@@ -224,7 +225,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                             ),
                                             onPressed: () {
                                               uploadData(
-                                                      '${Constant().endPoint}/api/updateVaccinateData/${widget.getVaccinate.vaccinateID}?status=ใช้แล้ว',
+                                                      '${Constant().endPoint}/api/updateVaccinateData/${widget.getVaccinate.vaccinateID}',
                                                       data)
                                                   .then((value) {
                                                 Navigator.of(context).pop();

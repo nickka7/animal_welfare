@@ -24,6 +24,15 @@ class _UpdateMedicalState extends State<UpdateMedical> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
+  
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    detailController.dispose();
+    super.dispose();
+  }
 
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
@@ -170,61 +179,59 @@ class _UpdateMedicalState extends State<UpdateMedical> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                       
-                          Map<String, String> data = {
-                            "medicalName": nameController.text,
-                            "detail": detailController.text
-                          };
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.lightGreen[400],
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
+                        Map<String, String> data = {
+                          "medicalName": nameController.text,
+                          "detail": detailController.text
+                        };
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Colors.lightGreen[400],
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: Text(
+                                  'ยืนยันการแก้ไขการรักษา',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                      'ยกเลิก',
+                                      style: TextStyle(color: Colors.red),
                                     ),
+                                    onPressed: () => Navigator.pop(context),
                                   ),
-                                  content: Text(
-                                    'ยืนยันการแก้ไขการรักษา',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  actions: [
-                                    CupertinoDialogAction(
+                                  CupertinoDialogAction(
                                       child: Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(color: Colors.red),
+                                        'ยืนยัน',
+                                        style: TextStyle(color: Colors.green),
                                       ),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    CupertinoDialogAction(
-                                        child: Text(
-                                          'ยืนยัน',
-                                          style: TextStyle(color: Colors.green),
-                                        ),
-                                        onPressed: () {
-                                          uploadData(
-                                                  '${Constant().endPoint}/api/updateMedicalData/${widget.getMedical.medicalID}?animalID=${widget.getanimal.animalID}',
-                                                  data)
-                                              .then((value) {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                            // setState(() {
+                                      onPressed: () {
+                                        uploadData(
+                                                '${Constant().endPoint}/api/updateMedicalData/${widget.getMedical.medicalID}?animalID=${widget.getanimal.animalID}',
+                                                data)
+                                            .then((value) {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                          // setState(() {
 
-                                            // });
-                                            final snackBar = SnackBar(
-                                                content: Text(
-                                                    'แก้ไขการรักษาเรียบร้อยแล้ว'));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackBar);
-                                          });
-                                        })
-                                  ],
-                                );
-                              });
-                        
+                                          // });
+                                          final snackBar = SnackBar(
+                                              content: Text(
+                                                  'แก้ไขการรักษาเรียบร้อยแล้ว'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        });
+                                      })
+                                ],
+                              );
+                            });
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),

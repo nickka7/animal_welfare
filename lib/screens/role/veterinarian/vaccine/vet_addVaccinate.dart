@@ -76,7 +76,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'แก้ไขการฉีดวัคซีน',
+            'เพิ่มการฉีดวัคซีน',
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(

@@ -1,16 +1,8 @@
-import 'dart:convert';
-
-import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/all_animals.dart.dart';
-import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
-import 'package:animal_welfare/screens/role/Executive/executive_employee.dart';
-import 'package:animal_welfare/screens/role/Executive/executive_visitors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
+
 
 class CeoHome extends StatefulWidget {
   const CeoHome({

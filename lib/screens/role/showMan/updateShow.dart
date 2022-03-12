@@ -27,16 +27,25 @@ class UpdateShow extends StatefulWidget {
 }
 
 class _UpdateShowState extends State<UpdateShow> {
+  late FixedExtentScrollController scrollController;
+
   Future<void>? api;
 
+  //int index = 2;
   @override
   void initState() {
     super.initState();
     api = getShowType();
+    scrollController = FixedExtentScrollController(initialItem: index);
   }
 
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+late DateTime startDate = widget.start;
+late DateTime endDate = widget.end;
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   final storage = new FlutterSecureStorage();
@@ -56,11 +65,12 @@ class _UpdateShowState extends State<UpdateShow> {
           'endDate': data['endDate'],
         }));
     print(data['scheduleName']);
-    print('aaaa ${request}');
+    print(request);
   }
 
-  int index = 0;
   List shows = [];
+
+  int index = 0;
   Future<bool> getShowType() async {
     String? token = await storage.read(key: 'token');
     var response = await http.get(Uri.parse('$endPoint/api/getAllShowType'),
@@ -72,8 +82,8 @@ class _UpdateShowState extends State<UpdateShow> {
     for (int i = 0; i < jsonData2.length; i++) {
       shows.add(jsonData2[i]['showName']);
     }
-    // print(jsonData2);
-    print(shows);
+    index = shows.indexOf('${widget.subject}');
+    print(index);
     return true;
   }
 
@@ -119,6 +129,10 @@ class _UpdateShowState extends State<UpdateShow> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _showPicker(context);
                                 },
                                 child: Row(
@@ -154,6 +168,10 @@ class _UpdateShowState extends State<UpdateShow> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _showDatePicker1(context);
                                 },
                                 child: Row(
@@ -187,6 +205,10 @@ class _UpdateShowState extends State<UpdateShow> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _showDatePicker2(context);
                                 },
                                 child: Row(
@@ -304,7 +326,7 @@ class _UpdateShowState extends State<UpdateShow> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 30,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: shows
                       .map((item) => Center(
                             child: Text(
@@ -316,6 +338,7 @@ class _UpdateShowState extends State<UpdateShow> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
+                      //this.shows = show;
                       final item = shows[index];
                       print('selected $item');
                     });
@@ -353,7 +376,7 @@ class _UpdateShowState extends State<UpdateShow> {
                         use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: widget.start,
+                        initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {
                             startDate = val;
@@ -388,7 +411,7 @@ class _UpdateShowState extends State<UpdateShow> {
                         use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: widget.end,
+                        initialDateTime: endDate,
                         onDateTimeChanged: (val) {
                           setState(() {
                             endDate = val;

@@ -27,6 +27,14 @@ class _AddResearchState extends State<AddResearch> {
   TextEditingController detailController =
       TextEditingController(); //รายละเอียดงานวิจัย
 
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    detailController.dispose();
+    super.dispose();
+  }
+
   int index = 0;
   List animalType = [];
   final storage = new FlutterSecureStorage();

@@ -20,6 +20,14 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   TextEditingController _userIDController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _userIDController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  
   LoginApi loginAPI = LoginApi();
   final storage = new FlutterSecureStorage();
 

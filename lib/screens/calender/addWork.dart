@@ -23,6 +23,14 @@ class _AddWorkState extends State<AddWork> {
   TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
+
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    calendarNameController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
   // TextEditingController startDateController = TextEditingController();
   // TextEditingController endDateController = TextEditingController();
 

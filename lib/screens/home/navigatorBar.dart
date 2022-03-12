@@ -1,9 +1,5 @@
-
-
 import 'package:animal_welfare/screens/document/DownloadFile.dart';
 import 'package:animal_welfare/screens/home/home.dart';
-import 'package:animal_welfare/screens/home/menu.dart';
-import 'package:animal_welfare/screens/profile/profile_main.dart';
 
 import 'package:flutter/material.dart';
 
@@ -19,11 +15,10 @@ class _NavigatorBarState extends State<NavigatorBar> {
   int _selectedIndex = 0;
 
   late List<Widget> _widgetOptions = <Widget>[
-
     HomePage(payload: widget.payload),
     DownloadFile(),
     //WarnNotifications(),
-   // Menu(),
+    // Menu(),
   ];
   @override
   Widget build(BuildContext context) {

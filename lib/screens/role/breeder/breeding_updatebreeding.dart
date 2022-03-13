@@ -10,25 +10,35 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UpdateBreeding extends StatefulWidget {
   final Data getBreeding;
-  const UpdateBreeding({ Key? key, required this.getBreeding }) : super(key: key);
+  const UpdateBreeding({Key? key, required this.getBreeding}) : super(key: key);
 
   @override
   State<UpdateBreeding> createState() => _UpdateBreedingState();
 }
 
 class _UpdateBreedingState extends State<UpdateBreeding> {
-   Future<void>? api;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController(); //ชื่อการวิจัย
+  TextEditingController detailController =
+      TextEditingController(); //รายละเอียดงานวิจัย
+  late FixedExtentScrollController scrollController;
+  Future<void>? api;
 
   @override
   void initState() {
     super.initState();
     api = getAnimalType();
+    scrollController = FixedExtentScrollController(initialItem: index);
   }
 
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController(); //ชื่อการวิจัย
-  TextEditingController detailController =
-      TextEditingController(); //รายละเอียดงานวิจัย
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    detailController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
 
   int index = 0;
   List animalType = [];
@@ -46,6 +56,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
     for (int i = 0; i < jsonData2.length; i++) {
       animalType.add(jsonData2[i]['typeName']);
     }
+     index = animalType.indexOf('${widget.getBreeding.typeName}');
     print(animalType);
 
     return true;
@@ -83,228 +94,241 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body:RefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () => Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (a, b, c) => UpdateBreeding(getBreeding: widget.getBreeding,),
+            pageBuilder: (a, b, c) => UpdateBreeding(
+              getBreeding: widget.getBreeding,
+            ),
             transitionDuration: Duration(milliseconds: 400),
           ),
         ),
         child: FutureBuilder<void>(
-          future: api,
-          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            if (snapshot.hasData) {
-              return SingleChildScrollView(
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'ชื่องานวิจัย',
-                                style: TextStyle(fontSize: 18),
-                              )),
-                          TextFormField(
-                            controller: nameController,
-                            // validator: (String? input) {
-                            //   if (input!.isEmpty) {
-                            //     return "กรุณากรอกชื่องานวิจัย";
-                            //   }
-                            //   return null;
-                            // },
-                            decoration: InputDecoration(
-                                hintText: '${widget.getBreeding.breedingName}',
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.green.shade800,
-                                        width: 2))),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'ชนิดสัตว์',
-                                style: TextStyle(fontSize: 18),
-                              )),
-                          Container(
-                            height: 58,
-                            width: double.infinity,
-                            child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                      width: 1, color: Colors.black45),
-                                ),
-                                onPressed: () {
-                                  _animalPicker(context);
-                                },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      animalType[index].toString(),
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.black,
-                                    )
-                                  ],
+            future: api,
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              if (snapshot.hasData) {
+                return SingleChildScrollView(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'ชื่องานวิจัย',
+                                  style: TextStyle(fontSize: 18),
                                 )),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'รายละเอียด',
-                                style: TextStyle(fontSize: 18),
-                              )),
-                          // TextFormField(
-                          //   controller: detailController,
-                          //   validator: (String? input) {
-                          //     if (input!.isEmpty) {
-                          //       return "กรุณากรอกรายละเอียด";
-                          //     }
-                          //     return null;
-                          //   },
-                          //   decoration: InputDecoration(
-                          //       border: OutlineInputBorder(),
-                          //       focusedBorder: OutlineInputBorder(
-                          //           borderSide: BorderSide(
-                          //               color: Colors.green.shade800,
-                          //               width: 2))),
-                          // ),
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black45,
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
+                            TextFormField(
+                              controller: nameController,
+                              // validator: (String? input) {
+                              //   if (input!.isEmpty) {
+                              //     return "กรุณากรอกชื่องานวิจัย";
+                              //   }
+                              //   return null;
+                              // },
+                              decoration: InputDecoration(
+                                  hintText:
+                                      '${widget.getBreeding.breedingName}',
+                                  border: OutlineInputBorder(),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.green.shade800,
+                                          width: 2))),
                             ),
-                            padding: EdgeInsets.all(10.0),
-                            child: new ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxHeight: 200.0,
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'ชนิดสัตว์',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                            Container(
+                              height: 58,
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                        width: 1, color: Colors.black45),
+                                  ),
+                                  onPressed: () {
+                                    scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
+                                    _animalPicker(context);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        animalType[index].toString(),
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      )
+                                    ],
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'รายละเอียด',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                            // TextFormField(
+                            //   controller: detailController,
+                            //   validator: (String? input) {
+                            //     if (input!.isEmpty) {
+                            //       return "กรุณากรอกรายละเอียด";
+                            //     }
+                            //     return null;
+                            //   },
+                            //   decoration: InputDecoration(
+                            //       border: OutlineInputBorder(),
+                            //       focusedBorder: OutlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //               color: Colors.green.shade800,
+                            //               width: 2))),
+                            // ),
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black45,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              child: new Scrollbar(
-                                child: new SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  reverse: true,
-                                  child: SizedBox(
-                                    height: 190.0,
-                                    child: new TextField(
-                                      controller: detailController,
-                                      maxLines: 100,
-                                      decoration: new InputDecoration(
-                                        hintText: '${widget.getBreeding.breedingDetail}',
-                                        border: InputBorder.none,
-                                       // hintText: 'เพิ่มรายละเอียดที่นี่',
+                              padding: EdgeInsets.all(10.0),
+                              child: new ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxHeight: 200.0,
+                                ),
+                                child: new Scrollbar(
+                                  child: new SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    reverse: true,
+                                    child: SizedBox(
+                                      height: 190.0,
+                                      child: new TextField(
+                                        controller: detailController,
+                                        maxLines: 100,
+                                        decoration: new InputDecoration(
+                                          hintText:
+                                              '${widget.getBreeding.breedingDetail}',
+                                          border: InputBorder.none,
+                                          // hintText: 'เพิ่มรายละเอียดที่นี่',
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 70),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                bool pass = _formKey.currentState!.validate();
-                                if (pass) {
-                                  Map<String, String> data = {
-                                    "researchName": nameController.text,
-                                    "animalType": animalType[index].toString(),
-                                    "detail": detailController.text
-                                  };
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return CupertinoAlertDialog(
-                                          title: CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor:
-                                                Colors.lightGreen[400],
-                                            child: Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          content: Text(
-                                            'ยืนยันการแก้ไขการเพาะพันธุ์',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                'ยกเลิก',
-                                                style: TextStyle(
-                                                    color: Colors.red),
+                            SizedBox(height: 70),
+                            Container(
+                              height: 50,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  bool pass = _formKey.currentState!.validate();
+                                  if (pass) {
+                                    Map<String, String> data = {
+                                      "researchName": nameController.text,
+                                      "animalType":
+                                          animalType[index].toString(),
+                                      "detail": detailController.text
+                                    };
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CupertinoAlertDialog(
+                                            title: CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor:
+                                                  Colors.lightGreen[400],
+                                              child: Icon(
+                                                Icons.check,
+                                                color: Colors.white,
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
                                             ),
-                                            CupertinoDialogAction(
+                                            content: Text(
+                                              'ยืนยันการแก้ไขการเพาะพันธุ์',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            actions: [
+                                              CupertinoDialogAction(
                                                 child: Text(
-                                                  'ยืนยัน',
+                                                  'ยกเลิก',
                                                   style: TextStyle(
-                                                      color: Colors.green),
+                                                      color: Colors.red),
                                                 ),
-                                                onPressed: () {
-                                                  uploadData(
-                                                          '${Constant().endPoint}/api/updateBreedingData/${widget.getBreeding.breedingID}',
-                                                          data)
-                                                      .then((value) {
-                                                    Navigator.of(context).pop();
-                                                    Navigator.of(context).pop();
-                                                    final snackBar = SnackBar(
-                                                        content: Text(
-                                                            'แก้ไขการเพาะพันธุ์เรียบร้อยแล้ว'));
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(snackBar);
-                                                  });
-                                                })
-                                          ],
-                                        );
-                                      });
-                                }
-                              },
-                              child: Text('เสร็จสิ้น',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(25.0)),
-                                  primary: HexColor('#697825')),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                              CupertinoDialogAction(
+                                                  child: Text(
+                                                    'ยืนยัน',
+                                                    style: TextStyle(
+                                                        color: Colors.green),
+                                                  ),
+                                                  onPressed: () {
+                                                    uploadData(
+                                                            '${Constant().endPoint}/api/updateBreedingData/${widget.getBreeding.breedingID}',
+                                                            data)
+                                                        .then((value) {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      final snackBar = SnackBar(
+                                                          content: Text(
+                                                              'แก้ไขการเพาะพันธุ์เรียบร้อยแล้ว'));
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackBar);
+                                                    });
+                                                  })
+                                            ],
+                                          );
+                                        });
+                                  }
+                                },
+                                child: Text('เสร็จสิ้น',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0)),
+                                    primary: HexColor('#697825')),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            } else {
-              return new Center(child: new CircularProgressIndicator());
-            }
-          }),),
+                );
+              } else {
+                return new Center(child: new CircularProgressIndicator());
+              }
+            }),
+      ),
     );
   }
 
@@ -324,7 +348,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: animalType
                       .map((item) => Center(
                             child: Text(

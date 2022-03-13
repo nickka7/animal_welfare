@@ -30,36 +30,31 @@ class CalendarUpdate extends StatefulWidget {
 class _CalendarUpdateState extends State<CalendarUpdate> {
   TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  late FixedExtentScrollController scrollController;
+  int index = 0;
+  @override
+  void initState() {
+    super.initState();
 
+    scrollController = FixedExtentScrollController(initialItem: index);
+  }
 
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    calendarNameController.dispose();
+    locationController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
 
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+late DateTime startDate = widget.start;
+late DateTime endDate = widget.end;
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadData(url, data) async {
-    //   String? token = await storage.read(key: 'token');
-    //   var request = http.MultipartRequest('PUT', Uri.parse(url));
-    //
-    //   request.fields['calendarName'] = data['scheduleName'];
-    //   request.fields['location'] = data['location'];
-    //   request.fields['startDate'] = data['startDate'];
-    //   request.fields['endDate'] = data['endDate'];
-    //   Map<String, String> headers = {
-    //     "authorization": "Bearer $token",
-    //     // "Content-Disposition": "attachment;filename=1.png",
-    //     // "Content-Type": "image/png"
-    //   };
-    //   request.headers
-    //       .addAll(headers); //['authorization'] = data['Bearer $token'];
-    //   var res = await request.send();
-    //   print('${res.reasonPhrase}test');
-    //   return res.reasonPhrase;
-    // }
-
-
     String? token = await storage.read(key: 'token');
     var request = http.put(Uri.parse(url),
         headers: <String, String>{
@@ -74,7 +69,7 @@ class _CalendarUpdateState extends State<CalendarUpdate> {
           'startDate': data['startDate'],
           'endDate': data['endDate'],
         }));
-print(data['scheduleName']);
+    print(data['scheduleName']);
     print('aaaa ${request}');
   }
 
@@ -150,9 +145,11 @@ print(data['scheduleName']);
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
-                        
+                          scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                           _showDatePicker1(context);
-                          
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,6 +180,10 @@ print(data['scheduleName']);
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
+                          scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                           _showDatePicker2(context);
                         },
                         child: Row(
@@ -290,10 +291,9 @@ print(data['scheduleName']);
                         use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: widget.start,
+                        initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {
-                            
                             startDate = val;
                             print(startDate);
                           });
@@ -326,7 +326,7 @@ print(data['scheduleName']);
                         use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: widget.end,
+                        initialDateTime: endDate,
                         onDateTimeChanged: (val) {
                           setState(() {
                             endDate = val;

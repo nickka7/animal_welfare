@@ -27,9 +27,7 @@ class _AddShowState extends State<AddShow> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController showController = TextEditingController();
-  TextEditingController startDateController = TextEditingController();
-  TextEditingController endDateController = TextEditingController();
+
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();

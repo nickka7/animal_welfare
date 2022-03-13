@@ -16,18 +16,27 @@ class UpdateResearch extends StatefulWidget {
 }
 
 class _UpdateResearchState extends State<UpdateResearch> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController(); //ชื่อการวิจัย
+  TextEditingController detailController =TextEditingController(); //รายละเอียดงานวิจัย
+  late FixedExtentScrollController scrollController;
+
   Future<void>? api;
 
   @override
   void initState() {
     super.initState();
     api = getAnimalType();
+    scrollController = FixedExtentScrollController(initialItem: index);
   }
-
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController(); //ชื่อการวิจัย
-  TextEditingController detailController =
-      TextEditingController(); //รายละเอียดงานวิจัย
+         @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    detailController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
 
   int index = 0;
   List animalType = [];
@@ -45,6 +54,7 @@ class _UpdateResearchState extends State<UpdateResearch> {
     for (int i = 0; i < jsonData2.length; i++) {
       animalType.add(jsonData2[i]['typeName']);
     }
+    index = animalType.indexOf('${widget.getResearch.typeName}');
     print(animalType);
 
     return true;
@@ -143,6 +153,10 @@ class _UpdateResearchState extends State<UpdateResearch> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _animalPicker(context);
                                 },
                                 child: Row(
@@ -323,7 +337,7 @@ class _UpdateResearchState extends State<UpdateResearch> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                   scrollController: scrollController,
                   children: animalType
                       .map((item) => Center(
                             child: Text(

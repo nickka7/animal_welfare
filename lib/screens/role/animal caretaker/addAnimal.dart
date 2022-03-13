@@ -33,6 +33,15 @@ class _AddAnimalState extends State<AddAnimal> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController weightController = TextEditingController();
+
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    weightController.dispose();
+    super.dispose();
+  }
+
   // bool _validate = false;
   Future<Null> chooseImage(ImageSource source) async {
     try {

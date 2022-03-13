@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:http/http.dart' as http;
@@ -24,12 +22,21 @@ class UpdateVaccinate extends StatefulWidget {
 
 class _UpdateVaccinateState extends State<UpdateVaccinate> {
   final _formKey = GlobalKey<FormState>();
+    late FixedExtentScrollController scrollController;
+
   Future<void>? api;
 
   @override
   void initState() {
     super.initState();
     api = getVaccine();
+    scrollController = FixedExtentScrollController(initialItem: index);
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   final storage = new FlutterSecureStorage();
@@ -48,16 +55,15 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
     if (jsonData.length != 0) {
       for (int i = 0; i < jsonData.length; i++) {
         vaccineID.add(
-            '${jsonData[i]['vaccineID']} ${jsonData[i]['vaccineName'] ?? 'ไม่มี'} ');
+            '${jsonData[i]['vaccineID']} ${jsonData[i]['vaccineName'] ?? 'ไม่มีวัคซีน'} ');
       }
       print(vaccineID);
     } else {
       vaccineID.add('ไม่มีวัคซีน');
     }
 
-    print('${vaccineID}');
+    print(vaccineID);
     //print(vaccineName);
-
     return true;
   }
 
@@ -156,6 +162,10 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                     BorderSide(width: 1, color: Colors.black45),
                               ),
                               onPressed: () {
+                                scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                 _vaccinePicker(context);
                               },
                               child: Row(
@@ -267,7 +277,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: vaccineID.map((item) {
                     return Center(
                       child: Text(

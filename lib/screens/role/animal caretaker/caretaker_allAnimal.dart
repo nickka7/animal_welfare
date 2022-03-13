@@ -4,7 +4,7 @@ import 'package:animal_welfare/api/allAnimal.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/AllanimalData.dart';
-import 'package:animal_welfare/screens/role/admin/addAnimal.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/addAnimal.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 

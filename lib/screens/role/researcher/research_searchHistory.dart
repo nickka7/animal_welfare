@@ -7,7 +7,7 @@ import 'package:animal_welfare/screens/calender/evenslide.dart';
 import 'package:animal_welfare/screens/role/researcher/research_HistoryDetail.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/researcher/research_addresearch.dart';
-import 'package:animal_welfare/screens/role/researcher/research_update.dart';
+import 'package:animal_welfare/screens/role/researcher/research_updateResearch.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;

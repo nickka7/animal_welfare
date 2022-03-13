@@ -28,6 +28,14 @@ class _AddBreedingState extends State<AddBreeding> {
   TextEditingController detailController =
       TextEditingController(); //รายละเอียดการเพาะพันธุ์
 
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    detailController.dispose();
+    super.dispose();
+  }
+
   int index = 0;
 
   int index1 = 0;

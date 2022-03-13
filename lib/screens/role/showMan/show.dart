@@ -5,7 +5,7 @@ import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/calender/calendar_update.dart';
 import 'package:animal_welfare/screens/role/showMan/addShow.dart';
 import 'package:animal_welfare/screens/role/showMan/showDetail.dart';
-import 'package:animal_welfare/screens/role/showMan/updartShow.dart';
+import 'package:animal_welfare/screens/role/showMan/updateShow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

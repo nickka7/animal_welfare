@@ -21,10 +21,23 @@ class _AddEvenState extends State<AddEven> {
   //TextEditingController userIDController = TextEditingController();
   TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  TextEditingController startDateController = TextEditingController();
-  TextEditingController endDateController = TextEditingController();
+  late FixedExtentScrollController scrollController;
+  int index = 0;
+  @override
+  void initState() {
+    super.initState();
+    scrollController = FixedExtentScrollController(initialItem: index);
+  }
 
 
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    calendarNameController.dispose();
+    locationController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
@@ -140,6 +153,10 @@ class _AddEvenState extends State<AddEven> {
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
+                           scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                           _showDatePicker1(context);
                         },
                         child: Row(
@@ -171,6 +188,10 @@ class _AddEvenState extends State<AddEven> {
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
+                           scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                           _showDatePicker2(context);
                         },
                         child: Row(
@@ -282,7 +303,8 @@ class _AddEvenState extends State<AddEven> {
                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: DateTime.now(),
+                       // minimumDate: DateTime.now(),
+                        initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {
                             startDate = val;
@@ -317,7 +339,8 @@ class _AddEvenState extends State<AddEven> {
                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: DateTime.now(),
+                      //  minimumDate: DateTime.now(),
+                        initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {
                             endDate = val;

@@ -19,12 +19,21 @@ class AddVaccinate extends StatefulWidget {
 }
 
 class _AddVaccinateState extends State<AddVaccinate> {
+  late FixedExtentScrollController scrollController;
+
   final _formKey = GlobalKey<FormState>();
   Future<void>? api;
   @override
   void initState() {
     super.initState();
     api = getVaccine();
+    scrollController = FixedExtentScrollController(initialItem: index);
+  }
+
+   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   final storage = new FlutterSecureStorage();
@@ -150,6 +159,10 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                     BorderSide(width: 1, color: Colors.black45),
                               ),
                               onPressed: () {
+                                scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                 _vaccinePicker(context);
                               },
                               child: Row(
@@ -263,7 +276,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: vaccineID.map((item) {
                     return Center(
                       child: Text(

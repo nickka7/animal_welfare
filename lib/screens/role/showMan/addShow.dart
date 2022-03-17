@@ -18,14 +18,23 @@ class AddShow extends StatefulWidget {
 }
 
 class _AddShowState extends State<AddShow> {
-  Future<void>? api;
+  late FixedExtentScrollController scrollController;
 
+  Future<void>? api;
+  int index = 0;
   @override
   void initState() {
     super.initState();
     api = getShowType();
+     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    scrollController.dispose();
+    super.dispose();
+  }
   final _formKey = GlobalKey<FormState>();
 
 
@@ -33,7 +42,7 @@ class _AddShowState extends State<AddShow> {
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
-  int index = 0;
+
 
   // final show = ['โชว์ช้าง', 'โชว์นกแก้ว', 'โชว์ลิง', 'โชว์แมวน้ำ'];
 
@@ -132,6 +141,10 @@ class _AddShowState extends State<AddShow> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _showPicker(context);
                                 },
                                 child: Row(
@@ -167,6 +180,10 @@ class _AddShowState extends State<AddShow> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _showDatePicker1(context);
                                 },
                                 child: Row(
@@ -200,6 +217,10 @@ class _AddShowState extends State<AddShow> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _showDatePicker2(context);
                                 },
                                 child: Row(
@@ -282,7 +303,7 @@ class _AddShowState extends State<AddShow> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 30,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                 scrollController: scrollController,
                   children: shows
                       .map((item) => Center(
                             child: Text(
@@ -330,7 +351,8 @@ class _AddShowState extends State<AddShow> {
                     child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: DateTime.now(),
+                       // minimumDate: DateTime.now(),
+                        initialDateTime: startDate,
                         use24hFormat: true,
                         onDateTimeChanged: (val) {
                           setState(() {
@@ -365,7 +387,8 @@ class _AddShowState extends State<AddShow> {
                     child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: DateTime.now(),
+                        //minimumDate: DateTime.now(),
+                        initialDateTime: endDate,
                         use24hFormat: true,
                         onDateTimeChanged: (val) {
                           setState(() {

@@ -291,6 +291,7 @@ late DateTime endDate = widget.end;
                         use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
+                        minimumDate: startDate,
                         initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {
@@ -326,6 +327,7 @@ late DateTime endDate = widget.end;
                         use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
+                       minimumDate: endDate,
                         initialDateTime: endDate,
                         onDateTimeChanged: (val) {
                           setState(() {

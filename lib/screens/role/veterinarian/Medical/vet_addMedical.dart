@@ -20,6 +20,7 @@ class _AddMedicalState extends State<AddMedical> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
+  
    @override
   void dispose() {
     // Clean up the controller when the widget is disposed.

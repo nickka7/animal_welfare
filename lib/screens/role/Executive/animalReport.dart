@@ -43,7 +43,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
   final vaccine = ['บาดทะยัก', 'พิษสุนัขบ้า'];
 
   final storage = new FlutterSecureStorage();
-  
+
 
   List<AnimalReport> report = [];
 
@@ -200,7 +200,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
               SizedBox(height: 40),
               //กราฟ
               SizedBox(height: 10),
-              
+
               charts1()
             ],
           ),
@@ -228,11 +228,11 @@ class _AnimalReportState extends State<AnimalReportTest> {
                   scrollController: FixedExtentScrollController(initialItem: 0),
                   children: year
                       .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (indexY) {
                     setState(() {
@@ -276,11 +276,11 @@ class _AnimalReportState extends State<AnimalReportTest> {
                   scrollController: FixedExtentScrollController(initialItem: 0),
                   children: month
                       .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (indexM) {
                     setState(() {
@@ -324,11 +324,11 @@ class _AnimalReportState extends State<AnimalReportTest> {
                   scrollController: FixedExtentScrollController(initialItem: 0),
                   children: vaccine
                       .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (indexV) {
                     setState(() {
@@ -358,8 +358,8 @@ class _AnimalReportState extends State<AnimalReportTest> {
       return Column(
         children: [
           Align(
-                  alignment: Alignment.topCenter,
-                  child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
+              alignment: Alignment.topCenter,
+              child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
           Container(
             height: 300,
             width: 300,

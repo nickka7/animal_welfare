@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:animal_welfare/addMyWork.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/home/navigatorBar.dart';
 import 'package:animal_welfare/screens/login/loginPage.dart';
-import 'package:animal_welfare/screens/setting/setting_logout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

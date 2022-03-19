@@ -236,7 +236,7 @@ class _AddWorkState extends State<AddWork> {
                                     ),
                                   ),
                                   content: Text(
-                                    'ยืนยันการเพิ่มกิจกรรม',
+                                    'ยืนยันการเพิ่มงาน',
                                     style: TextStyle(fontSize: 16),
                                   ),
                                   actions: [

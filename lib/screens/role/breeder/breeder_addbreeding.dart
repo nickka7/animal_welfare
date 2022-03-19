@@ -14,19 +14,20 @@ class AddBreeding extends StatefulWidget {
 }
 
 class _AddBreedingState extends State<AddBreeding> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController =
+      TextEditingController(); //ชื่อการเพาะพันธุ์
+  TextEditingController detailController =
+      TextEditingController(); //รายละเอียดการเพาะพันธุ์
+  late FixedExtentScrollController scrollController;
   Future<void>? api;
 
   @override
   void initState() {
     super.initState();
     api = getAnimalType();
+     scrollController = FixedExtentScrollController(initialItem: index);
   }
-
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController =
-      TextEditingController(); //ชื่อการเพาะพันธุ์
-  TextEditingController detailController =
-      TextEditingController(); //รายละเอียดการเพาะพันธุ์
 
    @override
   void dispose() {
@@ -41,7 +42,7 @@ class _AddBreedingState extends State<AddBreeding> {
   int index1 = 0;
   final status = [
     'pass',
-    'failed',
+    'fail',
   ];
 
   List animalType = [];
@@ -152,6 +153,10 @@ class _AddBreedingState extends State<AddBreeding> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index);
                                   _animalPicker(context);
                                 },
                                 child: Row(
@@ -187,6 +192,10 @@ class _AddBreedingState extends State<AddBreeding> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: index1);
                                   _statusPicker(context);
                                 },
                                 child: Row(
@@ -353,7 +362,7 @@ class _AddBreedingState extends State<AddBreeding> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                   scrollController: scrollController,
                   children: animalType
                       .map((item) => Center(
                             child: Text(
@@ -401,7 +410,7 @@ class _AddBreedingState extends State<AddBreeding> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 30,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                   scrollController: scrollController,
                   children: status
                       .map((item) => Center(
                             child: Text(

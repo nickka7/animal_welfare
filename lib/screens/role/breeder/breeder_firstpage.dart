@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/SearchAllAnimal.dart';
+import 'package:animal_welfare/screens/role/breeder/breeder_downloadfile.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/haxColor.dart';
 
@@ -192,7 +193,7 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BreederSearchHistory()),
+                      builder: (context) => BreederDownloadFile()),
                 );
               },
               child: Padding(

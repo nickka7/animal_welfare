@@ -97,11 +97,12 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                   TextFormField(
                     controller: repairController,
                     decoration: InputDecoration(
-                        hintText: '${widget.maintenanceDetail}',
+                      //  hintText: '${widget.maintenanceDetail}',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
+                
                   ),
                   SizedBox(
                     height: 20,
@@ -115,7 +116,6 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                   TextFormField(
                     controller: locationController,
                     decoration: InputDecoration(
-                      
                         border: OutlineInputBorder(),
                         hintText: '${widget.location}',
                         focusedBorder: OutlineInputBorder(
@@ -182,12 +182,12 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                                     ),
                                     onPressed: () => Navigator.pop(context),
                                   ),
-                                  CupertinoDialogAction (
+                                  CupertinoDialogAction(
                                       child: Text(
                                         'ยืนยัน',
                                         style: TextStyle(color: Colors.green),
                                       ),
-                                      onPressed: (){
+                                      onPressed: () {
                                         uploadImageAndData(
                                                 file?.path,
                                                 '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',

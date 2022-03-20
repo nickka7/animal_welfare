@@ -76,11 +76,6 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
   }
 
   Widget buildListview() {
-    // return FutureBuilder<AllAnimalsWithRole>(
-    //   future: getAnimal(),
-    //   builder:
-    //       (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
-    //     if (snapshot.hasData) {
           return ListView.builder(
               itemCount: bios.length,
               shrinkWrap: true,
@@ -154,13 +149,6 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                   ),
                 );
               });
-    //     } else {
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   Widget buildSearch() => SearchWidget(

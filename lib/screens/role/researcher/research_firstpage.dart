@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
+import 'package:animal_welfare/screens/role/researcher/research_downloadfile.dart';
 
 // import 'package:animal_welfare/screens/allAnimalInZoo.dart';
 import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
@@ -200,7 +201,7 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ResearchHistory()),
+                  MaterialPageRoute(builder: (context) => ResearchDownloadFile()),
                 );
               },
               child: Padding(

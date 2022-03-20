@@ -10,7 +10,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UpdateBreeding extends StatefulWidget {
   final Data getBreeding;
-  const UpdateBreeding({Key? key, required this.getBreeding, }) : super(key: key);
+  const UpdateBreeding({
+    Key? key,
+    required this.getBreeding,
+  }) : super(key: key);
 
   @override
   State<UpdateBreeding> createState() => _UpdateBreedingState();
@@ -28,12 +31,13 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
   void initState() {
     super.initState();
     api = getAnimalType();
+    getstatus();
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
   @override
   void dispose() {
-     //Clean up the controller when the widget is disposed.
+    //Clean up the controller when the widget is disposed.
     nameController.dispose();
     detailController.dispose();
     scrollController.dispose();
@@ -43,16 +47,18 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
   int index = 0;
   List animalType = [];
 
-   int index1 = 0;
+  int index1 = 0;
   final status = [
     'pass',
     'fail',
   ];
 
-  // getstatus() {
-  //   index1 = status.indexOf('${widget.getstatus}');
-  //   print(index1);
-  // }
+//late int index2 = status.indexOf('${widget.getBreeding.status}');
+
+  getstatus() {
+    index1 = status.indexOf('${widget.getBreeding.status}');
+    print(index1);
+  }
 
   // int index1 = status.indexOf('${widget.getBreeding.status}');
   final storage = new FlutterSecureStorage();
@@ -88,7 +94,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
           'researchName': data['researchName'],
           'animalType': data['animalType'],
           'detail': data['detail'],
-        //  'status': data['status']
+          //  'status': data['status']
         }));
     print(data['researchName']);
     print('aaaa ${request}');
@@ -232,7 +238,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                                     ],
                                   )),
                             ),
-                           SizedBox(height: 20),
+                            SizedBox(height: 20),
                             Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
@@ -286,7 +292,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                                       "animalType":
                                           animalType[index].toString(),
                                       "detail": detailController.text,
-                                    //  "status": status[index1].toString()
+                                      //  "status": status[index1].toString()
                                     };
                                     showDialog(
                                         context: context,

@@ -112,7 +112,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                           ),
                           Container(
                             child: Text(
-                              '${responseApi!.data![0].temperature}',
+                              '${responseApi!.data![0].temperature} °C',
                               style: TextStyle(
                                   fontSize: 80,
                                   fontWeight: FontWeight.w500,
@@ -127,7 +127,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                                 width: 8,
                               ),
                               Text(
-                                'ความชื้น ${responseApi.data![0].moisture} %',
+                                'ความชื้น ${responseApi.data![0].moisture} % RH',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),

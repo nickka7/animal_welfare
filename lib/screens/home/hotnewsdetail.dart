@@ -42,14 +42,14 @@ class _HotNewsDetailState extends State<HotNewsDetail> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
               child: Text(
                 '    ${widget.getNews.title}',
                 style: TextStyle(fontSize: 20),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
               child: Text('   ${widget.getNews.detail}'),
             )
           ],

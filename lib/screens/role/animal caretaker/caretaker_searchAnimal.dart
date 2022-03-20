@@ -1,4 +1,3 @@
-
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 
 import 'package:animal_welfare/haxColor.dart';
@@ -36,6 +35,7 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
 
   List<Bio> bios = [];
   String query = '';
+
   // Timer? debouncer;
 
   Future init() async {
@@ -81,79 +81,76 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
     //   builder:
     //       (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
     //     if (snapshot.hasData) {
-          return ListView.builder(
-              itemCount: bios.length,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemBuilder: (context, index) {
-                final animal = bios[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Card(
-                    elevation: 5,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AnimalData(
-
-                                      getanimal: bios[index],
-                                    )),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListView.builder(
+        itemCount: bios.length,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemBuilder: (context, index) {
+          final animal = bios[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Card(
+              elevation: 5,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AnimalData(
+                                getanimal: bios[index],
+                              )),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 250,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
-                                height: 70,
-                                width: 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        'Animal ID : ${animal.animalID}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'ชนิด : ${animal.typeName}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'ชื่อสัตว์ : ${animal.animalName}',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                    ),
-                                  ],
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'Animal ID : ${animal.animalID}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
                                 ),
                               ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                                size: 40,
-                              )
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  'ชนิด : ${animal.typeName}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'ชื่อสัตว์ : ${animal.animalName}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
-                        )),
-                  ),
-                );
-              });
+                        ),
+                        Icon(
+                          Icons.navigate_next,
+                          color: Colors.black,
+                          size: 40,
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        });
     //     } else {
     //       return Center(
     //         child: CircularProgressIndicator(),
@@ -164,10 +161,10 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
   }
 
   Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
-    onChanged: searchAnimal,
-  );
+        text: query,
+        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+        onChanged: searchAnimal,
+      );
 
   void searchAnimal(String query) async {
     final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
@@ -179,5 +176,4 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
       this.bios = bios;
     });
   }
-
 }

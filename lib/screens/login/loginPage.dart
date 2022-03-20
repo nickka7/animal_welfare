@@ -20,14 +20,14 @@ class _MyLoginHomeState extends State<MyLoginHome> {
   TextEditingController _userIDController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-   @override
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _userIDController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
-  
+
   LoginApi loginAPI = LoginApi();
   final storage = new FlutterSecureStorage();
 
@@ -53,8 +53,8 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                 .decode(base64.decode(base64.normalize(token.split(".")[1]))));
             // print(payload);
             // print(payload['userID']);
-            String firstName = jsonResponse['user']['firstName'];
-            String roles = jsonResponse['user']['role'];
+            // String firstName = jsonResponse['user']['firstName'];
+            // String roles = jsonResponse['user']['role'];
             // print(firstName.runtimeType);
             await storage.write(key: 'token', value: token);
             Navigator.push(

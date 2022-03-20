@@ -49,7 +49,6 @@ class _UploadDocumentState extends State<UploadDocument> {
   Future<String?> uploadDocAndRole(
       {required List filePath, required String url, required List role}) async {
     String? token = await storage.read(key: 'token');
-    print('1');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     Map<String, String> headers = {
       "authorization": "Bearer $token",

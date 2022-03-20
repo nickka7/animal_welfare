@@ -122,7 +122,8 @@ class _UploadDocumentState extends State<UploadDocument> {
             SizedBox(height: 15),
             ListView(
               shrinkWrap: true,
-              scrollDirection: Axis.vertical,
+              primary: false,
+             // scrollDirection: Axis.vertical,
               children: values.keys.map((String key) {
                 return new CheckboxListTile(
                   title: new Text(key),
@@ -224,7 +225,7 @@ class _UploadDocumentState extends State<UploadDocument> {
   }
 
   Widget openFiles(List<PlatformFile> files) => GridView.builder(
-        scrollDirection: Axis.vertical,
+        //scrollDirection: Axis.vertical,
         shrinkWrap: true,
         padding: EdgeInsets.all(16),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

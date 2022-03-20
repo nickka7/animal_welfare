@@ -22,23 +22,28 @@ class _AddAnimalState extends State<AddAnimal> {
 
   Future<void>? api;
   Future<void>? apicage;
+
+  int index = 0;
   @override
   void initState() {
     super.initState();
     api = getAnimalType();
     apicage = getCage();
+    scrollController = FixedExtentScrollController(initialItem: index);
   }
 
   File? file; //dart.io
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController weightController = TextEditingController();
+  late FixedExtentScrollController scrollController;
 
-   @override
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameController.dispose();
     weightController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -193,6 +198,10 @@ class _AddAnimalState extends State<AddAnimal> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: animalTypeIndex);
                                   _animalPicker(context);
                                 },
                                 child: Row(
@@ -228,6 +237,10 @@ class _AddAnimalState extends State<AddAnimal> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: genderindex);
                                   _sexPicker(context);
                                 },
                                 child: Row(
@@ -263,6 +276,10 @@ class _AddAnimalState extends State<AddAnimal> {
                                       width: 1, color: Colors.black45),
                                 ),
                                 onPressed: () {
+                                  scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: ageindex);
                                   _agePicker(context);
                                 },
                                 child: Row(
@@ -313,33 +330,8 @@ class _AddAnimalState extends State<AddAnimal> {
                                 'กรง',
                                 style: TextStyle(fontSize: 18),
                               )),
-                              cageID(),
-                          // Container(
-                          //   height: 58,
-                          //   width: double.infinity,
-                          //   child: OutlinedButton(
-                          //       style: OutlinedButton.styleFrom(
-                          //         side: BorderSide(
-                          //             width: 1, color: Colors.black45),
-                          //       ),
-                          //       onPressed: () {
-                          //         _animalPicker(context);
-                          //       },
-                          //       child: Row(
-                          //         mainAxisAlignment:
-                          //             MainAxisAlignment.spaceBetween,
-                          //         children: [
-                          //           Text(
-                          //             animalType[animalTypeIndex].toString(),
-                          //             style: TextStyle(color: Colors.black),
-                          //           ),
-                          //           Icon(
-                          //             Icons.arrow_drop_down,
-                          //             color: Colors.black,
-                          //           )
-                          //         ],
-                          //       )),
-                          // ),
+                          cageID(),
+                         
                           SizedBox(
                             height: 20,
                           ),
@@ -430,13 +422,13 @@ class _AddAnimalState extends State<AddAnimal> {
                                                           .pop();
 
                                                       final snackBar = SnackBar(
-                                                        content: Text(
-                                                            'เพิ่มสัตว์เรียบร้อยแล้ว'));
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(snackBar);
+                                                          content: Text(
+                                                              'เพิ่มสัตว์เรียบร้อยแล้ว'));
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackBar);
                                                     });
-                                                    
                                                   })
                                             ],
                                           );
@@ -481,6 +473,10 @@ class _AddAnimalState extends State<AddAnimal> {
                     side: BorderSide(width: 1, color: Colors.black45),
                   ),
                   onPressed: () {
+                    scrollController.dispose();
+                                  scrollController =
+                                      FixedExtentScrollController(
+                                          initialItem: cageindex);
                     _cagePicker(context);
                   },
                   child: Row(
@@ -519,7 +515,7 @@ class _AddAnimalState extends State<AddAnimal> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: animalType
                       .map((item) => Center(
                             child: Text(
@@ -567,7 +563,7 @@ class _AddAnimalState extends State<AddAnimal> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: cage
                       .map((item) => Center(
                             child: Text(
@@ -615,7 +611,7 @@ class _AddAnimalState extends State<AddAnimal> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: gender
                       .map((item) => Center(
                             child: Text(
@@ -663,7 +659,7 @@ class _AddAnimalState extends State<AddAnimal> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 40,
-                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  scrollController: scrollController,
                   children: age
                       .map((item) => Center(
                             child: Text(

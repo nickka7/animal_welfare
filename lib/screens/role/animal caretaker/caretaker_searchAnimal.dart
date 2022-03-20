@@ -1,3 +1,4 @@
+
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 
 import 'package:animal_welfare/haxColor.dart';
@@ -35,7 +36,6 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
 
   List<Bio> bios = [];
   String query = '';
-
   // Timer? debouncer;
 
   Future init() async {
@@ -58,13 +58,13 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            HexColor('#697825'),
-            Colors.white,
-          ],
-        )),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                HexColor('#697825'),
+                Colors.white,
+              ],
+            )),
         child: ListView(
           children: [
             buildSearch(),
@@ -76,11 +76,6 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
   }
 
   Widget buildListview() {
-    // return FutureBuilder<AllAnimalsWithRole>(
-    //   future: getAnimal(),
-    //   builder:
-    //       (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
         itemCount: bios.length,
         shrinkWrap: true,
@@ -88,7 +83,8 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
         itemBuilder: (context, index) {
           final animal = bios[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Card(
               elevation: 5,
               child: TextButton(
@@ -97,8 +93,9 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => AnimalData(
-                                getanimal: bios[index],
-                              )),
+
+                            getanimal: bios[index],
+                          )),
                     );
                   },
                   child: Padding(
@@ -110,7 +107,8 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                           height: 70,
                           width: 250,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
                             children: [
                               Align(
                                 alignment: Alignment.topLeft,
@@ -151,20 +149,13 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
             ),
           );
         });
-    //     } else {
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   Widget buildSearch() => SearchWidget(
-        text: query,
-        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
-        onChanged: searchAnimal,
-      );
+    text: query,
+    hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+    onChanged: searchAnimal,
+  );
 
   void searchAnimal(String query) async {
     final bios = await AllAnimalsWithRoleAPI.getAllAnimalsWithRole(query);
@@ -176,4 +167,5 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
       this.bios = bios;
     });
   }
+
 }

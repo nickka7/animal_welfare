@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:animal_welfare/constant.dart';
+import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/role/breeder/breeder_uploadDocument.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,22 +10,22 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/model/document.dart';
-import '../../constant.dart';
 
-class DownloadFile extends StatefulWidget {
-  const DownloadFile({Key? key}) : super(key: key);
+
+class BreederDownloadFile extends StatefulWidget {
+  const BreederDownloadFile({Key? key}) : super(key: key);
 
   @override
-  _DownloadFileState createState() => _DownloadFileState();
+  _BreederDownloadFileState createState() => _BreederDownloadFileState();
 }
 
-class _DownloadFileState extends State<DownloadFile> {
+class _BreederDownloadFileState extends State<BreederDownloadFile> {
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
 
   Future<Document> getDocument() async {
     String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/getDocument'),
+    var response = await http.get(Uri.parse('$endPoint/api/getWorkDocument'),
         headers: {"authorization": 'Bearer $token'});
     print(response.body);
     var jsonData = Document.fromJson(jsonDecode(response.body));
@@ -34,10 +37,14 @@ class _DownloadFileState extends State<DownloadFile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('เอกสาร'),
+          title: const Text('ข้อมูลการเพาะพันธุ์'),
           centerTitle: true,
           automaticallyImplyLeading: false,
+           leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+      ),
         body: SingleChildScrollView(
           child: FutureBuilder(
             future: getDocument(),
@@ -82,7 +89,19 @@ class _DownloadFileState extends State<DownloadFile> {
               }
             },
           ),
-        ));
+        ),
+                 floatingActionButton: FloatingActionButton(
+        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BreederUploadDocument()),
+                          ).then((value) =>
+                              setState(() {}));
+                        },
+                        backgroundColor: HexColor("#697825"),
+                        child: const Icon(Icons.add),
+      ),
+        );
   }
 
   Future openFile({required String url, String? fileName}) async {

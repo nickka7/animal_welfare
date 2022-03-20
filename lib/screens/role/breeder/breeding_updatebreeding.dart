@@ -10,7 +10,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UpdateBreeding extends StatefulWidget {
   final Data getBreeding;
-  const UpdateBreeding({Key? key, required this.getBreeding}) : super(key: key);
+  const UpdateBreeding({
+    Key? key,
+    required this.getBreeding,
+  }) : super(key: key);
 
   @override
   State<UpdateBreeding> createState() => _UpdateBreedingState();
@@ -28,12 +31,13 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
   void initState() {
     super.initState();
     api = getAnimalType();
+    getstatus();
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
+    //Clean up the controller when the widget is disposed.
     nameController.dispose();
     detailController.dispose();
     scrollController.dispose();
@@ -42,6 +46,21 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
 
   int index = 0;
   List animalType = [];
+
+  int index1 = 0;
+  final status = [
+    'pass',
+    'fail',
+  ];
+
+//late int index2 = status.indexOf('${widget.getBreeding.status}');
+
+  getstatus() {
+    index1 = status.indexOf('${widget.getBreeding.status}');
+    print(index1);
+  }
+
+  // int index1 = status.indexOf('${widget.getBreeding.status}');
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
 
@@ -56,7 +75,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
     for (int i = 0; i < jsonData2.length; i++) {
       animalType.add(jsonData2[i]['typeName']);
     }
-     index = animalType.indexOf('${widget.getBreeding.typeName}');
+    index = animalType.indexOf('${widget.getBreeding.typeName}');
     print(animalType);
 
     return true;
@@ -75,6 +94,7 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
           'researchName': data['researchName'],
           'animalType': data['animalType'],
           'detail': data['detail'],
+          //  'status': data['status']
         }));
     print(data['researchName']);
     print('aaaa ${request}');
@@ -159,9 +179,9 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                                   ),
                                   onPressed: () {
                                     scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: index);
+                                    scrollController =
+                                        FixedExtentScrollController(
+                                            initialItem: index);
                                     _animalPicker(context);
                                   },
                                   child: Row(
@@ -182,28 +202,49 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                             SizedBox(
                               height: 20,
                             ),
-
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'สถานะ',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                            Container(
+                              height: 58,
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                        width: 1, color: Colors.black45),
+                                  ),
+                                  onPressed: () {
+                                    scrollController.dispose();
+                                    scrollController =
+                                        FixedExtentScrollController(
+                                            initialItem: index1);
+                                    _statusPicker(context);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        status[index1],
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.black,
+                                      )
+                                    ],
+                                  )),
+                            ),
+                            SizedBox(height: 20),
                             Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
                                   'รายละเอียด',
                                   style: TextStyle(fontSize: 18),
                                 )),
-                            // TextFormField(
-                            //   controller: detailController,
-                            //   validator: (String? input) {
-                            //     if (input!.isEmpty) {
-                            //       return "กรุณากรอกรายละเอียด";
-                            //     }
-                            //     return null;
-                            //   },
-                            //   decoration: InputDecoration(
-                            //       border: OutlineInputBorder(),
-                            //       focusedBorder: OutlineInputBorder(
-                            //           borderSide: BorderSide(
-                            //               color: Colors.green.shade800,
-                            //               width: 2))),
-                            // ),
                             Container(
                               height: 200,
                               decoration: BoxDecoration(
@@ -250,7 +291,8 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                                       "researchName": nameController.text,
                                       "animalType":
                                           animalType[index].toString(),
-                                      "detail": detailController.text
+                                      "detail": detailController.text,
+                                      //  "status": status[index1].toString()
                                     };
                                     showDialog(
                                         context: context,
@@ -361,6 +403,54 @@ class _UpdateBreedingState extends State<UpdateBreeding> {
                     setState(() {
                       this.index = index;
                       final item = animalType[index];
+                      print('selected $item');
+                    });
+                  },
+                  diameterRatio: 1,
+                  useMagnifier: true,
+                  magnification: 1.3,
+                ),
+              ),
+              CupertinoButton(
+                child: Text('ยืนยัน'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _statusPicker(context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 400,
+          width: double.infinity,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: 300,
+                width: double.infinity,
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 30,
+                  scrollController: scrollController,
+                  children: status
+                      .map((item) => Center(
+                            child: Text(
+                              item,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ))
+                      .toList(),
+                  onSelectedItemChanged: (index1) {
+                    setState(() {
+                      this.index1 = index1;
+                      final item = status[index1];
                       print('selected $item');
                     });
                   },

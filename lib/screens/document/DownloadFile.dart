@@ -25,6 +25,9 @@ class _DownloadFileState extends State<DownloadFile> {
     String? token = await storage.read(key: 'token');
     var response = await http.get(Uri.parse('$endPoint/api/getDocument'),
         headers: {"authorization": 'Bearer $token'});
+    if (jsonDecode(response.body)['errorMessage'] == "session-expired") {
+      setState(() => UserLogout().clearTokenAndLogout(context));
+    }
     // print(response.body);
     // var z = jsonDecode(response.body)['errorMessage'];
     // print(z);
@@ -47,9 +50,9 @@ class _DownloadFileState extends State<DownloadFile> {
             future: getDocument(),
             builder: (BuildContext context, AsyncSnapshot<Document> snapshot) {
               if (snapshot.hasData) {
-                if (snapshot.data!.errorMessage == "session-expired") {
-                  setState((){UserLogout().clearTokenAndLogout(context);});
-                }
+                // if (snapshot.data!.errorMessage == "session-expired") {
+                //   setState(() => UserLogout().clearTokenAndLogout(context));
+                // }
                 return ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,

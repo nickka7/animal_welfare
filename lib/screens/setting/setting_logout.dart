@@ -7,8 +7,7 @@ enum DialogAction { yes, cancel }
 class UserLogout {
   final storage = new FlutterSecureStorage();
 
-  clearTokenAndLogout(
-    BuildContext context,
+  clearTokenAndLogout(BuildContext context,
   ) async {
     // print("cleartkLG");
     await storage.delete(key: 'token');

@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
                   var payload = json.decode(
                       utf8.decode(base64.decode(base64.normalize(jwt[1]))));
                   // print(payload.runtimeType);
-                  // เช็คว่าวันหมดอายุอยู่หลังวันเวลาปัจจุบันป่าว
+                  // เช็คว่าวันหมดอายุอยู่หลังวันเวลาปัจจุบันไหม
                   if (DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000)
                       .isAfter(DateTime.now())) {
                     print(DateTime.fromMillisecondsSinceEpoch(

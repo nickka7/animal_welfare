@@ -1,4 +1,5 @@
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/role/admin/DocHis.dart';
 import 'package:animal_welfare/screens/role/admin/addEven.dart';
 import 'package:animal_welfare/screens/role/admin/addNews.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_allAnimal.dart';
@@ -78,7 +79,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 25),
                       child: ListView(
-                        children: [uplodeDoc(), addActivity(),repair()],
+                        children: [uplodeDoc(),docHistory(), addActivity(),repair()],
                       ),
                     ),
                   ),
@@ -161,7 +162,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
     ));
   }
 
-  Widget addNews() {
+  Widget docHistory() {
     return Container(
         child: Column(
       children: [
@@ -173,7 +174,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddNews()),
+                  MaterialPageRoute(builder: (context) => AdminDownloadFile()),
                 );
               },
               child: Padding(
@@ -181,7 +182,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('เพิ่มข่าว',
+                    Text('ประวัติการอัปโหลดเอกสาร',
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                     Icon(
                       Icons.navigate_next,

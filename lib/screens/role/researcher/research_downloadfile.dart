@@ -47,48 +47,57 @@ class _ResearchDownloadFileState extends State<ResearchDownloadFile> {
         ),
       ),
         body: SingleChildScrollView(
-          child: FutureBuilder(
-            future: getDocument(),
-            builder: (BuildContext context, AsyncSnapshot<Document> snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data!.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: ListTile(
-                        leading: Icon(Icons.document_scanner_outlined),
-                        title: Text('${snapshot.data!.data![index].documentName}'),
-                        onTap: () => openFile(
-                          // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
-                          //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
-                          // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
-                          url: '${snapshot.data!.data![index].url}',
-                          //  '',
-                          // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
-                          //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',
-                          // fileName: 'abc.doc',
+          child: RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => ResearchDownloadFile(),
+            transitionDuration: Duration(milliseconds: 400),
+          ),
+        ),
+            child: FutureBuilder(
+              future: getDocument(),
+              builder: (BuildContext context, AsyncSnapshot<Document> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data!.data!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: ListTile(
+                          leading: Icon(Icons.document_scanner_outlined),
+                          title: Text('${snapshot.data!.data![index].documentName}'),
+                          onTap: () => openFile(
+                            // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
+                            //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
+                            // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
+                            url: '${snapshot.data!.data![index].url}',
+                            //  '',
+                            // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
+                            //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',
+                            // fileName: 'abc.doc',
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text('กรุณารอสักครู่'),
-                    ],
-                  ),
-                );
-              }
-            },
+                      );
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text('กรุณารอสักครู่'),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
           ),
         ),
                  floatingActionButton: FloatingActionButton(

@@ -3,6 +3,7 @@ import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_addAnimal.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_animalData.dart';
 
 import 'package:animal_welfare/widget/search_widget.dart';
@@ -71,6 +72,17 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
             buildListview(),
           ],
         ),
+      ),
+       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddAnimalWithRole()),
+                          ).then((value) =>
+                              setState(() {}));
+                        },
+                        backgroundColor: HexColor("#697825"),
+                        child: const Icon(Icons.add),
       ),
     );
   }

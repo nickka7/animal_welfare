@@ -56,7 +56,7 @@ class _ResearchUploadDocumentState extends State<ResearchUploadDocument> {
       request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
     }
     for (int j = 0; j < Emp.length; j++) {
-      request.fields['userID[$j]'] = '${Emp[j]}';
+      request.fields['userID[$j]'] = '${Emp[j].split(" ")[0]}';
     }
     request.headers.addAll(headers);
     var response = await request.send();

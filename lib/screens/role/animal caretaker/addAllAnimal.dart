@@ -62,7 +62,7 @@ class _AddAnimalState extends State<AddAnimal> {
   }
 
   final storage = new FlutterSecureStorage();
-
+   String endPoint = Constant().endPoint;
   Future<String?> uploadImageAndData(filepath, url, data) async {
     print(file!.path);
     String? token = await storage.read(key: 'token');
@@ -98,7 +98,7 @@ class _AddAnimalState extends State<AddAnimal> {
 
   final age = List<String>.generate(100, (i) => '$i');
 
-  String endPoint = Constant().endPoint;
+ 
 
   Future<bool> getAnimalType() async {
     String? token = await storage.read(key: 'token');

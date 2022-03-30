@@ -112,7 +112,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                           ),
                           Container(
                             child: Text(
-                              '${responseApi!.data![0].temperature} °C',
+                              '${responseApi!.data![0].temperature ?? "ไม่พบข้อมูล"} °C',
                               style: TextStyle(
                                   fontSize: 80,
                                   fontWeight: FontWeight.w500,
@@ -127,7 +127,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                                 width: 8,
                               ),
                               Text(
-                                'ความชื้น ${responseApi.data![0].moisture} % RH',
+                                'ความชื้น ${responseApi.data![0].moisture ?? "ไม่พบข้อมูล"} % RH',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
@@ -141,7 +141,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                                 width: 8,
                               ),
                               Text(
-                                'ความกดอากาศ ${responseApi.data![0].airpressure} hPa',
+                                'ความกดอากาศ ${responseApi.data![0].airpressure ?? "ไม่พบข้อมูล"} hPa',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),

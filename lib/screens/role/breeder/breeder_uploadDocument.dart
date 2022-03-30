@@ -45,7 +45,7 @@ class _BreederUploadDocumentState extends State<BreederUploadDocument> {
   Future<String?> uploadDocAndUser(
       {required List filePath, required String url, required List emp}) async {
     String? token = await storage.read(key: 'token');
-    print('1');
+  //  print('1');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     Map<String, String> headers = {
       "authorization": "Bearer $token",
@@ -54,7 +54,7 @@ class _BreederUploadDocumentState extends State<BreederUploadDocument> {
       request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
     }
     for (int j = 0; j < emp.length; j++) {
-      request.fields['userID[$j]'] = '${emp[j]}';
+      request.fields['userID[$j]'] = '${emp[j].split(" ")[0]}';
     }
     request.headers.addAll(headers);
     var response = await request.send();

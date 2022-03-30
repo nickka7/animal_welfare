@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AddAnimalWithRole extends StatefulWidget {
-  const AddAnimalWithRole({ Key? key }) : super(key: key);
+  const AddAnimalWithRole({Key? key}) : super(key: key);
 
   @override
   State<AddAnimalWithRole> createState() => _AddAnimalWithRoleState();
@@ -17,11 +18,11 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
   final snackBar = SnackBar(content: Text('เพิ่มสัตว์เรียบร้อยแล้ว'));
   late FixedExtentScrollController scrollController;
 
-    int index = 0;
+  int index = 0;
   @override
   void initState() {
     super.initState();
-   
+
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
@@ -31,28 +32,31 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
     scrollController.dispose();
     super.dispose();
   }
-List animal = [];
- final storage = new FlutterSecureStorage();
-   String endPoint = Constant().endPoint;
-    Future<bool> getAnimal() async {
+
+  List animal = [];
+  final storage = new FlutterSecureStorage();
+  String endPoint = Constant().endPoint;
+  Future<bool> getAnimal() async {
     String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/getUbableAddAnimalInUseID'),
+    var response = await http.get(
+        Uri.parse('$endPoint/api/getUsableAddAnimalUserID'),
         headers: {"authorization": 'Bearer $token'});
     // print('response.body ${response.body}');
 
-   // List jsonData = json.decode(response.body)['data'];
-      final allanimals = json.decode(response.body);
-      final List bio = allanimals['bio'];
+    // List jsonData = json.decode(response.body)['data'];
+    final allanimals = json.decode(response.body);
+    final List bio = allanimals['bio'];
 
     for (int i = 0; i < bio.length; i++) {
-      animal.add('${bio[i]['animalID']} ${bio[i]['animalName']} ${bio[i]['typeName']}');
+      animal.add(
+          '${bio[i]['animalID']} ${bio[i]['animalName']} ${bio[i]['typeName']}');
     }
-   // print(animal);
+    print(animal);
 
     return true;
   }
 
-    Future<String?> uploadData(url, data) async {
+  Future<String?> uploadData(url, data) async {
     // print(file!.path);
     String? token = await storage.read(key: 'token');
     var request = http.post(Uri.parse(url),
@@ -66,13 +70,15 @@ List animal = [];
         }));
 
     print(request);
-
   }
+
+  
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         centerTitle: true,
         title: Text(
           'เพิ่มสัตว์ที่ดูแล',
@@ -83,7 +89,7 @@ List animal = [];
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body:  FutureBuilder<void>(
+      body: FutureBuilder<void>(
           future: getAnimal(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             if (snapshot.hasError) print(snapshot.error);
@@ -93,10 +99,10 @@ List animal = [];
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                     child: Form(
-                     // key: _formKey,
+                      // key: _formKey,
                       child: Column(
                         children: [
-        Align(
+                          Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 'ชื่อสัตว์',
@@ -132,7 +138,6 @@ List animal = [];
                                   ],
                                 )),
                           ),
-                     
                           SizedBox(height: 70),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 25),
@@ -141,68 +146,64 @@ List animal = [];
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                
-                                    Map<String, String> data = {
-                                      "animalID": animal[index].split(" ")[0]
-                                    };
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return CupertinoAlertDialog(
-                                            title: CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor:
-                                                  Colors.lightGreen[400],
-                                              child: Icon(
-                                                Icons.check,
-                                                color: Colors.white,
+                                  Map<String, String> data = {
+                                    "animalID": animal[index].split(" ")[0]
+                                  };
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CupertinoAlertDialog(
+                                          title: CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor:
+                                                Colors.lightGreen[400],
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'ยืนยันการเพิ่มสัตว์',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Text(
+                                                'ยกเลิก',
+                                                style: TextStyle(
+                                                    color: Colors.red),
                                               ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
                                             ),
-                                            content: Text(
-                                              'ยืนยันการเพิ่มสัตว์',
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            actions: [
-                                              CupertinoDialogAction(
+                                            CupertinoDialogAction(
                                                 child: Text(
-                                                  'ยกเลิก',
+                                                  'ยืนยัน',
                                                   style: TextStyle(
-                                                      color: Colors.red),
+                                                      color: Colors.green),
                                                 ),
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                              ),
-                                              CupertinoDialogAction(
-                                                  child: Text(
-                                                    'ยืนยัน',
-                                                    style: TextStyle(
-                                                        color: Colors.green),
-                                                  ),
-                                                  onPressed: () {
-
-                                                    uploadData(
-                                                            
-                                                            '${Constant().endPoint}/api/postAnimalWithRole',
-                                                            data)
-                                                        .then((value) {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      Navigator.of(context)
-                                                          .pop();
-
-                                                      final snackBar = SnackBar(
-                                                          content: Text(
-                                                              'เพิ่มสัตว์เรียบร้อยแล้ว'));
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              snackBar);
-                                                    });
-                                                  })
-                                            ],
-                                          );
-                                        });
-                                  
+                                                onPressed: () {
+                                                  uploadData(
+                                                          '${Constant().endPoint}/api/postAnimalWithRole',
+                                                          data)
+                                                      .then((value) {
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    final snackBar = SnackBar(
+                                                        content: Text(
+                                                            'เพิ่มสัตว์เรียบร้อยแล้ว'));
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackBar);
+                                                  }).then((value) => setState(
+                                                            () {
+                                                              SearchAnimalData();
+                                                            },
+                                                          ));
+                                                })
+                                          ],
+                                        );
+                                      });
                                 },
                                 child: Text('เสร็จสิ้น',
                                     style: TextStyle(
@@ -227,6 +228,7 @@ List animal = [];
           }),
     );
   }
+
   void _animalPicker(context) {
     showCupertinoModalPopup(
       context: context,

@@ -45,7 +45,15 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Container(
+      body:RefreshIndicator(
+        onRefresh: () => Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => SearchAllAnimal(),
+              transitionDuration: Duration(milliseconds: 400),
+            ),
+          ),
+    child : Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -61,7 +69,7 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
             buildListview(),
           ],
         ),
-      ),
+      )),
     );
   }
 

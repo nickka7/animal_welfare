@@ -2,6 +2,7 @@ import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_AnimalData.dart';
+import 'package:animal_welfare/screens/role/veterinarian/vet_addAniaml.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +57,17 @@ class _VetSearchState extends State<VetSearch> {
             buildListview(),
           ],
         ),
+      ),
+       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => VetAddAnimalWithRole()),
+                          ).then((value) =>
+                              setState(() {}));
+                        },
+                        backgroundColor: HexColor("#697825"),
+                        child: const Icon(Icons.add),
       ),
     );
   }

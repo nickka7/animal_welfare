@@ -39,6 +39,10 @@ class _AdminDownloadFileState extends State<AdminDownloadFile> {
           title: const Text('เอกสาร'),
           centerTitle: true,
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: SingleChildScrollView(
           child: FutureBuilder(

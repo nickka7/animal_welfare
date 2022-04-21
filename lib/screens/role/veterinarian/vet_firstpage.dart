@@ -140,7 +140,7 @@ DateTime date = DateTime.now();
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  height: 75,
+                                  height: 100,
                                   width: 250,
                                   child: SingleChildScrollView(
                                     child: Column(

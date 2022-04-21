@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:animal_welfare/screens/role/Executive/allshow.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
@@ -122,6 +123,39 @@ class _CeoHomeState extends State<CeoHome> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('รายงานการฉีดวัคซีนของสัตว์แต่ละชนิด',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black)),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.black,
+                                  size: 40,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                     Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10.0),
+                      child: Card(
+                       // color: HexColor('#697825'),
+                        elevation: 5,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllShow()),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('รอบการแสดง',
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.black)),
                                 Icon(

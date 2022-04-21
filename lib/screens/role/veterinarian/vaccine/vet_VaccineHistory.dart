@@ -80,8 +80,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
 
     String? token = await storage.read(key: 'token');
     var response = await http.delete(
-        Uri.parse(
-            '$endPoint/api/deleteVaccinateHistory/$vaccinateID'),
+        Uri.parse('$endPoint/api/deleteVaccinateHistory/$vaccinateID'),
         headers: {
           "authorization": 'Bearer $token',
           'Content-Type': 'application/json; charset=UTF-8',
@@ -193,7 +192,8 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  'วัคซีน : ${vaccinate.vaccineID} ''${vaccinate.vaccineName}',
+                                  'วัคซีน : ${vaccinate.vaccineID} '
+                                  '${vaccinate.vaccineName}',
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 16),
                                 ),
@@ -240,59 +240,59 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                   );
                 },
               ),
-              IconSlideAction(
-                caption: 'ลบ',
-                color: Colors.red,
-                icon: Icons.delete,
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CupertinoAlertDialog(
-                          title: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.lightGreen[400],
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            ),
-                          ),
-                          content: Text(
-                            'ยืนยันการลบ',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          actions: [
-                            CupertinoDialogAction(
-                              child: Text(
-                                'ยกเลิก',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            CupertinoDialogAction(
-                                child: Text(
-                                  'ยืนยัน',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                                onPressed: () {
-                                  Map<String, String> data = {
-                                    "vaccineID": vaccinate.vaccineID.toString(),
-                                  };
-                                  deleteVaccinate(
-                                          '${vaccinate.vaccinateID}', data)
-                                      .then((value) => vaccine.removeAt(index))
-                                      .then((value) => Navigator.pop(context))
-                                      .then((value) => setState(() {}))
-                                      .then((value) => ScaffoldMessenger.of(
-                                              context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text('ลบข้อมูลแล้ว'))));
-                                })
-                          ],
-                        );
-                      });
-                },
-              ),
+              // IconSlideAction(
+              //   caption: 'ลบ',
+              //   color: Colors.red,
+              //   icon: Icons.delete,
+              //   onTap: () {
+              //     showDialog(
+              //         context: context,
+              //         builder: (context) {
+              //           return CupertinoAlertDialog(
+              //             title: CircleAvatar(
+              //               radius: 30,
+              //               backgroundColor: Colors.lightGreen[400],
+              //               child: Icon(
+              //                 Icons.check,
+              //                 color: Colors.white,
+              //               ),
+              //             ),
+              //             content: Text(
+              //               'ยืนยันการลบ',
+              //               style: TextStyle(fontSize: 16),
+              //             ),
+              //             actions: [
+              //               CupertinoDialogAction(
+              //                 child: Text(
+              //                   'ยกเลิก',
+              //                   style: TextStyle(color: Colors.red),
+              //                 ),
+              //                 onPressed: () => Navigator.pop(context),
+              //               ),
+              //               CupertinoDialogAction(
+              //                   child: Text(
+              //                     'ยืนยัน',
+              //                     style: TextStyle(color: Colors.green),
+              //                   ),
+              //                   onPressed: () {
+              //                     Map<String, String> data = {
+              //                       "vaccineID": vaccinate.vaccineID.toString(),
+              //                     };
+              //                     deleteVaccinate(
+              //                             '${vaccinate.vaccinateID}', data)
+              //                         .then((value) => vaccine.removeAt(index))
+              //                         .then((value) => Navigator.pop(context))
+              //                         .then((value) => setState(() {}))
+              //                         .then((value) => ScaffoldMessenger.of(
+              //                                 context)
+              //                             .showSnackBar(SnackBar(
+              //                                 content: Text('ลบข้อมูลแล้ว'))));
+              //                   })
+              //             ],
+              //           );
+              //         });
+              //   },
+              // ),
               IconSlideAction(
                 caption: 'ปิด',
                 color: Colors.grey,

@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   final navigatorKey = GlobalKey<NavigatorState>();
   Timer? _timer;
 
-  Future<String> get jwtOrEmpty async {
+  Future<String> jwtOrEmpty() async {
     var jwt = await storage.read(key: "token");
     if (jwt == null) return "";
     return jwt;
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
           ],
           locale: const Locale('th'),
           home: FutureBuilder(
-            future: jwtOrEmpty,
+            future: jwtOrEmpty(),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
               if (snapshot.data != "") {

@@ -45,54 +45,52 @@ class _DownloadFileState extends State<DownloadFile> {
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
-        body: SingleChildScrollView(
-          child: FutureBuilder(
-            future: getDocument(),
-            builder: (BuildContext context, AsyncSnapshot<Document> snapshot) {
-              if (snapshot.hasData) {
-                // if (snapshot.data!.errorMessage == "session-expired") {
-                //   setState(() => UserLogout().clearTokenAndLogout(context));
-                // }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data!.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: ListTile(
-                        leading: Icon(Icons.document_scanner_outlined),
-                        title:
-                            Text('${snapshot.data!.data![index].documentName}'),
-                        onTap: () => openFile(
-                          url: '${snapshot.data!.data![index].url}',
-                          // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
-                          //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
-                          // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
-                          //  '',
-                          // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
-                          //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',
-                          // fileName: 'abc.doc',
-                        ),
+        body: FutureBuilder(
+          future: getDocument(),
+          builder: (BuildContext context, AsyncSnapshot<Document> snapshot) {
+            if (snapshot.hasData) {
+              // if (snapshot.data!.errorMessage == "session-expired") {
+              //   setState(() => UserLogout().clearTokenAndLogout(context));
+              // }
+              return ListView.builder(
+                // shrinkWrap: true,
+                // scrollDirection: Axis.vertical,
+                itemCount: snapshot.data!.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: ListTile(
+                      leading: Icon(Icons.document_scanner_outlined),
+                      title:
+                          Text('${snapshot.data!.data![index].documentName}'),
+                      onTap: () => openFile(
+                        url: '${snapshot.data!.data![index].url}',
+                        // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
+                        //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
+                        // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
+                        //  '',
+                        // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
+                        //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',
+                        // fileName: 'abc.doc',
                       ),
-                    );
-                  },
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text('กรุณารอสักครู่'),
-                    ],
-                  ),
-                );
-              }
-            },
-          ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('กรุณารอสักครู่'),
+                  ],
+                ),
+              );
+            }
+          },
         ));
   }
 

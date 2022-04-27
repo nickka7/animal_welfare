@@ -371,6 +371,6 @@ class _AnimalReportState extends State<AnimalReportTest> {
         ],
       );
     } else
-      return Text("");
+      return Text("ไม่พบข้อมูล");
   }
 }

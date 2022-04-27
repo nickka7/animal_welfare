@@ -8,7 +8,6 @@ import '../../haxColor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:animal_welfare/constant.dart';
 
-
 class RepairNotice extends StatefulWidget {
   const RepairNotice({Key? key}) : super(key: key);
 
@@ -21,6 +20,7 @@ class _RepairNoticeState extends State<RepairNotice> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+
   // bool _validate = false;
   Future<Null> chooseImage(ImageSource source) async {
     try {
@@ -33,12 +33,12 @@ class _RepairNoticeState extends State<RepairNotice> {
     } catch (e) {
       print('${e}123');
     }
-
   }
+
   final storage = new FlutterSecureStorage();
-  
+
   Future<String?> uploadImageAndData(filepath, url, data) async {
-    print(file!.path);
+    // print(file!.path);
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
@@ -47,12 +47,12 @@ class _RepairNoticeState extends State<RepairNotice> {
     Map<String, String> headers = {
       "authorization": "Bearer $token",
     };
-    request.headers.addAll(headers);//['authorization'] = data['Bearer $token'];
+    request.headers
+        .addAll(headers); //['authorization'] = data['Bearer $token'];
     var res = await request.send();
     print('${res.reasonPhrase}test');
     return res.reasonPhrase;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,6 @@ class _RepairNoticeState extends State<RepairNotice> {
                       )),
                   TextFormField(
                     controller: repairController,
-
                     validator: (String? input) {
                       if (input!.isEmpty) {
                         return "กรุณากรอกปัญหาที่ชำรุด";
@@ -96,10 +95,10 @@ class _RepairNoticeState extends State<RepairNotice> {
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.green.shade800, width: 2))),
-                  ), SizedBox(
+                  ),
+                  SizedBox(
                     height: 20,
                   ),
-                  
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -187,30 +186,32 @@ class _RepairNoticeState extends State<RepairNotice> {
                                         onPressed: () {
                                           print('before upload image');
                                           uploadImageAndData(
-                                              file!.path,
-                                              '${Constant().endPoint}/api/postMaintenance',
-                                              data).then((value) {
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
-                                            });
+                                                  file!.path,
+                                                  '${Constant().endPoint}/api/postMaintenance',
+                                                  data)
+                                              .then((value) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          });
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                const RepairSuccessful()),
+                                                    const RepairSuccessful()),
                                           );
-                                        })                                  ],
+                                        })
+                                  ],
                                 );
                               });
                         }
                       },
                       child: Text('เสร็จสิ้น',
                           style: TextStyle(color: Colors.white, fontSize: 18)),
- style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      primary: HexColor('#697825')),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          primary: HexColor('#697825')),
                     ),
                   ),
                 ],

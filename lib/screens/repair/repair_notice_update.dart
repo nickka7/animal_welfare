@@ -97,7 +97,7 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
                   TextFormField(
                     controller: repairController,
                     decoration: InputDecoration(
-                      //  hintText: '${widget.maintenanceDetail}',
+                       hintText: '${widget.maintenanceDetail}',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(

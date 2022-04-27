@@ -29,11 +29,12 @@ class _DownloadFileState extends State<DownloadFile> {
       setState(() => UserLogout().clearTokenAndLogout(context));
     }
     // print(response.body);
-    // var z = jsonDecode(response.body)['errorMessage'];
+    // var z = jsonDecode(response.body);
     // print(z);
     // var y = json.decode(response.body)['errorMessage'];
     // print(y);
     var jsonData = Document.fromJson(jsonDecode(response.body));
+    // print(jsonData.resultCode);
     return jsonData;
   }
 

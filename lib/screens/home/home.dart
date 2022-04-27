@@ -20,6 +20,7 @@ import '../../constant.dart';
 
 class HomePage extends StatefulWidget {
   final payload;
+
   // final String? image;
   const HomePage({Key? key, this.payload}) : super(key: key);
 
@@ -47,34 +48,34 @@ class _HomePageState extends State<HomePage> {
     // print(widget.payload['firstName']);
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
-        headers: {"authorization": 'Bearer $token',
-          "Content-Type": "application/x-www-form-urlencoded"
+    var response =
+        await http.get(Uri.parse('$endPoint/api/getNews/0'), headers: {
+      "authorization": 'Bearer $token',
+      "Content-Type": "application/x-www-form-urlencoded"
     });
 
     // print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));
-    // print(jsonData);
+    // print(jsonDecode(response.body)['status']);
+    // print(jsonData.data![0].title);
     return jsonData;
   }
 
   bool tappedYes = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-            child: ListView(
-          physics: ClampingScrollPhysics(),
-          children: [
-            _headSection(),
-            Container(
-                width: double.infinity, height: 200, child: HotnewsSlider()),
-            buttonSection(),
-            //buttonSection(),
-            listnews()
-          ],
-        )),
+      body: ListView(
+        // physics: ClampingScrollPhysics(),
+        children: [
+          _headSection(),
+          Container(
+              width: double.infinity, height: 200, child: HotnewsSlider()),
+          buttonSection(),
+          //buttonSection(),
+          listnews()
+        ],
       ),
     );
   }
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(10.0),
                       child: CircleAvatar(
                         radius: 50.0,
-                         backgroundImage: NetworkImage(
+                        backgroundImage: NetworkImage(
                             '${Constant().endPoint}/${widget.payload['image']}'),
                       ),
                     ),

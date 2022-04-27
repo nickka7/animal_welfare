@@ -146,13 +146,13 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
   }
 
   Future deleteMaintenance(String maintenanceID) async {
-    print(maintenanceID);
+    // print(maintenanceID);
     String? token = await storage.read(key: 'token');
     var response = await http.delete(
         Uri.parse('$endPoint/api/deleteMaintenance/$maintenanceID'),
         headers: {"authorization": 'Bearer $token'});
     var jsonResponse = await json.decode(response.body);
-    print(jsonResponse['message']);
+    // print(jsonResponse['message']);
   }
 
   @override

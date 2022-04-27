@@ -29,7 +29,6 @@ class _SearchAllAnimalState extends State<SearchAllAnimal> {
 
   Future init() async {
     final bios = await AllAnimalsAPI.getAllAnimals(query);
-
     setState(() => this.bios = bios);
   }
 

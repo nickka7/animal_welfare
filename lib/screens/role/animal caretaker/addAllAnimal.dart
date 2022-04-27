@@ -62,9 +62,10 @@ class _AddAnimalState extends State<AddAnimal> {
   }
 
   final storage = new FlutterSecureStorage();
-   String endPoint = Constant().endPoint;
+  String endPoint = Constant().endPoint;
   Future<String?> uploadImageAndData(filepath, url, data) async {
-    print(file!.path);
+    // print(file!.path);
+    print('age: ${data['age']}');
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
@@ -98,7 +99,7 @@ class _AddAnimalState extends State<AddAnimal> {
 
   final age = List<String>.generate(100, (i) => '$i');
 
- 
+
 
   Future<bool> getAnimalType() async {
     String? token = await storage.read(key: 'token');
@@ -206,7 +207,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                 },
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       animalType[animalTypeIndex].toString(),
@@ -245,7 +246,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                 },
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       gender[genderindex].toString(),
@@ -284,7 +285,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                 },
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       age[ageindex].toString(),
@@ -331,7 +332,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                 style: TextStyle(fontSize: 18),
                               )),
                           cageID(),
-                         
+
                           SizedBox(
                             height: 20,
                           ),
@@ -350,9 +351,9 @@ class _AddAnimalState extends State<AddAnimal> {
                                   child: Center(
                                     child: file == null
                                         ? Icon(
-                                            Icons.camera_alt_outlined,
-                                            size: 40,
-                                          )
+                                      Icons.camera_alt_outlined,
+                                      size: 40,
+                                    )
                                         : Image.file(file!),
                                   ),
                                   onPressed: () => _onButtonPress())),
@@ -382,7 +383,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                             title: CircleAvatar(
                                               radius: 30,
                                               backgroundColor:
-                                                  Colors.lightGreen[400],
+                                              Colors.lightGreen[400],
                                               child: Icon(
                                                 Icons.check,
                                                 color: Colors.white,
@@ -412,9 +413,9 @@ class _AddAnimalState extends State<AddAnimal> {
                                                     print(
                                                         'before upload image');
                                                     uploadImageAndData(
-                                                            file!.path,
-                                                            '${Constant().endPoint}/api/postAnimalData',
-                                                            data)
+                                                        file!.path,
+                                                        '${Constant().endPoint}/api/postAnimalData',
+                                                        data)
                                                         .then((value) {
                                                       Navigator.of(context)
                                                           .pop();
@@ -425,9 +426,9 @@ class _AddAnimalState extends State<AddAnimal> {
                                                           content: Text(
                                                               'เพิ่มสัตว์เรียบร้อยแล้ว'));
                                                       ScaffoldMessenger.of(
-                                                              context)
+                                                          context)
                                                           .showSnackBar(
-                                                              snackBar);
+                                                          snackBar);
                                                     });
                                                   })
                                             ],
@@ -441,7 +442,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(25.0)),
+                                        BorderRadius.circular(25.0)),
                                     primary: HexColor('#697825')),
                               ),
                             ),
@@ -474,9 +475,9 @@ class _AddAnimalState extends State<AddAnimal> {
                   ),
                   onPressed: () {
                     scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: cageindex);
+                    scrollController =
+                        FixedExtentScrollController(
+                            initialItem: cageindex);
                     _cagePicker(context);
                   },
                   child: Row(
@@ -518,11 +519,11 @@ class _AddAnimalState extends State<AddAnimal> {
                   scrollController: scrollController,
                   children: animalType
                       .map((item) => Center(
-                            child: Text(
-                              item.toString(),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item.toString(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (index) {
                     setState(() {
@@ -566,11 +567,11 @@ class _AddAnimalState extends State<AddAnimal> {
                   scrollController: scrollController,
                   children: cage
                       .map((item) => Center(
-                            child: Text(
-                              item.toString(),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item.toString(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (index) {
                     setState(() {
@@ -614,11 +615,11 @@ class _AddAnimalState extends State<AddAnimal> {
                   scrollController: scrollController,
                   children: gender
                       .map((item) => Center(
-                            child: Text(
-                              item.toString(),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item.toString(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (index) {
                     setState(() {
@@ -662,11 +663,11 @@ class _AddAnimalState extends State<AddAnimal> {
                   scrollController: scrollController,
                   children: age
                       .map((item) => Center(
-                            child: Text(
-                              item.toString(),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
+                    child: Text(
+                      item.toString(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ))
                       .toList(),
                   onSelectedItemChanged: (index) {
                     setState(() {
@@ -695,9 +696,9 @@ class _AddAnimalState extends State<AddAnimal> {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(10.0),
-        topRight: Radius.circular(10.0),
-      )),
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          )),
       context: context,
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),

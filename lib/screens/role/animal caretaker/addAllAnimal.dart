@@ -372,7 +372,7 @@ class _AddAnimalState extends State<AddAnimal> {
                                       "animalType": animalType[animalTypeIndex]
                                           .toString(),
                                       "age": age[ageindex].toString(),
-                                      "gender": gender[ageindex].toString(),
+                                      "gender": gender[genderindex].toString(),
                                       "cage": cage[cageindex].toString(),
                                       "weight": weightController.text,
                                     };

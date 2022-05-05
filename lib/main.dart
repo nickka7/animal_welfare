@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/home/navigatorBar.dart';
 import 'package:animal_welfare/screens/login/loginPage.dart';
+import 'package:animal_welfare/zoolocation_history.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -122,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                   }
                 }
               } else {
-                return MyLoginHome();
+                return MyLoginHome(); //CheckinTest();
               }
             },
           ),

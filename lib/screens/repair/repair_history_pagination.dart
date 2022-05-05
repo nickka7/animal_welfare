@@ -184,7 +184,7 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
                     itemBuilder: (context, index) {
                       return Slidable(
                         actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
+                        // actionExtentRatio: 0.25,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(

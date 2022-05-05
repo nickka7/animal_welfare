@@ -80,7 +80,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(resizeToAvoidBottomInset : false,
       body: Container(
         height: double.infinity,
         decoration: BoxDecoration(
@@ -92,127 +92,124 @@ class _MyLoginHomeState extends State<MyLoginHome> {
             Colors.white,
           ],
         )),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 60, horizontal: 30),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Container(
-                            margin: EdgeInsets.all(30),
-                            width: 250.0,
-                            height: 200.0,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/logo/app_icon.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: BoxShape.circle,
-                              // color: Colors.black45,
-                            )),
-                      ),
-                      //TextForm username
-                      TextFormField(
-                        controller: _userIDController,
-                        validator: (String? input) {
-                          if (input!.isEmpty) {
-                            return "กรุณากรอก username";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(hintText: 'Username'),
-                      ),
-
-                      //TextForm password
-                      TextFormField(
-                        controller: _passwordController,
-                        validator: (String? input) {
-                          if (input!.isEmpty) {
-                            return "กรุณากรอก password";
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        decoration: InputDecoration(hintText: 'Password'),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: TextButton(
-                          child: Text('ลืมรหัสผ่าน',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500)),
-                          onPressed: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SelectMyContact()),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 60, horizontal: 30),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                          margin: EdgeInsets.all(30),
+                          width: 250.0,
+                          height: 200.0,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/logo/app_icon.png'),
+                              fit: BoxFit.cover,
                             ),
-                          },
-                        ),
+                            shape: BoxShape.circle,
+                            // color: Colors.black45,
+                          )),
+                    ),
+                    //TextForm username
+                    TextFormField(
+                      controller: _userIDController,
+                      validator: (String? input) {
+                        if (input!.isEmpty) {
+                          return "กรุณากรอก username";
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(hintText: 'Username'),
+                    ),
+                    //TextForm password
+                    TextFormField(
+                      controller: _passwordController,
+                      validator: (String? input) {
+                        if (input!.isEmpty) {
+                          return "กรุณากรอก password";
+                        }
+                        return null;
+                      },
+                      obscureText: true,
+                      decoration: InputDecoration(hintText: 'Password'),
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton(
+                        child: Text('ลืมรหัสผ่าน',
+                            style: TextStyle(
+                                color: Colors.black,
+                                decoration: TextDecoration.underline,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500)),
+                        onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const SelectMyContact()),
+                          ),
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              //ปุ่มเข้าสู่ระบบ
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      primary: HexColor('#697825')),
-                  child: Text('เข้าสู่ระบบ',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500)),
-                  onPressed: () => doLogin(),
-                ),
+            ),
+            //ปุ่มเข้าสู่ระบบ
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              width: double.infinity,
+              height: 45,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0)),
+                    primary: HexColor('#697825')),
+                child: Text('เข้าสู่ระบบ',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500)),
+                onPressed: () => doLogin(),
               ),
-              // Center(
-              //   child: Text('หากคุณยังไม่มีบัญชีกรุณาลงทะเบียน',
-              //       style: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 12.0,
-              //           fontWeight: FontWeight.w300)),
-              // ),
-              //ปุ่มลงทะเบียน
-              // Container(
-              //   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              //   width: double.infinity,
-              //   height: 45,
-              //   child: ElevatedButton(
-              //     style: ElevatedButton.styleFrom(
-              //         shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(25.0)),
-              //         primary: HexColor('#697825')),
-              //     child: Text('ลงทะเบียน',
-              //         style: TextStyle(
-              //             color: Colors.white,
-              //             fontSize: 20.0,
-              //             fontWeight: FontWeight.w500)),
-              //     onPressed: () => {
-              //        Navigator.push(
-              //                 context,MaterialPageRoute(
-              //                   builder: (context) => const MyRegisterHome()),
-              //                   ),
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
+            ),
+            // Center(
+            //   child: Text('หากคุณยังไม่มีบัญชีกรุณาลงทะเบียน',
+            //       style: TextStyle(
+            //           color: Colors.black,
+            //           fontSize: 12.0,
+            //           fontWeight: FontWeight.w300)),
+            // ),
+            //ปุ่มลงทะเบียน
+            // Container(
+            //   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+            //   width: double.infinity,
+            //   height: 45,
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //         shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(25.0)),
+            //         primary: HexColor('#697825')),
+            //     child: Text('ลงทะเบียน',
+            //         style: TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 20.0,
+            //             fontWeight: FontWeight.w500)),
+            //     onPressed: () => {
+            //        Navigator.push(
+            //                 context,MaterialPageRoute(
+            //                   builder: (context) => const MyRegisterHome()),
+            //                   ),
+            //     },
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

@@ -100,7 +100,7 @@ class _DownloadFileState extends State<DownloadFile> {
     final file = await downloadFile(url, name);
     if (file == null) return;
     // print('Path : ${file.path}');
-    OpenFile.open(file.path);
+    return OpenFile.open(file.path);
   }
 
   Future<File?> downloadFile(String url, String? name) async {

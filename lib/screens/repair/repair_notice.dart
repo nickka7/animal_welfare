@@ -16,6 +16,13 @@ class RepairNotice extends StatefulWidget {
 }
 
 class _RepairNoticeState extends State<RepairNotice> {
+  @override
+  void dispose() {
+    repairController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
+
   File? file; //dart.io
   final _formKey = GlobalKey<FormState>();
   TextEditingController repairController = TextEditingController();
@@ -188,12 +195,13 @@ class _RepairNoticeState extends State<RepairNotice> {
                                           uploadImageAndData(
                                                   file!.path,
                                                   '${Constant().endPoint}/api/postMaintenance',
-                                                  data)
-                                              .then((value) {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                          });
+                                                  data);
+                                          //TODO : ตรงนี้เอา.then ออกป่ะ
+                                          //     .then((value) {
+                                          //   Navigator.of(context).pop();
+                                          //   Navigator.of(context).pop();
+                                          //   Navigator.of(context).pop();
+                                          // });
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

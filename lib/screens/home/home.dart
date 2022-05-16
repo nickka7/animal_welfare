@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/evenslide.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
-import 'package:animal_welfare/screens/meeting/meetingHistory.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_main.dart';
 import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';

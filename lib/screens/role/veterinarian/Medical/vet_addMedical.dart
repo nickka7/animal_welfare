@@ -256,6 +256,7 @@ class _AddMedicalState extends State<AddMedical> {
       ),
     );
   }
+  
   Widget _buildfont(var title, var data) {
     return Container(
       child: Row(

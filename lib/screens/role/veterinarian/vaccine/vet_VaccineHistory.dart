@@ -306,7 +306,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
 
   Widget buildSearch() => SearchWidget(
         text: query,
-        hintText: "รหัสการฉีดวัคซีน,รหัสสัตว์",
+        hintText: "รหัสการฉีดวัคซีน,วัคซีน",
         onChanged: searchAnimal,
       );
 

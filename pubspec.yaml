@@ -48,6 +48,7 @@ dependencies:
   charts_flutter: ^0.12.0
   timezone: ^0.8.0
   flutter_local_notifications: ^9.4.0
+  multiselect_formfield: ^0.1.7
 
 
 dev_dependencies:

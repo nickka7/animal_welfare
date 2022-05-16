@@ -7,15 +7,16 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import '../../../model/reportEmp.dart';
 
-class AnimalReportTest extends StatefulWidget {
-  const AnimalReportTest({Key? key}) : super(key: key);
+class ReportTest extends StatefulWidget {
+  const ReportTest({Key? key}) : super(key: key);
 
   @override
-  _AnimalReportState createState() => _AnimalReportState();
+  _ReportState createState() => _ReportState();
 }
 
-class _AnimalReportState extends State<AnimalReportTest> {
+class _ReportState extends State<ReportTest> {
   late FixedExtentScrollController scrollController;
 
   Future<void>? api;
@@ -38,7 +39,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
   // DateTime _Date = DateTime.now();
   int indexY = 0;
   int indexM = 0;
-  int indexV = 0;
+
 
   final year = ['2021', '2022'];
   final month = [
@@ -55,40 +56,41 @@ class _AnimalReportState extends State<AnimalReportTest> {
     'พฤศจิกายน',
     'ธันวาคม'
   ];
-  final vaccine = ['บาดทะยัก', 'พิษสุนัขบ้า'];
+
 
   final storage = new FlutterSecureStorage();
 
-  List<AnimalReport> report = [];
+  List<EmpReport> report = [];
 
-  Future<AnimalReport> getAnimalReport() async {
+  Future<EmpReport> getEmpReport() async {
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
     var response = await http.get(
       Uri.parse(
-          '$endPoint/api/getReport?year=${year[indexY]}&month=${month[indexM]}&vaccineType=${vaccine[indexV]}'),
+          '$endPoint/api/employeeReport?month=${month[indexM]}&year=${year[indexY]}'),
       headers: {"authorization": 'Bearer $token'},
     );
 
     //print(response.body);
     var jsonData = jsonDecode(response.body);
 
-    List<AnimalReport> tempdata = animalReportFromJson(response.body);
+    List<EmpReport> tempdata = empReportFromJson(response.body);
     setState(() {
-      report = tempdata;
+      report = tempdata ;
     });
     print('$jsonData');
     return jsonData;
   }
 
-  List<charts.Series<AnimalReport, String>> _createSampleData() {
+  List<charts.Series<EmpReport, String>> _createSampleData() {
     return [
-      charts.Series<AnimalReport, String>(
+      charts.Series<EmpReport, String>(
         data: report,
-        id: 'animal',
+        id: 'nameTH',
         colorFn: (_, __) => charts.MaterialPalette.teal.shadeDefault,
-        domainFn: (AnimalReport genderModel, _) => genderModel.typename,
-        measureFn: (AnimalReport genderModel, _) => genderModel.percent,
+        domainFn: (EmpReport genderModel, _) => genderModel.nameTh,
+        measureFn: (EmpReport genderModel, _) => genderModel.percent,
+        
       )
     ];
   }
@@ -99,7 +101,7 @@ class _AnimalReportState extends State<AnimalReportTest> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'รายงานการฉีดวัคซีน',
+          'รายงานการเข้างาน',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -171,46 +173,14 @@ class _AnimalReportState extends State<AnimalReportTest> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  height: 58,
-                  width: double.infinity,
-                  child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(width: 1, color: Colors.black45),
-                      ),
-                      onPressed: () {
-                        scrollController.dispose();
-                        scrollController =
-                            FixedExtentScrollController(initialItem: indexV);
-                        _vaccinePicker(context);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            vaccine[indexV],
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.black,
-                          )
-                        ],
-                      )),
-                ),
-              ),
+            
               SizedBox(height: 10),
               Container(
                 height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    getAnimalReport();
+                    getEmpReport();
                   },
                   child: Text('ค้นหา',
                       style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -328,66 +298,23 @@ class _AnimalReportState extends State<AnimalReportTest> {
     );
   }
 
-  void _vaccinePicker(context) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 400,
-          width: double.infinity,
-          color: Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              Container(
-                height: 300,
-                width: double.infinity,
-                child: CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  itemExtent: 30,
-                  scrollController: scrollController,
-                  children: vaccine
-                      .map((item) => Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
-                      .toList(),
-                  onSelectedItemChanged: (index) {
-                    setState(() {
-                      this.indexV = index;
-                      final item = vaccine[index];
-                      print('selected $item');
-                    });
-                  },
-                  diameterRatio: 1,
-                  useMagnifier: true,
-                  magnification: 1.3,
-                ),
-              ),
-              CupertinoButton(
-                child: Text('ยืนยัน'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
+  
   Widget charts1() {
     if (report.isNotEmpty) {
       return Column(
         children: [
           Align(
               alignment: Alignment.topCenter,
-              child: Text('แผนภูมิแสดงเปอร์เซ็นการฉีดวัคซีน')),
+              child: Text('แผนภูมิแสดงเปอร์เซ็นการเข้างาน')),
           Container(
             height: 300,
-            width: 300,
+            width: 380,
             child: charts.BarChart(
               _createSampleData(),
+              domainAxis: charts.OrdinalAxisSpec(
+                renderSpec: charts.SmallTickRendererSpec(
+                  labelRotation: 45)
+              ),
               animate: true,
             ),
           ),

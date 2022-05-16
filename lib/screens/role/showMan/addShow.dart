@@ -61,19 +61,7 @@ class _AddShowState extends State<AddShow> {
     for (int i = 0; i < jsonData2.length; i++) {
       shows.add(jsonData2[i]['showName']);
     }
-    // print(jsonData2);
     print(shows);
-
-    // var jsonData = showTypeFromJson(response.body);
-    // print('1');
-    // print('jsonData ${jsonData.data}');
-
-    // List<ShowType> data = showTypeFromJson(response.body) as List<ShowType>;
-    // setState(() {
-    //   shows = data;
-    //   print(shows);
-    // });
-
     return true;
   }
 
@@ -92,11 +80,6 @@ class _AddShowState extends State<AddShow> {
           'startDate': data['startDate'],
           'endDate': data['endDate'],
         }));
-
-    // print(request);
-    // print(data['showName']);
-    // print(data['startDate']);
-    // print(data['endDate']);
   }
 
   @override

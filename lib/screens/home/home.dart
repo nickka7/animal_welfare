@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/evenslide.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
+import 'package:animal_welfare/screens/meeting/meetingHistory.dart';
 import 'package:animal_welfare/screens/repair/repair_Page.dart';
 import 'package:animal_welfare/screens/role/Executive/executive_main.dart';
 import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';
@@ -47,9 +48,10 @@ class _HomePageState extends State<HomePage> {
     // print(widget.payload['firstName']);
     String? token = await storage.read(key: 'token');
     String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getNews/0'),
-        headers: {"authorization": 'Bearer $token',
-          "Content-Type": "application/x-www-form-urlencoded"
+    var response =
+        await http.get(Uri.parse('$endPoint/api/getNews/0'), headers: {
+      "authorization": 'Bearer $token',
+      "Content-Type": "application/x-www-form-urlencoded"
     });
 
     // print(response.body);
@@ -104,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(10.0),
                       child: CircleAvatar(
                         radius: 50.0,
-                         backgroundImage: NetworkImage(
+                        backgroundImage: NetworkImage(
                             '${Constant().endPoint}/${widget.payload['image']}'),
                       ),
                     ),
@@ -145,7 +147,7 @@ class _HomePageState extends State<HomePage> {
               //    _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
               _buildButton(Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
               // _buildButtonmim(
-              //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
+              //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MeetingHistory()),
               // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
 
@@ -386,10 +388,19 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         width: double.infinity,
                         height: 170,
-                        child: Image.network(
-                          '${snapshot.data!.data![index].image}',
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/bg1.png',
+                          image: '${snapshot.data!.data![index].image}',
                           fit: BoxFit.fill,
+                          imageErrorBuilder: (context, error, stackTrace) {
+                            return Image(image: AssetImage('assets/bg1.png'));
+                          },
                         ),
+
+                        //  Image.network(
+                        //   '${snapshot.data!.data![index].image}',
+                        //   fit: BoxFit.fill,
+                        // ),
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,

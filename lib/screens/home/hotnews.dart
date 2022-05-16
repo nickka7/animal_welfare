@@ -74,6 +74,9 @@ Future<NewsData> getNews() async {
                             ),
                             child: Image.network(
                               imageUrl.image.toString(),
+                              errorBuilder: (context, error, stackTrace) {
+                            return Image(image: AssetImage('assets/bg1.png'));
+                          },
                               fit: BoxFit.cover,
                               width: 1000,
                             ),

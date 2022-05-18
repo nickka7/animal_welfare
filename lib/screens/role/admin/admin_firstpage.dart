@@ -17,6 +17,7 @@ class AdminFirstpage extends StatefulWidget {
 
 class _AdminFirstpageState extends State<AdminFirstpage> {
   DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +80,16 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 25),
                       child: ListView(
-                        children: [uplodeDoc(),docHistory(), addActivity(),repair()],
+                        children: [
+                          // ButtonTest(
+                          //   text: 'อัปโหลดเอกสาร',
+                          //   path: UploadDocument(),
+                          // )
+                          uplodeDoc(),
+                          docHistory(),
+                          addActivity(),
+                          repair()
+                        ],
                       ),
                     ),
                   ),
@@ -199,7 +209,6 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
     ));
   }
 
-  
   Widget repair() {
     return Container(
         child: Column(
@@ -212,8 +221,7 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => AdminRepairHistory()),
+                  MaterialPageRoute(builder: (context) => AdminRepairHistory()),
                 );
               },
               child: Padding(
@@ -237,21 +245,61 @@ class _AdminFirstpageState extends State<AdminFirstpage> {
       ],
     ));
   }
-  // Widget _heading(var title, double h, double w) {
-  //   return Container(
-  //     height: h,
-  //     width: w,
-  //     decoration: BoxDecoration(
-  //         color: HexColor("#697825"),
-  //         borderRadius: BorderRadius.all(Radius.circular(45))),
-  //     child: Center(
-  //       child: Text(
-  //         title,
-  //         style: TextStyle(
-  //             color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
-  //       ),
-  //     ),
-  //   );
-  // }
+// Widget _heading(var title, double h, double w) {
+//   return Container(
+//     height: h,
+//     width: w,
+//     decoration: BoxDecoration(
+//         color: HexColor("#697825"),
+//         borderRadius: BorderRadius.all(Radius.circular(45))),
+//     child: Center(
+//       child: Text(
+//         title,
+//         style: TextStyle(
+//             color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+//       ),
+//     ),
+//   );
+// }
 }
 
+// class ButtonTest extends StatelessWidget {
+//   const ButtonTest({
+//     Key? key,
+//     required this.text,
+//     this.path
+//   }) : super(key: key);
+//
+//   final path;
+//   final String text;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       elevation: 5,
+//       child: TextButton(
+//         onPressed: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => path),
+//           );
+//         },
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Text('$text',
+//                   style: TextStyle(fontSize: 16, color: Colors.black)),
+//               Icon(
+//                 Icons.navigate_next,
+//                 color: Colors.black,
+//                 size: 40,
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

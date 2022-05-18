@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/home/navigatorBar.dart';
 import 'package:animal_welfare/screens/login/loginPage.dart';
-import 'package:animal_welfare/zoolocation_history.dart';
+// import 'package:animal_welfare/zoolocation_history.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'api/notification_api.dart';
+import 'checkinTest.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -112,9 +113,9 @@ class _MyAppState extends State<MyApp> {
                   // เช็คว่าวันหมดอายุอยู่หลังวันเวลาปัจจุบันไหม
                   if (DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000)
                       .isAfter(DateTime.now())) {
-                    print(DateTime.fromMillisecondsSinceEpoch(
-                            payload["exp"] * 1000)
-                        .isAfter(DateTime.now()));
+                    // print(DateTime.fromMillisecondsSinceEpoch(
+                    //         payload["exp"] * 1000)
+                    //     .isAfter(DateTime.now()));
                     // NavigatorBar(payload: payload)
                     return NavigatorBar(
                         payload: payload); //HomePage(str, payload);
@@ -130,4 +131,5 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 }
+
 // class ContextClass{late BuildContext contexts = null; }

@@ -63,7 +63,7 @@ class _UploadDocumentState extends State<UploadDocument> {
     }
     request.headers.addAll(headers);
     var response = await request.send();
-    print(response.statusCode);
+    // print(response.statusCode);
   }
 
   @override
@@ -80,47 +80,47 @@ class _UploadDocumentState extends State<UploadDocument> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            result == null
-                ? Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        result = await FilePicker.platform
-                            .pickFiles(allowMultiple: true);
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          result == null
+              ? Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      result = await FilePicker.platform
+                          .pickFiles(allowMultiple: true);
+                      // print(result!.files);
+                      if (result != null) {
+                        // var a = result.files.first;
+                        // print('testttttdeeeeett $a');
+
+                        // List<File> files = result!.paths
+                        //     .map((path) => File(path!))
+                        //     .toList();
+
+                        // print(files);
+                        // print('Name: ${result.names}');
+                        print('Path: ${result!.paths}');
+                        // print('Name: ${result.names}');
+                        // print('Name: ${result.names}');
                         // print(result!.files);
-                        if (result != null) {
-                          // var a = result.files.first;
-                          // print('testttttdeeeeett $a');
 
-                          // List<File> files = result!.paths
-                          //     .map((path) => File(path!))
-                          //     .toList();
-
-                          // print(files);
-                          // print('Name: ${result.names}');
-                          print('Path: ${result!.paths}');
-                          // print('Name: ${result.names}');
-                          // print('Name: ${result.names}');
-                          // print(result!.files);
-
-                          // openFiles(result!.files);
-                          setState(() {
-                            filePath = result!.paths;
-                            // print(filePath);
-                          });
-                        } else {
-                          // User canceled the picker
-                        }
-                      },
-                      child: Text('Upload File'),
-                    ),
-                  )
-                : openFiles(result!.files),
-            SizedBox(height: 15),
-            ListView(
+                        // openFiles(result!.files);
+                        setState(() {
+                          filePath = result!.paths;
+                          // print(filePath);
+                        });
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    child: Text('Upload File'),
+                  ),
+                )
+              : openFiles(result!.files),
+          SizedBox(height: 15),
+          Expanded(
+            child: ListView(
               shrinkWrap: true,
               primary: false,
              // scrollDirection: Axis.vertical,
@@ -136,90 +136,90 @@ class _UploadDocumentState extends State<UploadDocument> {
                 );
               }).toList(),
             ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      primary: HexColor('#697825')),
-                  child: Text('อัปโหลด',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500)),
+          ),
+          Center(
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              width: double.infinity,
+              height: 45,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0)),
+                    primary: HexColor('#697825')),
+                child: Text('อัปโหลด',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500)),
 
-                   onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CupertinoAlertDialog(
-                            title: CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.lightGreen[400],
-                              child: Icon(
-                                Icons.check,
-                                color: Colors.white,
+                 onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.lightGreen[400],
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                          ),
+                          content: Text(
+                            'ยืนยันการอัปโหลดเอกสาร',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text(
+                                'ยกเลิก',
+                                style: TextStyle(color: Colors.red),
                               ),
+                              onPressed: () => Navigator.pop(context),
                             ),
-                            content: Text(
-                              'ยืนยันการอัปโหลดเอกสาร',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            actions: [
-                              CupertinoDialogAction(
+                            CupertinoDialogAction(
                                 child: Text(
-                                  'ยกเลิก',
-                                  style: TextStyle(color: Colors.red),
+                                  'ยืนยัน',
+                                  style: TextStyle(color: Colors.green),
                                 ),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                              CupertinoDialogAction(
-                                  child: Text(
-                                    'ยืนยัน',
-                                    style: TextStyle(color: Colors.green),
-                                  ),
-                                  onPressed: () {
-                                    getItems();
-                                    // for (int i = 0; i < filePath.length; i++) {}
-                                    uploadDocAndRole(
-                                      filePath: result!.paths,
-                                      url:
-                                          '${Constant().endPoint}/api/postDocument',
-                                      role: selected,
-                                    );
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    final snackBar = SnackBar(
-                                        content:
-                                            Text('อัปโหลดเอกสารเรียบร้อยแล้ว'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  })
-                            ],
-                          );
-                        });
-                  },
-                ),
+                                onPressed: () {
+                                  getItems();
+                                  // for (int i = 0; i < filePath.length; i++) {}
+                                  uploadDocAndRole(
+                                    filePath: result!.paths,
+                                    url:
+                                        '${Constant().endPoint}/api/postDocument',
+                                    role: selected,
+                                  );
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                  final snackBar = SnackBar(
+                                      content:
+                                          Text('อัปโหลดเอกสารเรียบร้อยแล้ว'));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                })
+                          ],
+                        );
+                      });
+                },
               ),
-              // child: ElevatedButton(
-              //   onPressed: () {
-              //     getItems();
-              //     // for (int i = 0; i < filePath.length; i++) {}
-              //     uploadDocAndRole(
-              //       filePath: result!.paths,
-              //       url: '${Constant().endPoint}/api/postDocument',
-              //       role: selected,
-              //     );
-              //   },
-              //   child: Text('อัปโหลด'),
-              // ),
-            )
-          ],
-        ),
+            ),
+            // child: ElevatedButton(
+            //   onPressed: () {
+            //     getItems();
+            //     // for (int i = 0; i < filePath.length; i++) {}
+            //     uploadDocAndRole(
+            //       filePath: result!.paths,
+            //       url: '${Constant().endPoint}/api/postDocument',
+            //       role: selected,
+            //     );
+            //   },
+            //   child: Text('อัปโหลด'),
+            // ),
+          )
+        ],
       ),
     );
   }

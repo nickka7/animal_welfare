@@ -63,6 +63,9 @@ class _HomePageState extends State<HomePage> {
 
   bool tappedYes = false;
 
+  // เฉพาะบางโรลที่เห็นปุ่มงาน
+  List roleWork = ["admin", "ceo", "caretaker", "veterinarian", "researcher", "breeder", "showman"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,7 +153,14 @@ class _HomePageState extends State<HomePage> {
               // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
 
-              buildButton(),
+              // เฉพาะบางโรลที่เห็นปุ่มงาน
+              roleWork.contains(widget.payload['role']) ? buildButton() : SizedBox(),
+
+              // if (roleWork.contains(widget.payload['role'])) ...[
+              //   buildButton()
+              // ] else ...[
+              //   SizedBox(),
+              // ],
               Container(
                 width: 130,
                 height: 90,

@@ -84,133 +84,130 @@ class _RepairNoticeUpdateState extends State<RepairNoticeUpdate> {
         child: Container(
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Form(
-              // key: _formKey,
-              child: Column(
-                children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'ปัญหาที่ชำรุด',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  TextFormField(
-                    controller: repairController,
-                    decoration: InputDecoration(
-                       hintText: '${widget.maintenanceDetail}',
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'สถานที่',
-                        style: TextStyle(fontSize: 18),
-                      )),
-                  TextFormField(
-                    controller: locationController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '${widget.location}',
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.green.shade800, width: 2))),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                      height: 200,
-                      width: double.infinity,
-                      child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            side: BorderSide(width: 2, color: Colors.green),
-                          ),
-                          // color: Colors.green.shade800,
-                          child: Center(
-                            child: file == null
-                                ? Icon(
-                                    Icons.camera_alt_outlined,
-                                    size: 40,
-                                  )
-                                : Image.file(file!),
-                          ),
-                          onPressed: () => _getPhoto())),
-                  SizedBox(height: 70),
-                  Container(
-                    height: 50,
+            child: Column(
+              children: [
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'ปัญหาที่ชำรุด',
+                      style: TextStyle(fontSize: 18),
+                    )),
+                TextFormField(
+                  controller: repairController,
+                  decoration: InputDecoration(
+                     hintText: '${widget.maintenanceDetail}',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.green.shade800, width: 2))),
+
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'สถานที่',
+                      style: TextStyle(fontSize: 18),
+                    )),
+                TextFormField(
+                  controller: locationController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '${widget.location}',
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.green.shade800, width: 2))),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                    height: 200,
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Map<String, String> data = {
-                          "maintenanceDetail": repairController.text,
-                          "location": locationController.text,
-                        };
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return CupertinoAlertDialog(
-                                title: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.lightGreen[400],
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                content: Text(
-                                  'ยืนยันการแก้ไข',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child: Text(
-                                      'ยกเลิก',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                  CupertinoDialogAction(
-                                      child: Text(
-                                        'ยืนยัน',
-                                        style: TextStyle(color: Colors.green),
-                                      ),
-                                      onPressed: () {
-                                        uploadImageAndData(
-                                                file?.path,
-                                                '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',
-                                                data)
-                                            .then((value) {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        });
-                                      })
-                                ],
-                              );
-                            });
-                      },
-                      child: Text('เสร็จสิ้น',
-                          style: TextStyle(color: Colors.white, fontSize: 18)),
-                      style: ElevatedButton.styleFrom(
+                    child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0)),
-                          primary: HexColor('#697825')),
-                    ),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          side: BorderSide(width: 2, color: Colors.green),
+                        ),
+                        // color: Colors.green.shade800,
+                        child: Center(
+                          child: file == null
+                              ? Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 40,
+                                )
+                              : Image.file(file!),
+                        ),
+                        onPressed: () => _getPhoto())),
+                SizedBox(height: 70),
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
-                ],
-              ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Map<String, String> data = {
+                        "maintenanceDetail": repairController.text,
+                        "location": locationController.text,
+                      };
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.lightGreen[400],
+                                child: Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              content: Text(
+                                'ยืนยันการแก้ไข',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: Text(
+                                    'ยกเลิก',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                CupertinoDialogAction(
+                                    child: Text(
+                                      'ยืนยัน',
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                    onPressed: () {
+                                      uploadImageAndData(
+                                              file?.path,
+                                              '${Constant().endPoint}/api/updateMaintenance/${widget.maintenanceID}',
+                                              data)
+                                          .then((value) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      });
+                                    })
+                              ],
+                            );
+                          });
+                    },
+                    child: Text('เสร็จสิ้น',
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                        primary: HexColor('#697825')),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -92,7 +92,6 @@ class _AddEvenState extends State<AddEven> {
               key: _formKey,
               child: Column(
                 children: [
-                  
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -266,8 +265,8 @@ class _AddEvenState extends State<AddEven> {
                            );
                                         })                                  ],
                                 );
-                              });  
-                        
+                              });
+
                         }
                       },
                       child: Text('เสร็จสิ้น',

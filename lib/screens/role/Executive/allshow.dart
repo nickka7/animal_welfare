@@ -17,6 +17,10 @@ class AllShow extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _AllShowState();
   }
+
+  getDataFromWeb() {}
+
+  deleteShow(String s) {}
 }
 
 class _AllShowState extends State<AllShow> {

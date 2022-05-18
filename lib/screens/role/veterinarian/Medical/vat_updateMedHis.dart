@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:http/http.dart' as http;
@@ -46,7 +45,6 @@ class _UpdateMedicalState extends State<UpdateMedical> {
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
-          // 'userID' : data['userID'],
           'medicalName': data['medicalName'],
           'detail': data['detail'],
         }));

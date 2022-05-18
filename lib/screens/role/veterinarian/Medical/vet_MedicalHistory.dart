@@ -52,9 +52,11 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
       final List medical = allmedical['data'];
       // print('bioo $bio');
       return medical.map((json) => Medical.fromJson(json)).where((medical) {
+        final medicalLowerID = medical.medicalID.toString();
         final medicalLower = medical.medicalName!;
         final searchLower = query;
-        return medicalLower.contains(searchLower);
+        return medicalLower.contains(searchLower)||
+        medicalLowerID.contains(searchLower);
       }).toList();
     } else {
       print('not 200');
@@ -166,12 +168,20 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      height: 70,
+                      height: 90,
                       width: 280,
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                             Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'รหัสการรักษา : ${animal.medicalID}',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
@@ -294,7 +304,7 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
 
   Widget buildSearch() => SearchWidget(
         text: query,
-        hintText: "รหัสการรักษา,การรักษา,รหัสสัตว์",
+        hintText: "รหัสการรักษา,การรักษา",
         onChanged: searchAnimal,
       );
 

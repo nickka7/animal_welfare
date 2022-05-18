@@ -22,6 +22,7 @@ class _UploadDocumentState extends State<UploadDocument> {
     'researcher': false,
     'breeder': false,
     'showman': false,
+    'admin': false,
   };
 
   List selected = [];
@@ -52,8 +53,6 @@ class _UploadDocumentState extends State<UploadDocument> {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     Map<String, String> headers = {
       "authorization": "Bearer $token",
-      // "Content-Disposition": "attachment;filename=1.png",
-      // "Content-Type": "image/png"
     };
     for (int i = 0; i < filePath.length; i++) {
       request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));

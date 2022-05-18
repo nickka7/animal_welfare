@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
               //    _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
               _buildButton(Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
               // _buildButtonmim(
-              //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MyMeetingHistory()),
+              //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MeetingHistory()),
               // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
 
@@ -397,10 +397,19 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         width: double.infinity,
                         height: 170,
-                        child: Image.network(
-                          '${snapshot.data!.data![index].image}',
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/bg1.png',
+                          image: '${snapshot.data!.data![index].image}',
                           fit: BoxFit.fill,
+                          imageErrorBuilder: (context, error, stackTrace) {
+                            return Image(image: AssetImage('assets/bg1.png'));
+                          },
                         ),
+
+                        //  Image.network(
+                        //   '${snapshot.data!.data![index].image}',
+                        //   fit: BoxFit.fill,
+                        // ),
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,

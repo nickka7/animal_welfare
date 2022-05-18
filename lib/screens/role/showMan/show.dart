@@ -31,7 +31,7 @@ class _ShowScreenState extends State<ShowScreen> {
   }
 
   final storage = new FlutterSecureStorage();
- String endPoint = Constant().endPoint;
+  String endPoint = Constant().endPoint;
 
   Future<List<Appointment>> getDataFromWeb() async {
     String? token = await storage.read(key: 'token');
@@ -74,6 +74,7 @@ class _ShowScreenState extends State<ShowScreen> {
   }
 
   final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -313,7 +314,10 @@ class _ShowScreenState extends State<ShowScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddShow()),
-          ).then((value) => setState(() {}));
+          ).then((value) async{
+            await getDataFromWeb();
+            setState(() {});
+          });
         },
         backgroundColor: HexColor("#697825"),
         child: const Icon(Icons.add),

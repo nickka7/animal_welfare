@@ -8,7 +8,6 @@ import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/role/Executive/animalReport.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/intl.dart';
 
 class CeoHome extends StatefulWidget {
   const CeoHome({
@@ -122,7 +121,7 @@ class _CeoHomeState extends State<CeoHome> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('รายงานการฉีดวัคซีนของสัตว์แต่ละชนิด',
+                                Text('รายงานการฉีดวัคซีนสัตว์แต่ละชนิด',
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.black)),
                                 Icon(
@@ -169,6 +168,8 @@ class _CeoHomeState extends State<CeoHome> {
                         ),
                       ),
                     ),
+                    
+                   
                   ],
                 ),
               );

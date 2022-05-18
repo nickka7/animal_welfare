@@ -121,7 +121,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
               animalID: widget.animalID,
               getanimal: widget.getanimal,
             ),
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: Duration(milliseconds: 200),
           ),
         ),
         child: Container(
@@ -147,7 +147,21 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                 builder: (context) => AddVaccinate(
                       getanimal: widget.getanimal,
                     )),
-          ).then((value) => setState(() {}));
+          ).then((value) async {
+            await init();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => VetVaccineHistory(
+              animalID: widget.animalID,
+              getanimal: widget.getanimal,
+            ),
+                  transitionDuration: Duration(milliseconds: 400),
+                ),
+              );
+            });
+          });
         },
         backgroundColor: HexColor("#697825"),
         child: const Icon(Icons.add),

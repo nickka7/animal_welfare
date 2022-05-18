@@ -95,7 +95,7 @@ class _EventSlideState extends State<EventSlide> {
           context,
           PageRouteBuilder(
             pageBuilder: (a, b, c) => EventSlide(),
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: Duration(milliseconds: 100),
           ),
         ),
         child: FutureBuilder<List<Appointment>>(
@@ -219,7 +219,18 @@ class _EventSlideState extends State<EventSlide> {
                                                 end:
                                                     appointments[index].endTime,
                                               )),
-                                    );
+                                    ).then((value) async {
+            await getDataFromWeb();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => EventSlide(),
+                  transitionDuration: Duration(milliseconds: 400),
+                ),
+              );
+            });
+          });
                                   },
                                 ),
                                 IconSlideAction(
@@ -314,7 +325,18 @@ class _EventSlideState extends State<EventSlide> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddWork()),
-          ).then((value) => setState(() {}));
+          ).then((value) async {
+            await getDataFromWeb();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => EventSlide(),
+                  transitionDuration: Duration(milliseconds: 100),
+                ),
+              );
+            });
+          });
         },
         backgroundColor: HexColor("#697825"),
         child: const Icon(Icons.add),

@@ -279,9 +279,14 @@ late DateTime endDate = widget.end;
                                                         '${Constant().endPoint}/api/updateShow/${widget.id}',
                                                         data)
                                                     .then((value) {
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                });
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    final snackBar = SnackBar(
+                                        content: Text(
+                                            'แก้ไขรอบการแสดงเรียบร้อยแล้ว'));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  });
                                               })
                                         ],
                                       );

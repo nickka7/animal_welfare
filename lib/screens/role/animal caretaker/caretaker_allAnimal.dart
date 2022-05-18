@@ -69,8 +69,18 @@ class _AllanimalState extends State<Allanimal> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AddAnimal()),
-                          ).then((value) =>
-                              setState(() {}));
+                          ).then((value) async {
+            await init();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => Allanimal(),
+                  transitionDuration: Duration(milliseconds: 100),
+                ),
+              );
+            });
+          });
                         },
                         backgroundColor: HexColor("#697825"),
                         child: const Icon(Icons.add),

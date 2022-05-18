@@ -251,6 +251,11 @@ late DateTime endDate = widget.end;
                                             .then((value) {
                                           Navigator.pop(context);
                                           Navigator.pop(context);
+                                           final snackBar = SnackBar(
+                                                content: Text(
+                                                    'แก้ไขงานเรียบร้อยแล้ว'));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
                                         });
                                       })
                                 ],

@@ -26,23 +26,21 @@ class _AddShowState extends State<AddShow> {
   void initState() {
     super.initState();
     api = getShowType();
-     scrollController = FixedExtentScrollController(initialItem: index);
+    scrollController = FixedExtentScrollController(initialItem: index);
   }
 
-   @override
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     scrollController.dispose();
     super.dispose();
   }
-  final _formKey = GlobalKey<FormState>();
 
+  final _formKey = GlobalKey<FormState>();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
-
-
 
   // final show = ['โชว์ช้าง', 'โชว์นกแก้ว', 'โชว์ลิง', 'โชว์แมวน้ำ'];
 
@@ -61,6 +59,7 @@ class _AddShowState extends State<AddShow> {
     for (int i = 0; i < jsonData2.length; i++) {
       shows.add(jsonData2[i]['showName']);
     }
+    // shows.insert(0,'กรุณาเลือกโชว์');
     print(shows);
     return true;
   }
@@ -286,7 +285,7 @@ class _AddShowState extends State<AddShow> {
                 child: CupertinoPicker(
                   backgroundColor: Colors.white,
                   itemExtent: 30,
-                 scrollController: scrollController,
+                  scrollController: scrollController,
                   children: shows
                       .map((item) => Center(
                             child: Text(
@@ -334,7 +333,7 @@ class _AddShowState extends State<AddShow> {
                     child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                       // minimumDate: DateTime.now(),
+                        // minimumDate: DateTime.now(),
                         initialDateTime: startDate,
                         use24hFormat: true,
                         onDateTimeChanged: (val) {

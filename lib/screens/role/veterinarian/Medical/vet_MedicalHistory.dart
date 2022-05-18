@@ -132,7 +132,18 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
                 builder: (context) => AddMedical(
                       getanimal: widget.getBio,
                     )),
-          ).then((value) => setState(() {}));
+          ).then((value) async {
+            await init();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => VetMedicalHistory(getBio: widget.getBio,),
+                  transitionDuration: Duration(milliseconds: 100),
+                ),
+              );
+            });
+          });
         },
         backgroundColor: HexColor("#697825"),
         child: const Icon(Icons.add),

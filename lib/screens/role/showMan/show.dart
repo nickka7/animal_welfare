@@ -94,7 +94,7 @@ class _ShowScreenState extends State<ShowScreen> {
           context,
           PageRouteBuilder(
             pageBuilder: (a, b, c) => ShowScreen(),
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: Duration(milliseconds: 100),
           ),
         ),
         child: FutureBuilder<List<Appointment>>(
@@ -219,7 +219,18 @@ class _ShowScreenState extends State<ShowScreen> {
                                                 end:
                                                     appointments[index].endTime,
                                               )),
-                                    );
+                                    ).then((value) async {
+            await getDataFromWeb();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => ShowScreen(),
+                  transitionDuration: Duration(milliseconds: 100),
+                ),
+              );
+            });
+          });
                                   },
                                 ),
                                 IconSlideAction(
@@ -314,9 +325,17 @@ class _ShowScreenState extends State<ShowScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddShow()),
-          ).then((value) async{
+          ).then((value) async {
             await getDataFromWeb();
-            setState(() {});
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => ShowScreen(),
+                  transitionDuration: Duration(milliseconds: 100),
+                ),
+              );
+            });
           });
         },
         backgroundColor: HexColor("#697825"),

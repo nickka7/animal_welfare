@@ -7,7 +7,6 @@ import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 
 class VetSearch extends StatefulWidget {
-  
   const VetSearch({Key? key}) : super(key: key);
 
   @override
@@ -41,41 +40,52 @@ class _VetSearchState extends State<VetSearch> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body:RefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () => Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (a, b, c) => VetSearch(),
-              transitionDuration: Duration(milliseconds: 400),
-            ),
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => VetSearch(),
+            transitionDuration: Duration(milliseconds: 400),
           ),
-    child : Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            HexColor('#697825'),
-            Colors.white,
-          ],
-        )),
-        child: ListView(
-          children: [
-            buildSearch(),
-            buildListview(),
-          ],
         ),
-      ),),
-       floatingActionButton: FloatingActionButton(
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              HexColor('#697825'),
+              Colors.white,
+            ],
+          )),
+          child: ListView(
+            children: [
+              buildSearch(),
+              buildListview(),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => VetAddAnimalWithRole()),
-                          ).then((value) =>
-                              setState(() {}));
-                        },
-                        backgroundColor: HexColor("#697825"),
-                        child: const Icon(Icons.add),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => VetAddAnimalWithRole()),
+          ).then((value) async {
+            await init();
+            setState(() {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (a, b, c) => VetSearch(),
+                  transitionDuration: Duration(milliseconds: 100),
+                ),
+              );
+            });
+          });
+        },
+        backgroundColor: HexColor("#697825"),
+        child: const Icon(Icons.add),
       ),
     );
   }

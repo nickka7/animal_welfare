@@ -2,21 +2,21 @@ import 'dart:convert';
 import 'package:animal_welfare/model/news.dart';
 import 'package:animal_welfare/screens/calender/evenslide.dart';
 import 'package:animal_welfare/screens/home/hotNews.dart';
-import 'package:animal_welfare/screens/repair/repair_Page.dart';
-import 'package:animal_welfare/screens/role/Executive/executive_main.dart';
+import 'package:animal_welfare/screens/repair/repair_FirstPage.dart';
+import 'package:animal_welfare/screens/role/Executive/executive_firstpage.dart';
 import 'package:animal_welfare/screens/role/admin/admin_firstpage.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_fristpage.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_firstpage.dart';
 import 'package:animal_welfare/screens/role/researcher/research_firstPage.dart';
 import 'package:animal_welfare/screens/role/showMan/show.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_firstpage.dart';
-import 'package:animal_welfare/screens/setting/setting_logout.dart';
 import 'package:animal_welfare/widget/seemore.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../../constant.dart';
+import '../logout/setting_logout.dart';
 
 class HomePage extends StatefulWidget {
   final payload;
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // getNews();
+     getNews();
     super.initState();
   }
 
@@ -56,8 +56,7 @@ class _HomePageState extends State<HomePage> {
 
     // print(response.body);
     var jsonData = NewsData.fromJson(jsonDecode(response.body));
-    // print(jsonDecode(response.body)['status']);
-    // print(jsonData.data![0].title);
+ 
     return jsonData;
   }
 
@@ -146,21 +145,10 @@ class _HomePageState extends State<HomePage> {
         child: Column(children: [
           Wrap(
             children: [
-              //    _buildButtonmim(Icons.timer, 'เวลาเข้าออกงาน', WorkTimeCheck()),
               _buildButton(Icons.calendar_today, 'ปฏิทินกิจกรรม', EventSlide()),
-              // _buildButtonmim(
-              //     Icons.assistant_photo_outlined, 'จองห้องประชุม', MeetingHistory()),
-              // _buildButtonmim(Icons.settings, 'ตั้งค่า', MySettingHome()),
               _buildButton(Icons.build_outlined, 'แจ้งซ่อม', RepairPage()),
-
               // เฉพาะบางโรลที่เห็นปุ่มงาน
-              roleWork.contains(widget.payload['role']) ? buildButton() : SizedBox(),
-
-              // if (roleWork.contains(widget.payload['role'])) ...[
-              //   buildButton()
-              // ] else ...[
-              //   SizedBox(),
-              // ],
+              roleWork.contains(widget.payload['role']) ? buildWorkButton() : SizedBox(),
               Container(
                 width: 130,
                 height: 90,
@@ -204,7 +192,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildButton() {
+//ปุ่มงาน เมื่อกดจะนำแต่ละตำแหน่งไปหน้าต่อไปที่ต่างกัน
+  Widget buildWorkButton() {
     return Container(
       width: 130,
       height: 90,
@@ -299,6 +288,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+//ขนาด สี ปุ่มและข้อความ
   Widget _buildButton(IconData icon, String label, var page) {
     return Container(
       width: 130,
@@ -338,45 +328,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildButtonmim(IconData icon, String label, var page) {
-    return Container(
-      width: 130,
-      height: 90,
-      child: TextButton(
-        onPressed: () {
-          setState(
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => page),
-              );
-            },
-          );
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 50,
-                width: 50,
-                child: Icon(icon, size: 40, color: Colors.grey),
-              ),
-              Container(
-                //  margin: const EdgeInsets.only(top: 8),
-                child: Text(
-                  label,
-                  style: Theme.of(context).textTheme.button,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+//ข่าวสารในหน้าแรก 
   Widget listnews() {
     return FutureBuilder(
       future: getNews(),
@@ -431,7 +383,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
+//ดูข้อความเพิ่มเติม
   Widget buildSeeMore(var text) {
     return SeeMore(
       text: text,

@@ -1,11 +1,10 @@
 import 'dart:convert';
+import 'package:animal_welfare/api/allAnimal.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/role/breeder/breeder_downloadfile.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/haxColor.dart';
-
-import 'package:animal_welfare/screens/role/breeder/breeder_searchHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -20,24 +19,12 @@ class BreederFirstpage extends StatefulWidget {
 }
 
 class _BreederFirstpageState extends State<BreederFirstpage> {
-  @override
-  void initState() {
-    getAnimal();
-    super.initState();
-  }
+
 
   final storage = new FlutterSecureStorage();
 
-  Future<AllAnimals> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
-  }
+  final AllAnimalsAPI allAnimalsAPI = AllAnimalsAPI();
+ 
 
   DateTime date = DateTime.now();
   @override
@@ -111,7 +98,7 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
 
   Widget totalAnimal() {
     return FutureBuilder<AllAnimals>(
-      future: getAnimal(),
+      future: allAnimalsAPI.getAnimal(),
       builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return Container(
@@ -143,7 +130,8 @@ class _BreederFirstpageState extends State<BreederFirstpage> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                       'จำนวนสัตว์ทั้งหมด ${snapshot.data?.data?.amount} ตัว',

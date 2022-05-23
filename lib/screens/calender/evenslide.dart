@@ -220,17 +220,19 @@ class _EventSlideState extends State<EventSlide> {
                                                     appointments[index].endTime,
                                               )),
                                     ).then((value) async {
-            await getDataFromWeb();
-            setState(() {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (a, b, c) => EventSlide(),
-                  transitionDuration: Duration(milliseconds: 400),
-                ),
-              );
-            });
-          });
+                                      await getDataFromWeb();
+                                      setState(() {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (a, b, c) =>
+                                                EventSlide(),
+                                            transitionDuration:
+                                                Duration(milliseconds: 400),
+                                          ),
+                                        );
+                                      });
+                                    });
                                   },
                                 ),
                                 IconSlideAction(

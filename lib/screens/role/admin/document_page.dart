@@ -42,7 +42,7 @@ class _DocumentPageState extends State<DocumentPage> {
     final fileSize =
         mb >= 1 ? '${mb.toStringAsFixed(2)} MB' : '${mb.toStringAsFixed(2)} KB';
     final extension = file.extension ?? 'none';
-    final color = getColor(extension);
+    final color = Colors.blue;
     return InkWell(
       onTap:()=> widget.onOpenedFile(file),
       child: Column(
@@ -81,29 +81,27 @@ class _DocumentPageState extends State<DocumentPage> {
     );
   }
 
-  MaterialColor? getColor(String extension) {
-    switch (extension) {
-      case 'xlsx':
-        {
-          return Colors.amber;
-        }
+  // MaterialColor? getColor(String extension) {
+  //   switch (extension) {
+  //     case 'xlsx':
+  //       {
+  //         return Colors.amber;
+  //       }
        
 
-      case 'pdf':
-        {
-          return Colors.blue;
-        }
-        
-
-      case 'docx':
-        {
-          return Colors.orange;
-        }
-      default:
-        {
-          return Colors.grey;
-        }
+  //     case 'pdf':
+  //       {
+  //         return Colors.blue;
+  //       }
+  //     case 'docx':
+  //       {
+  //         return Colors.orange;
+  //       }
+  //     default:
+  //       {
+  //         return Colors.grey;
+  //       }
        
-    }
-  }
+  //   }
+  // }
 }

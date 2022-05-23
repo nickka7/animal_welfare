@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:animal_welfare/api/vaccine.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +23,7 @@ class UpdateVaccinate extends StatefulWidget {
 
 class _UpdateVaccinateState extends State<UpdateVaccinate> {
   final _formKey = GlobalKey<FormState>();
-    late FixedExtentScrollController scrollController;
+  late FixedExtentScrollController scrollController;
 
   Future<void>? api;
 
@@ -67,21 +68,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
     return true;
   }
 
-  Future<String?> uploadData(url, data) async {
-    String? token = await storage.read(key: 'token');
-    var request = http.put(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          // 'userID' : data['userID'],
-          'vaccineID': data['vaccineID'],
-        }));
-
-    print(request);
-  }
+  final VaccineApi vaccineApi = VaccineApi();
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +150,8 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                               ),
                               onPressed: () {
                                 scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: index);
+                                scrollController = FixedExtentScrollController(
+                                    initialItem: index);
                                 _vaccinePicker(context);
                               },
                               child: Row(
@@ -224,7 +210,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                                   color: Colors.green),
                                             ),
                                             onPressed: () {
-                                              uploadData(
+                                              vaccineApi.updateData(
                                                       '${Constant().endPoint}/api/updateVaccinateData/${widget.getVaccinate.vaccinateID}',
                                                       data)
                                                   .then((value) {

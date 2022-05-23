@@ -1,17 +1,13 @@
 import 'dart:convert';
-
+import 'package:animal_welfare/api/allAnimal.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals.dart.dart';
 import 'package:animal_welfare/screens/role/researcher/research_downloadfile.dart';
-
-// import 'package:animal_welfare/screens/allAnimalInZoo.dart';
-import 'package:animal_welfare/screens/role/researcher/research_searchHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
 import '../../SearchAllAnimal.dart';
 
 class ResearcherFirstpage extends StatefulWidget {
@@ -22,31 +18,10 @@ class ResearcherFirstpage extends StatefulWidget {
 }
 
 class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
-  @override
-  void initState() {
-    getAnimal();
-    super.initState();
-  }
 
-  final storage = new FlutterSecureStorage();
-  List x = [];
-  Future<AllAnimals> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
-        headers: {"authorization": 'Bearer $token'});
-    // print('decode ${json.decode(response.body)}');
-    // print('response ${response.body}');
-    // var a = json.decode(response.body);
-    // print(a);
-    AllAnimals jsonData = AllAnimals.fromJson(jsonDecode(response.body));
-    // print('jsondata ${jsonData.bio}');
-    // var q=json.decode(response.body);
-    // x=q['bio'];
-    // print('x= $x');
-    return jsonData;
-  }
 
+
+  final AllAnimalsAPI allAnimalsAPI = AllAnimalsAPI();
   DateTime date = DateTime.now();
 
   @override
@@ -120,7 +95,7 @@ class _ResearcherFirstpageState extends State<ResearcherFirstpage> {
 
   Widget totalAnimal() {
     return FutureBuilder<AllAnimals>(
-      future: getAnimal(),
+      future: allAnimalsAPI.getAnimal(),
       builder: (BuildContext context, AsyncSnapshot<AllAnimals> snapshot) {
         if (snapshot.hasData) {
           return Container(

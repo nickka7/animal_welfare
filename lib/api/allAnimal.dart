@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../constant.dart';
 
 class AllAnimalsAPI {
+  final storage = new FlutterSecureStorage();
   static Future<List<Bio>> getAllAnimals(String query) async {
     final storage = new FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
@@ -35,5 +36,14 @@ class AllAnimalsAPI {
       print('not 200');
       throw Exception();
     }
+  }
+
+   Future<AllAnimals> getAnimal() async {
+    String? token = await storage.read(key: 'token');
+    String endPoint = Constant().endPoint;
+    var response = await http.get(Uri.parse('$endPoint/api/getAnimalInZoo'),
+        headers: {"authorization": 'Bearer $token'});
+    AllAnimals jsonData = AllAnimals.fromJson(jsonDecode(response.body));
+    return jsonData;
   }
 }

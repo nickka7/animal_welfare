@@ -68,14 +68,7 @@ class _BreederDownloadFileState extends State<BreederDownloadFile> {
                           leading: Icon(Icons.document_scanner_outlined),
                           title: Text('${snapshot.data!.data![index].documentName}'),
                           onTap: () => openFile(
-                            // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
-                            //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
-                            // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
                             url: '${snapshot.data!.data![index].url}',
-                            //  '',
-                            // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
-                            //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',
-                            // fileName: 'abc.doc',
                           ),
                         ),
                       );

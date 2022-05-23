@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
+import 'package:animal_welfare/api/vaccine.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/SearchAllAnimal.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vet_searchAnimal.dart';
@@ -35,46 +36,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
     super.dispose();
   }
 
-  List animal = [];
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-  Future<bool> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(
-        Uri.parse('$endPoint/api/getUsableAddAnimalUserID'),
-        headers: {"authorization": 'Bearer $token'});
-
-    final allanimals = json.decode(response.body);
-    final List bio = allanimals['bio'];
-
-    for (int i = 0; i < bio.length; i++) {
-      animal.add(
-          '${bio[i]['animalID']} ${bio[i]['animalName']} ${bio[i]['typeName']}');
-    }
-    print(animal);
-
-    return true;
-  }
-
-  Future<String?> uploadData(url, data) async {
-    // print(file!.path);
-    String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          'animalID': data['animalID'],
-        }));
-
-    print(request);
-    print(
-      data['breedingName'],
-    );
-  }
-
+  final AllAnimalsWithRoleAPI allAnimalsWithRoleAPI = AllAnimalsWithRoleAPI();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +52,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
         ),
       ),
       body: FutureBuilder<void>(
-          future: getAnimal(),
+          future: allAnimalsWithRoleAPI.getAnimal(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData) {
@@ -128,7 +90,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      animal[index].toString(),
+                                      allAnimalsWithRoleAPI.animal[index].toString(),
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     Icon(
@@ -147,7 +109,8 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   Map<String, String> data = {
-                                    "animalID": animal[index].split(" ")[0]
+                                    "animalID":
+                                        allAnimalsWithRoleAPI.animal[index].split(" ")[0]
                                   };
                                   showDialog(
                                       context: context,
@@ -183,7 +146,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
                                                       color: Colors.green),
                                                 ),
                                                 onPressed: () {
-                                                  uploadData(
+                                                      allAnimalsWithRoleAPI.uploadData(
                                                           '${Constant().endPoint}/api/postAnimalWithRole',
                                                           data)
                                                       .then((value) {
@@ -197,9 +160,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
                                                             context)
                                                         .showSnackBar(snackBar);
                                                   }).then((value) => setState(
-                                                            () {
-                                                              
-                                                            },
+                                                            () {},
                                                           ));
                                                 })
                                           ],
@@ -230,6 +191,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
     );
   }
 
+//เลือกสัตว์
   void _animalPicker(context) {
     showCupertinoModalPopup(
       context: context,
@@ -247,7 +209,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
                   backgroundColor: Colors.white,
                   itemExtent: 40,
                   scrollController: scrollController,
-                  children: animal
+                  children: allAnimalsWithRoleAPI.animal
                       .map((item) => Center(
                             child: Text(
                               item.toString(),
@@ -258,7 +220,7 @@ class _VetAddAnimalWithRoleState extends State<VetAddAnimalWithRole> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
-                      final item = animal[index];
+                      final item = allAnimalsWithRoleAPI.animal[index];
                       print('selected $item');
                     });
                   },

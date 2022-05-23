@@ -138,25 +138,25 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                       obscureText: true,
                       decoration: InputDecoration(hintText: 'Password'),
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                        child: Text('ลืมรหัสผ่าน',
-                            style: TextStyle(
-                                color: Colors.black,
-                                decoration: TextDecoration.underline,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500)),
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SelectMyContact()),
-                          ),
-                        },
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: TextButton(
+                    //     child: Text('ลืมรหัสผ่าน',
+                    //         style: TextStyle(
+                    //             color: Colors.black,
+                    //             decoration: TextDecoration.underline,
+                    //             fontSize: 14.0,
+                    //             fontWeight: FontWeight.w500)),
+                    //     onPressed: () => {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const SelectMyContact()),
+                    //       ),
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

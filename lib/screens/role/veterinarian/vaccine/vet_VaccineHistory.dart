@@ -6,7 +6,6 @@ import 'package:animal_welfare/model/vaccineHIs.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vaccine/vet_addVaccinate.dart';
 import 'package:animal_welfare/screens/role/veterinarian/vaccine/vet_updateVaccinate.dart';
 import 'package:animal_welfare/widget/search_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -72,24 +71,6 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
     final vaccine = await getAllvaccinate(query);
 
     setState(() => this.vaccine = vaccine);
-  }
-
-  Future deleteVaccinate(String vaccinateID, data) async {
-    print('${data['vaccineID']}');
-    print(data['vaccineID'].length);
-
-    String? token = await storage.read(key: 'token');
-    var response = await http.delete(
-        Uri.parse('$endPoint/api/deleteVaccinateHistory/$vaccinateID'),
-        headers: {
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'vaccineID': data['vaccineID'],
-        }));
-    // var jsonResponse = await json.decode(response.body);
-    // print(jsonResponse['message']);
   }
 
   String formatDateFromString(String date) {
@@ -254,59 +235,7 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                   );
                 },
               ),
-              // IconSlideAction(
-              //   caption: 'ลบ',
-              //   color: Colors.red,
-              //   icon: Icons.delete,
-              //   onTap: () {
-              //     showDialog(
-              //         context: context,
-              //         builder: (context) {
-              //           return CupertinoAlertDialog(
-              //             title: CircleAvatar(
-              //               radius: 30,
-              //               backgroundColor: Colors.lightGreen[400],
-              //               child: Icon(
-              //                 Icons.check,
-              //                 color: Colors.white,
-              //               ),
-              //             ),
-              //             content: Text(
-              //               'ยืนยันการลบ',
-              //               style: TextStyle(fontSize: 16),
-              //             ),
-              //             actions: [
-              //               CupertinoDialogAction(
-              //                 child: Text(
-              //                   'ยกเลิก',
-              //                   style: TextStyle(color: Colors.red),
-              //                 ),
-              //                 onPressed: () => Navigator.pop(context),
-              //               ),
-              //               CupertinoDialogAction(
-              //                   child: Text(
-              //                     'ยืนยัน',
-              //                     style: TextStyle(color: Colors.green),
-              //                   ),
-              //                   onPressed: () {
-              //                     Map<String, String> data = {
-              //                       "vaccineID": vaccinate.vaccineID.toString(),
-              //                     };
-              //                     deleteVaccinate(
-              //                             '${vaccinate.vaccinateID}', data)
-              //                         .then((value) => vaccine.removeAt(index))
-              //                         .then((value) => Navigator.pop(context))
-              //                         .then((value) => setState(() {}))
-              //                         .then((value) => ScaffoldMessenger.of(
-              //                                 context)
-              //                             .showSnackBar(SnackBar(
-              //                                 content: Text('ลบข้อมูลแล้ว'))));
-              //                   })
-              //             ],
-              //           );
-              //         });
-              //   },
-              // ),
+
               IconSlideAction(
                 caption: 'ปิด',
                 color: Colors.grey,

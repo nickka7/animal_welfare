@@ -8,17 +8,15 @@ import 'package:animal_welfare/screens/role/animal%20caretaker/addAllAnimal.dart
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 
-
-
 class Allanimal extends StatefulWidget {
-  const Allanimal({ Key? key }) : super(key: key);
+  const Allanimal({Key? key}) : super(key: key);
 
   @override
   _AllanimalState createState() => _AllanimalState();
 }
 
 class _AllanimalState extends State<Allanimal> {
- @override
+  @override
   void initState() {
     // getAnimal();
     init();
@@ -35,7 +33,6 @@ class _AllanimalState extends State<Allanimal> {
     setState(() => this.bios = bios);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,13 +47,13 @@ class _AllanimalState extends State<Allanimal> {
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor('#697825'),
-                Colors.white,
-              ],
-            )),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HexColor('#697825'),
+            Colors.white,
+          ],
+        )),
         child: ListView(
           children: [
             buildSearch(),
@@ -66,24 +63,24 @@ class _AllanimalState extends State<Allanimal> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddAnimal()),
-                          ).then((value) async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddAnimal()),
+          ).then((value) async {
             await init();
             setState(() {
               Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (a, b, c) => Allanimal(),
-                  transitionDuration: Duration(milliseconds: 100),
+                  transitionDuration: Duration(milliseconds: 10),
                 ),
               );
             });
           });
-                        },
-                        backgroundColor: HexColor("#697825"),
-                        child: const Icon(Icons.add),
+        },
+        backgroundColor: HexColor("#697825"),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -96,8 +93,7 @@ class _AllanimalState extends State<Allanimal> {
         itemBuilder: (context, index) {
           final animal = bios[index];
           return Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Card(
               elevation: 5,
               child: TextButton(
@@ -106,8 +102,8 @@ class _AllanimalState extends State<Allanimal> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => AnimalData(
-                            getBio: bios[index],
-                          )),
+                                getBio: bios[index],
+                              )),
                     );
                   },
                   child: Padding(
@@ -119,8 +115,7 @@ class _AllanimalState extends State<Allanimal> {
                           height: 70,
                           width: 250,
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Align(
                                 alignment: Alignment.topLeft,
@@ -164,10 +159,10 @@ class _AllanimalState extends State<Allanimal> {
   }
 
   Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
-    onChanged: searchAnimal,
-  );
+        text: query,
+        hintText: "ชื่อสัตว์,รหัสสัตว์,ชนิดของสัตว์",
+        onChanged: searchAnimal,
+      );
 
   void searchAnimal(String query) async {
     final bios = await AllAnimalsAPI.getAllAnimals(query);

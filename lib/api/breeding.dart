@@ -1,50 +1,66 @@
 import 'dart:convert';
-
-import 'package:animal_welfare/model/breeding.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../constant.dart';
 
 class BreedingApi {
-  static Future<List<Data>> getResearch(String query) async {
-    final storage = new FlutterSecureStorage();
+  final storage = new FlutterSecureStorage();
+  String endPoint = Constant().endPoint;
+
+//เพิ่มเอกสาร
+    Future<String?> uploadDocAndUser(
+      {required List filePath, required String url, required List emp}) async {
     String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-
-    final url = Uri.parse('$endPoint/api/getBreedingData');
-
-    final response =
-        await http.get(url, headers: {"authorization": 'Bearer $token'});
-    //print('1');
-
-    if (response.statusCode == 200) {
-      //  print('2');
-
-      final breeding = json.decode(response.body);
-      final List data = breeding['data'];
-      // print('3');
-      // print('test $bio');
-      return data.map((json) => Data.fromJson(json)).where((breeding) {
-        final breedingIDLower = breeding.breedingID;
-        print(breedingIDLower);
-        final typeNameLower = breeding.typeName;
-        print(typeNameLower);
-        final breedingNameLower = breeding.breedingName;
-        print(breedingNameLower);
-        final researchdateLower = breeding.date;
-        print(researchdateLower);
-        final searchLower = query;
-        print(searchLower);
-        // print(animalTypeLower.contains(searchLower));
-        return breedingIDLower.contains(searchLower) ||
-            typeNameLower.contains(searchLower) ||
-            breedingNameLower.contains(searchLower) ||
-            researchdateLower.contains(searchLower);
-      }).toList();
-    } else {
-      print('not 200');
-      throw Exception();
+  //  print('1');
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    Map<String, String> headers = {
+      "authorization": "Bearer $token",
+    };
+    for (int i = 0; i < filePath.length; i++) {
+      request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
     }
+    for (int j = 0; j < emp.length; j++) {
+      request.fields['userID[$j]'] = '${emp[j].split(" ")[0]}';
+    }
+    request.headers.addAll(headers);
+    var response = await request.send();
+    print(response.statusCode);
   }
+
+  List selected = [];
+
+
+  List getItems() {
+    //พนักงานที่ถูกเลือก
+    map.forEach((key, value) {
+      if (value == true) {
+        selected.add(key);
+      }
+    });
+    print(selected);
+    return selected;
+  }
+
+
+  final listOfBreeder = [];
+  late final map = Map<String, bool>.fromIterable(listOfBreeder,
+      key: (item) => item.toString(), value: (item) => false);
+
+  Future<bool> getlistOfBreeder() async {
+    String? token = await storage.read(key: 'token');
+    var response = await http.get(Uri.parse('$endPoint/api/friendBreeder'),
+        headers: {"authorization": 'Bearer $token'});
+    List jsonData = json.decode(response.body)['message'];
+
+    for (int i = 0; i < jsonData.length; i++) {
+      listOfBreeder
+          .add('${jsonData[i]['userID']} ${jsonData[i]['firstName']} ');
+    }
+
+    print(map);
+
+    return true;
+  }
+  
 }

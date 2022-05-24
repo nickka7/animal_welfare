@@ -9,10 +9,9 @@ class BreedingApi {
   String endPoint = Constant().endPoint;
 
 //เพิ่มเอกสาร
-    Future<String?> uploadDocAndUser(
+  Future<String?> uploadDocAndUser(
       {required List filePath, required String url, required List emp}) async {
     String? token = await storage.read(key: 'token');
-  //  print('1');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     Map<String, String> headers = {
       "authorization": "Bearer $token",
@@ -30,7 +29,6 @@ class BreedingApi {
 
   List selected = [];
 
-
   List getItems() {
     //พนักงานที่ถูกเลือก
     map.forEach((key, value) {
@@ -41,8 +39,7 @@ class BreedingApi {
     print(selected);
     return selected;
   }
-
-
+//list ของเพื่อนร่วมงานของนักเพาะพันธุ์
   final listOfBreeder = [];
   late final map = Map<String, bool>.fromIterable(listOfBreeder,
       key: (item) => item.toString(), value: (item) => false);
@@ -62,5 +59,4 @@ class BreedingApi {
 
     return true;
   }
-  
 }

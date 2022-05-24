@@ -30,7 +30,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
   @override
   void initState() {
     super.initState();
-    api = getVaccine();
+    api = vaccineApi.getVaccine();
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
@@ -40,33 +40,8 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
     super.dispose();
   }
 
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-
   int index = 0;
-  List vaccineID = [];
-
-  Future<bool> getVaccine() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/getVaccineUsable'),
-        headers: {"authorization": 'Bearer $token'});
-    //print('response.body ${response.body}');
-
-    List jsonData = json.decode(response.body)['data'];
-    if (jsonData.length != 0) {
-      for (int i = 0; i < jsonData.length; i++) {
-        vaccineID.add(
-            '${jsonData[i]['vaccineID']} ${jsonData[i]['vaccineName'] ?? 'ไม่มีวัคซีน'} ');
-      }
-      print(vaccineID);
-    } else {
-      vaccineID.add('ไม่มีวัคซีน');
-    }
-
-    print(vaccineID);
-    //print(vaccineName);
-    return true;
-  }
+ 
 
   final VaccineApi vaccineApi = VaccineApi();
 
@@ -159,7 +134,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${vaccineID[index]}',
+                                    '${vaccineApi.vaccineID[index]}',
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   Icon(
@@ -176,7 +151,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                           child: ElevatedButton(
                             onPressed: () {
                               Map<String, String> data = {
-                                "vaccineID": vaccineID[index].substring(0, 6),
+                                "vaccineID": vaccineApi.vaccineID[index].substring(0, 6),
                               };
                               showDialog(
                                   context: context,
@@ -264,7 +239,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                   backgroundColor: Colors.white,
                   itemExtent: 40,
                   scrollController: scrollController,
-                  children: vaccineID.map((item) {
+                  children: vaccineApi.vaccineID.map((item) {
                     return Center(
                       child: Text(
                         '${item.toString()}',
@@ -275,7 +250,7 @@ class _UpdateVaccinateState extends State<UpdateVaccinate> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
-                      final item = '${vaccineID[index]}';
+                      final item = '${vaccineApi.vaccineID[index]}';
                       //var result = vaccineID[index].substring(0, 6);
                       print('selected $item');
                     });

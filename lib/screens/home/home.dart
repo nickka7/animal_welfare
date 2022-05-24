@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-//ปุ่มงาน เมื่อกดจะนำแต่ละตำแหน่งไปหน้าต่อไปที่ต่างกัน
+//ปุ่มงาน เมื่อกดจะนำแต่ละตำแหน่งไปหน้าต่อไปที่ต่างกัน (hardcode)
   Widget buildWorkButton() {
     return Container(
       width: 130,

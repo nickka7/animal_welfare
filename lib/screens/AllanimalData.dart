@@ -1,7 +1,5 @@
 import 'package:animal_welfare/model/all_animals.dart.dart';
-
 import 'package:flutter/material.dart';
-
 import '../haxColor.dart';
 
 class AnimalData extends StatefulWidget {

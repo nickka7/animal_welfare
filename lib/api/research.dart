@@ -20,6 +20,7 @@ class ResearchApi {
     return selected;
   }
 
+//อัปโหลดเอกสารงานวิจัย
   Future<String?> uploadDocAndUser(
       {required List filePath, required String url, required List Emp}) async {
     String? token = await storage.read(key: 'token');
@@ -39,6 +40,7 @@ class ResearchApi {
     print(response.statusCode);
   }
 
+//list ของเพื่อนร่วมงานของนักวิจัย
   final listOfResearch = [];
   late final map = Map<String, bool>.fromIterable(listOfResearch,
       key: (item) => item.toString(), value: (item) => false);

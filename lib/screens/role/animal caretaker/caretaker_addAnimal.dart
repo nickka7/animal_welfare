@@ -1,12 +1,9 @@
-import 'dart:convert';
 import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AddAnimalWithRole extends StatefulWidget {
   const AddAnimalWithRole({Key? key}) : super(key: key);

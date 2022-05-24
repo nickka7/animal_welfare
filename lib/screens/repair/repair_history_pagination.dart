@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/screens/logout/setting_logout.dart';
 import 'package:animal_welfare/screens/repair/repair_notice_update.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +146,7 @@ class _RepairHistoryPaginationState extends State<RepairHistoryPagination> {
         Uri.parse('$endPoint/api/deleteMaintenance/$maintenanceID'),
         headers: {"authorization": 'Bearer $token'});
     var jsonResponse = await json.decode(response.body);
-    // print(jsonResponse['message']);
+     print(jsonResponse['message']);
   }
 
   @override

@@ -135,10 +135,10 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (a, b, c) => VetVaccineHistory(
-              animalID: widget.animalID,
-              getanimal: widget.getanimal,
-            ),
-                  transitionDuration: Duration(milliseconds: 400),
+                    animalID: widget.animalID,
+                    getanimal: widget.getanimal,
+                  ),
+                  transitionDuration: Duration(milliseconds: 100),
                 ),
               );
             });
@@ -232,10 +232,23 @@ class _VetVaccineHistoryState extends State<VetVaccineHistory> {
                               getanimal: widget.getanimal,
                               getVaccinate: vaccinate,
                             )),
-                  );
+                  ).then((value) async {
+                    await init();
+                    setState(() {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (a, b, c) => VetVaccineHistory(
+                            animalID: widget.animalID,
+                            getanimal: widget.getanimal,
+                          ),
+                          transitionDuration: Duration(milliseconds: 100),
+                        ),
+                      );
+                    });
+                  });
                 },
               ),
-
               IconSlideAction(
                 caption: 'ปิด',
                 color: Colors.grey,

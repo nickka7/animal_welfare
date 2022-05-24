@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:animal_welfare/screens/logout/setting_logout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

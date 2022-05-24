@@ -60,4 +60,5 @@ class VaccineApi {
 
     print(request);
   }
+
 }

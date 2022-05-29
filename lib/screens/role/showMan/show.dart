@@ -220,17 +220,19 @@ class _ShowScreenState extends State<ShowScreen> {
                                                     appointments[index].endTime,
                                               )),
                                     ).then((value) async {
-            await getDataFromWeb();
-            setState(() {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (a, b, c) => ShowScreen(),
-                  transitionDuration: Duration(milliseconds: 100),
-                ),
-              );
-            });
-          });
+                                      await getDataFromWeb();
+                                      setState(() {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (a, b, c) =>
+                                                ShowScreen(),
+                                            transitionDuration:
+                                                Duration(milliseconds: 100),
+                                          ),
+                                        );
+                                      });
+                                    });
                                   },
                                 ),
                                 IconSlideAction(

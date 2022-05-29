@@ -1,7 +1,5 @@
-import 'dart:convert';
-
+import 'package:animal_welfare/api/medical.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
-import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,27 +30,7 @@ class _AddMedicalState extends State<AddMedical> {
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
 
-  Future<String?> uploadData(url, data) async {
-    String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          'medicalName': data['medicalName'],
-          'detail': data['detail'],
-        }));
-
-    print(request);
-    print(data['medicalName']);
-    print(data['detail']);
-    // print(data['endDate']);
-  }
-
-
-
+  final MedicalApi medicalApi = MedicalApi();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,7 +196,7 @@ class _AddMedicalState extends State<AddMedical> {
                                           style: TextStyle(color: Colors.green),
                                         ),
                                         onPressed: () {
-                                          uploadData(
+                                          medicalApi.uploadData(
                                                   '${Constant().endPoint}/api/postMedicalData/${widget.getanimal.animalID}',
                                                   data)
                                               .then((value) {

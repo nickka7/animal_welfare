@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:animal_welfare/api/showApi.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -44,32 +45,17 @@ class _UpdateShowState extends State<UpdateShow> {
     scrollController.dispose();
     super.dispose();
   }
-late DateTime startDate = widget.start;
-late DateTime endDate = widget.end;
+
+  late DateTime startDate = widget.start;
+  late DateTime endDate = widget.end;
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   final storage = new FlutterSecureStorage();
   String endPoint = Constant().endPoint;
-  Future<String?> uploadData(url, data) async {
-    String? token = await storage.read(key: 'token');
-    var request = http.put(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          // 'userID' : data['userID'],
-          'showName': data['showName'],
-          'startDate': data['startDate'],
-          'endDate': data['endDate'],
-        }));
-    print(data['scheduleName']);
-    print(request);
-  }
+
+  final ShowApi showApi = ShowApi();
 
   List shows = [];
-
   int index = 0;
   Future<bool> getShowType() async {
     String? token = await storage.read(key: 'token');
@@ -275,18 +261,19 @@ late DateTime endDate = widget.end;
                                                     color: Colors.green),
                                               ),
                                               onPressed: () {
-                                                uploadData(
+                                                showApi
+                                                    .updateData(
                                                         '${Constant().endPoint}/api/updateShow/${widget.id}',
                                                         data)
                                                     .then((value) {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    final snackBar = SnackBar(
-                                        content: Text(
-                                            'แก้ไขรอบการแสดงเรียบร้อยแล้ว'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  });
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                  final snackBar = SnackBar(
+                                                      content: Text(
+                                                          'แก้ไขรอบการแสดงเรียบร้อยแล้ว'));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar);
+                                                });
                                               })
                                         ],
                                       );

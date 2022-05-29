@@ -9,15 +9,14 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class AddEven extends StatefulWidget {
-  const AddEven({ Key? key }) : super(key: key);
+  const AddEven({Key? key}) : super(key: key);
 
   @override
   _AddEvenState createState() => _AddEvenState();
 }
 
 class _AddEvenState extends State<AddEven> {
-
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   //TextEditingController userIDController = TextEditingController();
   TextEditingController calendarNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
@@ -29,8 +28,7 @@ class _AddEvenState extends State<AddEven> {
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
-
-   @override
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     calendarNameController.dispose();
@@ -38,11 +36,11 @@ class _AddEvenState extends State<AddEven> {
     scrollController.dispose();
     super.dispose();
   }
+
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
-  
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadData(url, data) async {
@@ -55,7 +53,7 @@ class _AddEvenState extends State<AddEven> {
         },
         //   headers: {"authorization": 'Bearer $token'},
         body: jsonEncode(<String, String>{
-         // 'userID' : data['userID'],
+          // 'userID' : data['userID'],
           'calendarName': data['calendarName'],
           'location': data['location'],
           'startDate': data['startDate'],
@@ -63,28 +61,27 @@ class _AddEvenState extends State<AddEven> {
         }));
 
     print(request);
-   // print(data['userID']);
+    // print(data['userID']);
     print(data['calendarName']);
     print(data['startDate']);
     print(data['endDate']);
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'เพิ่มกิจกรรมในสวนสัตว์',
-            style: TextStyle(color: Colors.white),
-          ),
-          leading: IconButton(
-            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        centerTitle: true,
+        title: Text(
+          'เพิ่มกิจกรรมในสวนสัตว์',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-       body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Container(
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -115,7 +112,7 @@ class _AddEvenState extends State<AddEven> {
                   SizedBox(
                     height: 30,
                   ),
-                   Align(
+                  Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         'สถานที่',
@@ -152,10 +149,9 @@ class _AddEvenState extends State<AddEven> {
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
-                           scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: index);
+                          scrollController.dispose();
+                          scrollController =
+                              FixedExtentScrollController(initialItem: index);
                           _showDatePicker1(context);
                         },
                         child: Row(
@@ -187,10 +183,9 @@ class _AddEvenState extends State<AddEven> {
                           side: BorderSide(width: 1, color: Colors.black45),
                         ),
                         onPressed: () {
-                           scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: index);
+                          scrollController.dispose();
+                          scrollController =
+                              FixedExtentScrollController(initialItem: index);
                           _showDatePicker2(context);
                         },
                         child: Row(
@@ -216,13 +211,13 @@ class _AddEvenState extends State<AddEven> {
                         bool pass = _formKey.currentState!.validate();
                         if (pass) {
                           Map<String, String> data = {
-                           // "userID": userIDController.text,
+                            // "userID": userIDController.text,
                             "calendarName": calendarNameController.text,
-                           "location": locationController.text,
+                            "location": locationController.text,
                             "startDate": startDate.toString(),
                             "endDate": endDate.toString()
                           };
-                           showDialog(
+                          showDialog(
                               context: context,
                               builder: (context) {
                                 return CupertinoAlertDialog(
@@ -251,22 +246,23 @@ class _AddEvenState extends State<AddEven> {
                                           'ยืนยัน',
                                           style: TextStyle(color: Colors.green),
                                         ),
-                                      onPressed: () {
-                                            uploadData(
-                                  '${Constant().endPoint}/api/postEvent', data)
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            final snackBar = SnackBar(
-                                content: Text('เพิ่มกิจกรรมเรียบร้อยแล้ว'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                           );
-                                        })                                  ],
+                                        onPressed: () {
+                                          uploadData(
+                                                  '${Constant().endPoint}/api/postEvent',
+                                                  data)
+                                              .then((value) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                            final snackBar = SnackBar(
+                                                content: Text(
+                                                    'เพิ่มกิจกรรมเรียบร้อยแล้ว'));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+                                          });
+                                        })
+                                  ],
                                 );
                               });
-
                         }
                       },
                       child: Text('เสร็จสิ้น',
@@ -285,6 +281,7 @@ class _AddEvenState extends State<AddEven> {
       ),
     );
   }
+
   void _showDatePicker1(ctx) {
     // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(
@@ -299,10 +296,10 @@ class _AddEvenState extends State<AddEven> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                       use24hFormat: true,
+                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                       // minimumDate: DateTime.now(),
+                        // minimumDate: DateTime.now(),
                         initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {
@@ -335,10 +332,10 @@ class _AddEvenState extends State<AddEven> {
                     height: 300,
                     width: double.infinity,
                     child: CupertinoDatePicker(
-                       use24hFormat: true,
+                        use24hFormat: true,
                         mode: CupertinoDatePickerMode.dateAndTime,
                         maximumYear: DateTime.now().year,
-                      //  minimumDate: DateTime.now(),
+                        //  minimumDate: DateTime.now(),
                         initialDateTime: startDate,
                         onDateTimeChanged: (val) {
                           setState(() {

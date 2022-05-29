@@ -194,7 +194,6 @@ class _RepairNoticeState extends State<RepairNotice> {
                             ),
                             side: BorderSide(width: 2, color: Colors.green),
                           ),
-                          // color: Colors.green.shade800,
                           child: Center(
                             child: file == null
                                 ? Icon(
@@ -284,6 +283,7 @@ class _RepairNoticeState extends State<RepairNotice> {
     );
   }
 
+//เลือกรูปจากแกลเลอรี่ หรือถ่ายจากกล้อง
   void _onButtonPress() {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(

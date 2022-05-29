@@ -1,11 +1,9 @@
-import 'dart:convert';
+import 'package:animal_welfare/api/AllAnimalWithRole.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AddAnimalWithRole extends StatefulWidget {
   const AddAnimalWithRole({Key? key}) : super(key: key);
@@ -22,7 +20,6 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
   @override
   void initState() {
     super.initState();
-
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
@@ -33,47 +30,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
     super.dispose();
   }
 
-  List animal = [];
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-  Future<bool> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(
-        Uri.parse('$endPoint/api/getUsableAddAnimalUserID'),
-        headers: {"authorization": 'Bearer $token'});
-    // print('response.body ${response.body}');
-
-    // List jsonData = json.decode(response.body)['data'];
-    final allanimals = json.decode(response.body);
-    final List bio = allanimals['bio'];
-
-    for (int i = 0; i < bio.length; i++) {
-      animal.add(
-          '${bio[i]['animalID']} ${bio[i]['animalName']} ${bio[i]['typeName']}');
-    }
-    print(animal);
-
-    return true;
-  }
-
-  Future<String?> uploadData(url, data) async {
-    // print(file!.path);
-    String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          'animalID': data['animalID'],
-        }));
-
-    print(request);
-  }
-
-  
-  
+  final AllAnimalsWithRoleAPI allAnimalsWithRoleAPI = AllAnimalsWithRoleAPI();
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +47,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
         ),
       ),
       body: FutureBuilder<void>(
-          future: getAnimal(),
+          future: allAnimalsWithRoleAPI.getAnimal(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData) {
@@ -128,7 +85,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      animal[index].toString(),
+                                      allAnimalsWithRoleAPI.animal[index].toString(),
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     Icon(
@@ -147,7 +104,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   Map<String, String> data = {
-                                    "animalID": animal[index].split(" ")[0]
+                                    "animalID": allAnimalsWithRoleAPI.animal[index].split(" ")[0]
                                   };
                                   showDialog(
                                       context: context,
@@ -183,7 +140,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
                                                       color: Colors.green),
                                                 ),
                                                 onPressed: () {
-                                                  uploadData(
+                                                  allAnimalsWithRoleAPI.uploadData(
                                                           '${Constant().endPoint}/api/postAnimalWithRole',
                                                           data)
                                                       .then((value) {
@@ -246,7 +203,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
                   backgroundColor: Colors.white,
                   itemExtent: 40,
                   scrollController: scrollController,
-                  children: animal
+                  children: allAnimalsWithRoleAPI.animal
                       .map((item) => Center(
                             child: Text(
                               item.toString(),
@@ -257,7 +214,7 @@ class _AddAnimalWithRoleState extends State<AddAnimalWithRole> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
-                      final item = animal[index];
+                      final item = allAnimalsWithRoleAPI.animal[index];
                       print('selected $item');
                     });
                   },

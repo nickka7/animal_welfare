@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+//หน้ารายละเอียดกิจกรรมและงาน
 class EventDetail extends StatefulWidget {
   final String subject;
   final String? location;
@@ -43,6 +44,7 @@ class _EventDetailState extends State<EventDetail> {
     );
   }
 
+// TextStyle สีข้อความ ขนาดข้อความ
   Widget _buildfont(var title, var data) {
     return Container(
       child: Row(

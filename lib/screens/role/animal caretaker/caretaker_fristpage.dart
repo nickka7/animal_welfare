@@ -1,16 +1,12 @@
-import 'dart:convert';
-
+import 'package:animal_welfare/api/AllAnimalWithRole.dart';
+import 'package:animal_welfare/api/Weather.dart';
 import 'package:animal_welfare/haxColor.dart';
-import 'package:animal_welfare/model/Schedule.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
 import 'package:animal_welfare/model/weather.dart';
-import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_allAnimal.dart';
+import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchallAnimal.dart';
 import 'package:animal_welfare/screens/role/animal%20caretaker/caretaker_searchAnimal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import '../../../constant.dart';
 
 class CaretakerFirstPage extends StatefulWidget {
   const CaretakerFirstPage({Key? key}) : super(key: key);
@@ -20,47 +16,8 @@ class CaretakerFirstPage extends StatefulWidget {
 }
 
 class _CaretakerFirstPageState extends State<CaretakerFirstPage> {
-  final storage = new FlutterSecureStorage();
-
-  Future<WeatherData> getWeather() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getWeather'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = WeatherData.fromJson(jsonDecode(response.body));
-    print(jsonData);
-    return jsonData;
-  }
-
-Future<AllAnimalsWithRole> getAnimal() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
-    print('$jsonData');
-    return jsonData;
-  } 
-
-  Future<ScheduleData> getSchedule() async {
-    String? token = await storage.read(key: 'token');
-    String endPoint = Constant().endPoint;
-    var response = await http.get(Uri.parse('$endPoint/api/getSchedule'),
-        headers: {"authorization": 'Bearer $token'});
-    print(response.body);
-    var jsonData = ScheduleData.fromJson(jsonDecode(response.body));
-    print(jsonData);
-    return jsonData;
-  }
-
-  String formatDateFromString(String date) {
-    var parseDate = DateTime.parse(date);
-    final DateFormat formatter = DateFormat('hh:mm');
-    final String formattedDate = formatter.format(parseDate);
-    return formattedDate;
-  }
+  final Weather weather = Weather();
+  final AllAnimalsWithRoleAPI allAnimalsWithRoleAPI = AllAnimalsWithRoleAPI();
 
   DateTime today = DateTime.now();
   @override
@@ -73,9 +30,9 @@ Future<AllAnimalsWithRole> getAnimal() async {
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(
-          icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+            icon: new Icon(Icons.arrow_back_ios_new, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: Container(
           // width: ,
@@ -89,7 +46,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
             ],
           )),
           child: FutureBuilder(
-            future: getWeather(),
+            future: weather.getWeather(),
             builder:
                 (BuildContext context, AsyncSnapshot<WeatherData> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
@@ -169,9 +126,9 @@ Future<AllAnimalsWithRole> getAnimal() async {
         ));
   }
 
-   Widget totalAnimal() {
+  Widget totalAnimal() {
     return FutureBuilder<AllAnimalsWithRole>(
-      future: getAnimal(),
+      future: allAnimalsWithRoleAPI.getNumAnimalWithRole(),
       builder:
           (BuildContext context, AsyncSnapshot<AllAnimalsWithRole> snapshot) {
         if (snapshot.hasData) {
@@ -204,14 +161,13 @@ Future<AllAnimalsWithRole> getAnimal() async {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                height: 75,
+                                height: 90,
                                 width: 250,
                                 child: SingleChildScrollView(
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                     
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Container(
@@ -220,17 +176,19 @@ Future<AllAnimalsWithRole> getAnimal() async {
                                           child: ListView.builder(
                                             scrollDirection: Axis.vertical,
                                             shrinkWrap: true,
-                                            itemCount: snapshot.data!.data!.length,
-                                            itemBuilder:
-                                                (BuildContext context, int index) {
+                                            itemCount:
+                                                snapshot.data!.data!.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
                                               return Text(
                                                   '${snapshot.data!.data![index].animalName} ${snapshot.data!.data![index].amount} ตัว',
-                                                  style: TextStyle(fontSize: 16,color: Colors.black));
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black));
                                             },
                                           ),
                                         ),
                                       ),
-                             
                                     ],
                                   ),
                                 ),
@@ -245,7 +203,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
                         )),
                   ),
                 ),
-               addAnimal()
+                addAnimal()
               ],
             ),
           );
@@ -257,6 +215,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
       },
     );
   }
+
   Widget addAnimal() {
     return Container(
         child: Column(
@@ -269,8 +228,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Allanimal()),
+                  MaterialPageRoute(builder: (context) => Allanimal()),
                 );
               },
               child: Padding(
@@ -294,7 +252,7 @@ Future<AllAnimalsWithRole> getAnimal() async {
       ],
     ));
   }
-  
+
   Widget _heading(var title, double h, double w) {
     return Container(
       height: h,

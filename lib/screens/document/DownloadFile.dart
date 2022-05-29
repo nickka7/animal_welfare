@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:animal_welfare/screens/setting/setting_logout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:animal_welfare/model/document.dart';
 import '../../constant.dart';
+import '../logout/setting_logout.dart';
 
 class DownloadFile extends StatefulWidget {
   const DownloadFile({Key? key}) : super(key: key);
@@ -25,16 +25,7 @@ class _DownloadFileState extends State<DownloadFile> {
     String? token = await storage.read(key: 'token');
     var response = await http.get(Uri.parse('$endPoint/api/getDocument'),
         headers: {"authorization": 'Bearer $token'});
-    if (jsonDecode(response.body)['errorMessage'] == "session-expired") {
-      setState(() => UserLogout().clearTokenAndLogout(context));
-    }
-    // print(response.body);
-    // var z = jsonDecode(response.body);
-    // print(z);
-    // var y = json.decode(response.body)['errorMessage'];
-    // print(y);
     var jsonData = Document.fromJson(jsonDecode(response.body));
-    // print(jsonData.resultCode);
     return jsonData;
   }
 
@@ -65,13 +56,6 @@ class _DownloadFileState extends State<DownloadFile> {
                           Text('${snapshot.data!.data![index].documentName}'),
                       onTap: () => openFile(
                         url: '${snapshot.data!.data![index].url}',
-                        // '', url: 'https://www.ocsc.go.th/sites/default/files/document/example_calculation25552.xls',
-                        //    url: 'http://tls.labour.go.th/attachments/category/118/0000001%20tls%2003%202563.doc',
-                        // https://shortrecap.co/wp-content/uploads/2020/05/Catcover_web.jpg
-                        //  '',
-                        // url:'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4'
-                        //   'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4',
-                        // fileName: 'abc.doc',
                       ),
                     ),
                   );

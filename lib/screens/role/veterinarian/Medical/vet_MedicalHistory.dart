@@ -8,13 +8,11 @@ import 'package:animal_welfare/screens/role/veterinarian/Medical/vet_medHisDetai
 import 'package:animal_welfare/widget/search_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../../../constant.dart';
-import '../../../../main.dart';
 
 class VetMedicalHistory extends StatefulWidget {
   final Bio getBio;
@@ -32,8 +30,8 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
   }
 
   final storage = new FlutterSecureStorage();
-   String endPoint = Constant().endPoint;
-     final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
+  String endPoint = Constant().endPoint;
+  final snackBar = SnackBar(content: Text('ลบข้อมูลแล้ว'));
   List<Medical> medHis = [];
   String query = '';
 
@@ -48,15 +46,15 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
     print(response.body);
     if (response.statusCode == 200) {
       allmedical = json.decode(response.body);
-     
+
       final List medical = allmedical['data'];
       // print('bioo $bio');
       return medical.map((json) => Medical.fromJson(json)).where((medical) {
         final medicalLowerID = medical.medicalID.toString();
         final medicalLower = medical.medicalName!;
         final searchLower = query;
-        return medicalLower.contains(searchLower)||
-        medicalLowerID.contains(searchLower);
+        return medicalLower.contains(searchLower) ||
+            medicalLowerID.contains(searchLower);
       }).toList();
     } else {
       print('not 200');
@@ -87,7 +85,6 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
     print(jsonResponse['message']);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,26 +101,29 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
       ),
       body: RefreshIndicator(
         onRefresh: () => Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (a, b, c) => VetMedicalHistory(getBio: widget.getBio,),
-              transitionDuration: Duration(milliseconds: 400),
+          context,
+          PageRouteBuilder(
+            pageBuilder: (a, b, c) => VetMedicalHistory(
+              getBio: widget.getBio,
             ),
+            transitionDuration: Duration(milliseconds: 400),
           ),
-    child :  Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            HexColor('#697825'),
-            Colors.white,
-          ],
-        )),
-        child: ListView(
-          children: [buildSearch(), buildListview()],
         ),
-      ),),
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              HexColor('#697825'),
+              Colors.white,
+            ],
+          )),
+          child: ListView(
+            children: [buildSearch(), buildListview()],
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -138,7 +138,9 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
               Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (a, b, c) => VetMedicalHistory(getBio: widget.getBio,),
+                  pageBuilder: (a, b, c) => VetMedicalHistory(
+                    getBio: widget.getBio,
+                  ),
                   transitionDuration: Duration(milliseconds: 100),
                 ),
               );
@@ -152,164 +154,168 @@ class _VetMedicalHistoryState extends State<VetMedicalHistory> {
   }
 
   Widget buildListview() {
-    return  ListView.builder(
+    return ListView.builder(
         itemCount: medHis.length,
         shrinkWrap: true,
         physics: ScrollPhysics(),
         itemBuilder: (context, index) {
           final animal = medHis[index];
           return Slidable(
-                              actionPane: SlidableDrawerActionPane(),
-                              actionExtentRatio: 0.25,
-                              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: Card(
-              elevation: 5,
-              child:TextButton(onPressed: () { 
-                 Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MedicalDetail(
-                              getMedHis: animal)),
-                    );
-               },
-              child:  Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 90,
-                      width: 280,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                             Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'รหัสการรักษา : ${animal.medicalID}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.25,
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                child: Card(
+                  elevation: 5,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MedicalDetail(getMedHis: animal)),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 90,
+                            width: 280,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'รหัสการรักษา : ${animal.medicalID}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'การรักษา : ${animal.medicalName}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      'เวลา : ${animal.time}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'วันที่ : ${formatDateFromString(animal.date.toString())}',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'การรักษา : ${animal.medicalName}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'เวลา : ${animal.time}',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'วันที่ : ${formatDateFromString(animal.date.toString())}',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                )),
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                caption: 'แก้ไข',
+                color: Colors.green,
+                icon: Icons.build_rounded,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdateMedical(
+                              getMedical: animal,
+                              getanimal: widget.getBio,
+                            )),
+                  ).then((value) async {
+                    await init();
+                    setState(() {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (a, b, c) => VetMedicalHistory(
+                            getBio: widget.getBio,
+                          ),
+                          transitionDuration: Duration(milliseconds: 100),
+                        ),
+                      );
+                    });
+                  });
+                },
               ),
-            ),
-          )),
-          secondaryActions: <Widget>[
-                                IconSlideAction(
-                                  caption: 'แก้ไข',
-                                  color: Colors.green,
-                                  icon: Icons.build_rounded,
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => UpdateMedical(getMedical: animal, getanimal: widget.getBio,
-                                               
-                                              )),
-                                    );
-                                  },
+              IconSlideAction(
+                caption: 'ลบ',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.lightGreen[400],
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                          ),
+                          content: Text(
+                            'ยืนยันการลบ',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text(
+                                'ยกเลิก',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            CupertinoDialogAction(
+                                child: Text(
+                                  'ยืนยัน',
+                                  style: TextStyle(color: Colors.green),
                                 ),
-                                IconSlideAction(
-                                  caption: 'ลบ',
-                                  color: Colors.red,
-                                  icon: Icons.delete,
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return CupertinoAlertDialog(
-                                            title: CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor:
-                                                  Colors.lightGreen[400],
-                                              child: Icon(
-                                                Icons.check,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            content: Text(
-                                              'ยืนยันการลบ',
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            actions: [
-                                              CupertinoDialogAction(
-                                                child: Text(
-                                                  'ยกเลิก',
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                ),
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                              ),
-                                              CupertinoDialogAction(
-                                                  child: Text(
-                                                    'ยืนยัน',
-                                                    style: TextStyle(
-                                                        color: Colors.green),
-                                                  ),
-                                                  onPressed: () {
-                                                    deleteMedical(
-                                                            '${animal.medicalID}')
-                                                        .then((value) =>
-                                                            medHis
-                                                                .removeAt(
-                                                                    index))
-                                                        .then((value) =>
-                                                            Navigator.pop(
-                                                                context))
-                                                        .then((value) =>
-                                                            setState(() {}))
-                                                        .then((value) =>
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    snackBar));
-                                                  })
-                                            ],
-                                          );
-                                        });
-                                  },
-                                ),
-                                IconSlideAction(
-                                  caption: 'ปิด',
-                                  color: Colors.grey,
-                                  icon: Icons.close,
-                                  onTap: () {},
-                                ),
-                              ],);
+                                onPressed: () {
+                                  deleteMedical('${animal.medicalID}')
+                                      .then((value) => medHis.removeAt(index))
+                                      .then((value) => Navigator.pop(context))
+                                      .then((value) => setState(() {}))
+                                      .then((value) =>
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar));
+                                })
+                          ],
+                        );
+                      });
+                },
+              ),
+              IconSlideAction(
+                caption: 'ปิด',
+                color: Colors.grey,
+                icon: Icons.close,
+                onTap: () {},
+              ),
+            ],
+          );
         });
   }
 

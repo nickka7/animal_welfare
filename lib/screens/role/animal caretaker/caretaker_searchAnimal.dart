@@ -22,18 +22,6 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
     super.initState();
   }
 
-  // final storage = new FlutterSecureStorage();
-  // Future<AllAnimalsWithRole> getAnimal() async {
-  //   String? token = await storage.read(key: 'token');
-  //   String endPoint = Constant().endPoint;
-  //   var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
-  //       headers: {"authorization": 'Bearer $token'});
-  //   print(response.body);
-  //   var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
-  //   print('$jsonData');
-  //   return jsonData;
-  // }
-
   List<Bio> bios = [];
   String query = '';
   // Timer? debouncer;
@@ -92,7 +80,7 @@ class _SearchAnimalDataState extends State<SearchAnimalData> {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (a, b, c) => SearchAnimalData(),
-                  transitionDuration: Duration(milliseconds: 100),
+                  transitionDuration: Duration(milliseconds: 10),
                 ),
               );
             });

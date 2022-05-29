@@ -6,6 +6,10 @@ import 'package:http/http.dart' as http;
 import '../constant.dart';
 
 class AllAnimalsWithRoleAPI {
+    String endPoint = Constant().endPoint;
+  final storage = new FlutterSecureStorage();
+
+//ค้นหาสัตว์ทั้งหมด
   static Future<List<Bio>> getAllAnimalsWithRole(String query) async {
     final storage = new FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
@@ -40,5 +44,54 @@ class AllAnimalsWithRoleAPI {
       print('not 200');
       throw Exception();
     }
+  }
+//จำนวนสัตว์แต่ละชนิด
+    Future<AllAnimalsWithRole> getNumAnimalWithRole() async {
+    String? token = await storage.read(key: 'token');
+    var response = await http.get(Uri.parse('$endPoint/api/getAnimalWithRole'),
+        headers: {"authorization": 'Bearer $token'});
+    print(response.body);
+    var jsonData = AllAnimalsWithRole.fromJson(jsonDecode(response.body));
+    print('$jsonData');
+    return jsonData;
+  }
+
+  List animal = [];
+//listของรหัสสัตว์ ชื่อสัตว์
+  Future<bool> getAnimal() async {
+    String? token = await storage.read(key: 'token');
+    var response = await http.get(
+        Uri.parse('$endPoint/api/getUsableAddAnimalUserID'),
+        headers: {"authorization": 'Bearer $token'});
+    // print('response.body ${response.body}');
+
+    // List jsonData = json.decode(response.body)['data'];
+    final allanimals = json.decode(response.body);
+    final List bio = allanimals['bio'];
+
+    for (int i = 0; i < bio.length; i++) {
+      animal.add(
+          '${bio[i]['animalID']} ${bio[i]['animalName']} ${bio[i]['typeName']}');
+    }
+    print(animal);
+
+    return true;
+  }
+
+//เพิ่มสัตว์ภายใต้การดูแล
+    Future<String?> uploadData(url, data) async {
+    // print(file!.path);
+    String? token = await storage.read(key: 'token');
+    var request = http.post(Uri.parse(url),
+        headers: <String, String>{
+          "authorization": 'Bearer $token',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        //   headers: {"authorization": 'Bearer $token'},
+        body: jsonEncode(<String, String>{
+          'animalID': data['animalID'],
+        }));
+
+    print(request);
   }
 }

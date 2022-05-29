@@ -1,18 +1,14 @@
-import 'dart:convert';
-
+import 'package:animal_welfare/api/vaccine.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
-import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class AddVaccinate extends StatefulWidget {
   final Bio getanimal;
-  const AddVaccinate(
-      {Key? key, required this.getanimal})
-      : super(key: key);
+  const AddVaccinate({Key? key, required this.getanimal}) : super(key: key);
 
   @override
   _AddVaccinateState createState() => _AddVaccinateState();
@@ -26,59 +22,19 @@ class _AddVaccinateState extends State<AddVaccinate> {
   @override
   void initState() {
     super.initState();
-    api = getVaccine();
+    api = vaccineApi.getVaccine();
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
-   @override
+  @override
   void dispose() {
     scrollController.dispose();
     super.dispose();
   }
 
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
+  final VaccineApi vaccineApi = VaccineApi();
 
   int index = 0;
-  List vaccineID = [];
-
-  Future<bool> getVaccine() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/getVaccineUsable'),
-        headers: {"authorization": 'Bearer $token'});
-    //print('response.body ${response.body}');
-
-    List jsonData = json.decode(response.body)['data'];
-    if (jsonData.length != 0) {
-      for (int i = 0; i < jsonData.length; i++) {
-        vaccineID.add(
-            '${jsonData[i]['vaccineID']} ${jsonData[i]['vaccineName'] ?? 'ไม่มี'} ');
-      }
-      print(vaccineID);
-    } else {
-      vaccineID.add('ไม่มีวัคซีน');
-    }
-
-    print(' ${vaccineID}');
-    //print(vaccineName);
-
-    return true;
-  }
-
-  Future<String?> uploadData(url, data) async {
-    print(data['vaccineID']);
-    print(widget.getanimal.animalID);
-    String? token = await storage.read(key: 'token');
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          // "Content-Type": "application/x-www-form-urlencoded",
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'vaccineID': data['vaccineID'],
-        }));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +116,8 @@ class _AddVaccinateState extends State<AddVaccinate> {
                               ),
                               onPressed: () {
                                 scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: index);
+                                scrollController = FixedExtentScrollController(
+                                    initialItem: index);
                                 _vaccinePicker(context);
                               },
                               child: Row(
@@ -170,8 +125,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-
-                                    '${vaccineID[index]}',
+                                    '${vaccineApi.vaccineID[index]}',
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   Icon(
@@ -187,9 +141,8 @@ class _AddVaccinateState extends State<AddVaccinate> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-
                               Map<String, String> data = {
-                                "vaccineID": vaccineID[index].split(" ")[0],
+                                "vaccineID": vaccineApi.vaccineID[index].split(" ")[0],
                               };
                               showDialog(
                                   context: context,
@@ -223,13 +176,13 @@ class _AddVaccinateState extends State<AddVaccinate> {
                                                   color: Colors.green),
                                             ),
                                             onPressed: () {
-                                              uploadData(
+                                              vaccineApi.uploadData(
                                                       '${Constant().endPoint}/api/postVaccineData/?animalID=${widget.getanimal.animalID}',
                                                       data)
                                                   .then((value) {
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
-                                                 // setState(() {});
+                                                // setState(() {});
                                                 final snackBar = SnackBar(
                                                     content: Text(
                                                         'เพิ่มการฉีดวัคซีนเรียบร้อยแล้ว'));
@@ -277,7 +230,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                   backgroundColor: Colors.white,
                   itemExtent: 40,
                   scrollController: scrollController,
-                  children: vaccineID.map((item) {
+                  children: vaccineApi.vaccineID.map((item) {
                     return Center(
                       child: Text(
                         '${item.toString()}',
@@ -288,7 +241,7 @@ class _AddVaccinateState extends State<AddVaccinate> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
-                      final item = '${vaccineID[index]}';
+                      final item = '${vaccineApi.vaccineID[index]}';
                       //var result = vaccineID[index].substring(0, 6);
                       print('selected $item');
                     });

@@ -1,11 +1,9 @@
-import 'dart:convert';
 
+import 'package:animal_welfare/api/breeding.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import '../../../constant.dart';
 
@@ -17,69 +15,11 @@ class BreederUploadDocument extends StatefulWidget {
 }
 
 class _BreederUploadDocumentState extends State<BreederUploadDocument> {
-  @override
-  void initState() {
-    super.initState();
-    getlistOfBreeder();
-  }
 
-  List selected = [];
-
+  final BreedingApi breedingApi = BreedingApi();
+  
   FilePickerResult? result;
   late List<String?> filePath;
-
-  List getItems() {
-    //พนักงานที่ถูกเลือก
-    map.forEach((key, value) {
-      if (value == true) {
-        selected.add(key);
-      }
-    });
-    print(selected);
-    return selected;
-  }
-
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-
-  Future<String?> uploadDocAndUser(
-      {required List filePath, required String url, required List emp}) async {
-    String? token = await storage.read(key: 'token');
-  //  print('1');
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    Map<String, String> headers = {
-      "authorization": "Bearer $token",
-    };
-    for (int i = 0; i < filePath.length; i++) {
-      request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
-    }
-    for (int j = 0; j < emp.length; j++) {
-      request.fields['userID[$j]'] = '${emp[j].split(" ")[0]}';
-    }
-    request.headers.addAll(headers);
-    var response = await request.send();
-    print(response.statusCode);
-  }
-
-  final listOfResearch = [];
- late final map = Map<String, bool>.fromIterable(listOfResearch,
-        key: (item) => item.toString(), value: (item) => false);
-
-  Future<bool> getlistOfBreeder() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/friendBreeder'),
-        headers: {"authorization": 'Bearer $token'});
-    List jsonData = json.decode(response.body)['message'];
-
-    for (int i = 0; i < jsonData.length; i++) {
-      listOfResearch
-          .add('${jsonData[i]['userID']} ${jsonData[i]['firstName']} ');
-    }
-   
-    print(map);
-
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +37,7 @@ class _BreederUploadDocumentState extends State<BreederUploadDocument> {
       ),
       body: SingleChildScrollView(
           child: FutureBuilder<bool>(
-        future: getlistOfBreeder(),
+        future: breedingApi.getlistOfBreeder(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
             return Column(
@@ -125,13 +65,13 @@ class _BreederUploadDocumentState extends State<BreederUploadDocument> {
                 ListView(
                   shrinkWrap: true,
                   primary: false,
-                  children: map.keys.map((String key) {
+                  children: breedingApi.map.keys.map((String key) {
                     return new CheckboxListTile(
                       title: new Text(key),
-                      value: map[key],
+                      value: breedingApi.map[key],
                       onChanged: (bool? value) {
                         setState(() {
-                          map[key] = value!;
+                          breedingApi.map[key] = value!;
                         });
                       },
                     );
@@ -183,13 +123,13 @@ class _BreederUploadDocumentState extends State<BreederUploadDocument> {
                                         style: TextStyle(color: Colors.green),
                                       ),
                                       onPressed: () {
-                                        getItems();
+                                        breedingApi.getItems();
                                         // for (int i = 0; i < filePath.length; i++) {}
-                                        uploadDocAndUser(
+                                        breedingApi.uploadDocAndUser(
                                           filePath: result!.paths,
                                           url:
                                               '${Constant().endPoint}/api/postBreedingDocument',
-                                          emp: selected,
+                                          emp: breedingApi.selected,
                                         );
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop();
@@ -244,19 +184,17 @@ class _BreederUploadDocumentState extends State<BreederUploadDocument> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: color, borderRadius: BorderRadius.circular(25)),
-              child: Text(
-                '.$extension',
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
+          Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: color, borderRadius: BorderRadius.circular(25)),
+            child: Text(
+              '.$extension',
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           SizedBox(height: 8),

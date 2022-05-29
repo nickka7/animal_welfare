@@ -1,12 +1,9 @@
-import 'dart:convert';
-
+import 'package:animal_welfare/api/showApi.dart';
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
 class AddShow extends StatefulWidget {
   const AddShow({
@@ -25,7 +22,7 @@ class _AddShowState extends State<AddShow> {
   @override
   void initState() {
     super.initState();
-    api = getShowType();
+    api = showApi.getShowType();
     scrollController = FixedExtentScrollController(initialItem: index);
   }
 
@@ -36,51 +33,14 @@ class _AddShowState extends State<AddShow> {
     super.dispose();
   }
 
+  final ShowApi showApi = ShowApi();
   final _formKey = GlobalKey<FormState>();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
 
-  // final show = ['โชว์ช้าง', 'โชว์นกแก้ว', 'โชว์ลิง', 'โชว์แมวน้ำ'];
-
-  List shows = [];
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-
-  Future<bool> getShowType() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/getAllShowType'),
-        headers: {"authorization": 'Bearer $token'});
-    // print('response.body ${response.body}');
-
-    List jsonData2 = json.decode(response.body)['data'];
-
-    for (int i = 0; i < jsonData2.length; i++) {
-      shows.add(jsonData2[i]['showName']);
-    }
-    // shows.insert(0,'กรุณาเลือกโชว์');
-    print(shows);
-    return true;
-  }
-
-  Future<String?> uploadData(url, data) async {
-    // print(file!.path);
-    String? token = await storage.read(key: 'token');
-    // ignore: unused_local_variable
-    var request = http.post(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          'showName': data['showName'],
-          'startDate': data['startDate'],
-          'endDate': data['endDate'],
-        }));
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,7 +94,7 @@ class _AddShowState extends State<AddShow> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      shows[index].toString(),
+                                      showApi.shows[index].toString(),
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     Icon(
@@ -229,11 +189,11 @@ class _AddShowState extends State<AddShow> {
                                 bool pass = _formKey.currentState!.validate();
                                 if (pass) {
                                   Map<String, String> data = {
-                                    "showName": shows[index].toString(),
+                                    "showName": showApi.shows[index].toString(),
                                     "startDate": startDate.toString(),
                                     "endDate": endDate.toString()
                                   };
-                                  uploadData(
+                                  showApi.uploadData(
                                           '${Constant().endPoint}/api/postShow',
                                           data)
                                       .then((value) {
@@ -286,7 +246,7 @@ class _AddShowState extends State<AddShow> {
                   backgroundColor: Colors.white,
                   itemExtent: 30,
                   scrollController: scrollController,
-                  children: shows
+                  children: showApi.shows
                       .map((item) => Center(
                             child: Text(
                               item.toString(),
@@ -297,7 +257,7 @@ class _AddShowState extends State<AddShow> {
                   onSelectedItemChanged: (index) {
                     setState(() {
                       this.index = index;
-                      final item = shows[index];
+                      final item = showApi.shows[index];
                       print('selected $item');
                     });
                   },

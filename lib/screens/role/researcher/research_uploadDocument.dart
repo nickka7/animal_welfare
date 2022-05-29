@@ -1,11 +1,8 @@
-import 'dart:convert';
-
+import 'package:animal_welfare/api/research.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import '../../../constant.dart';
 
@@ -17,73 +14,10 @@ class ResearchUploadDocument extends StatefulWidget {
 }
 
 class _ResearchUploadDocumentState extends State<ResearchUploadDocument> {
-  Future<void>? api;
-
-  @override
-  void initState() {
-    super.initState();
-    api = getlistOfResearch();
-  }
-
-  List selected = [];
+  final ResearchApi researchApi = ResearchApi();
 
   FilePickerResult? result;
   late List<String?> filePath;
-
-  List getItems() {
-    //พนักงานที่ถูกเลือก
-    map.forEach((key, value) {
-      if (value == true) {
-        selected.add(key);
-      }
-    });
-    print(selected);
-    return selected;
-  }
-
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-
-  Future<String?> uploadDocAndUser(
-      {required List filePath, required String url, required List Emp}) async {
-    String? token = await storage.read(key: 'token');
-    print('1');
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    Map<String, String> headers = {
-      "authorization": "Bearer $token",
-    };
-    for (int i = 0; i < filePath.length; i++) {
-      request.files.add(await http.MultipartFile.fromPath('url', filePath[i]));
-    }
-    for (int j = 0; j < Emp.length; j++) {
-      request.fields['userID[$j]'] = '${Emp[j].split(" ")[0]}';
-    }
-    request.headers.addAll(headers);
-    var response = await request.send();
-    print(response.statusCode);
-  }
-
-  final listOfResearch = [];
-  late final map = Map<String, bool>.fromIterable(listOfResearch,
-      key: (item) => item.toString(), value: (item) => false);
-
-  Future<bool> getlistOfResearch() async {
-    String? token = await storage.read(key: 'token');
-    var response = await http.get(Uri.parse('$endPoint/api/friendResearcher'),
-        headers: {"authorization": 'Bearer $token'});
-    // print('response.body ${response.body}');
-
-    List jsonData = json.decode(response.body)['message'];
-
-    for (int i = 0; i < jsonData.length; i++) {
-      listOfResearch
-          .add('${jsonData[i]['userID']} ${jsonData[i]['firstName']} ');
-    }
-
-    print(map);
-
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +35,7 @@ class _ResearchUploadDocumentState extends State<ResearchUploadDocument> {
       ),
       body: SingleChildScrollView(
           child: FutureBuilder<bool>(
-        future: getlistOfResearch(),
+        future: researchApi.getlistOfResearch(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
             return Column(
@@ -132,13 +66,13 @@ class _ResearchUploadDocumentState extends State<ResearchUploadDocument> {
                   shrinkWrap: true,
                   primary: false,
                   // scrollDirection: Axis.vertical,
-                  children: map.keys.map((String key) {
+                  children: researchApi.map.keys.map((String key) {
                     return new CheckboxListTile(
                       title: new Text(key),
-                      value: map[key],
+                      value: researchApi.map[key],
                       onChanged: (bool? value) {
                         setState(() {
-                          map[key] = value!;
+                          researchApi.map[key] = value!;
                         });
                       },
                     );
@@ -190,13 +124,13 @@ class _ResearchUploadDocumentState extends State<ResearchUploadDocument> {
                                         style: TextStyle(color: Colors.green),
                                       ),
                                       onPressed: () {
-                                        getItems();
+                                        researchApi.getItems();
                                         // for (int i = 0; i < filePath.length; i++) {}
-                                        uploadDocAndUser(
+                                        researchApi.uploadDocAndUser(
                                           filePath: result!.paths,
                                           url:
                                               '${Constant().endPoint}/api/postResearchDocument',
-                                          Emp: selected,
+                                          Emp: researchApi.selected,
                                         );
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop();

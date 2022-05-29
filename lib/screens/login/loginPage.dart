@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:animal_welfare/screens/login/select_contact.dart';
 import 'package:flutter/material.dart';
-import '../../addMyWork.dart';
 import '../../haxColor.dart';
 import '../home/navigatorBar.dart';
 import 'package:animal_welfare/api/loginApi.dart';
@@ -48,6 +45,7 @@ class _MyLoginHomeState extends State<MyLoginHome> {
           // print(jsonResponse);
           if (jsonResponse['message'] == 'Login Success') {
             String token = jsonResponse['token'];
+            // ignore: todo
             // TODO: ความรู้การแตก jwt token เอา payload
             var payload = json.decode(utf8
                 .decode(base64.decode(base64.normalize(token.split(".")[1]))));
@@ -138,25 +136,25 @@ class _MyLoginHomeState extends State<MyLoginHome> {
                       obscureText: true,
                       decoration: InputDecoration(hintText: 'Password'),
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                        child: Text('ลืมรหัสผ่าน',
-                            style: TextStyle(
-                                color: Colors.black,
-                                decoration: TextDecoration.underline,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500)),
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SelectMyContact()),
-                          ),
-                        },
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: TextButton(
+                    //     child: Text('ลืมรหัสผ่าน',
+                    //         style: TextStyle(
+                    //             color: Colors.black,
+                    //             decoration: TextDecoration.underline,
+                    //             fontSize: 14.0,
+                    //             fontWeight: FontWeight.w500)),
+                    //     onPressed: () => {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const SelectMyContact()),
+                    //       ),
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

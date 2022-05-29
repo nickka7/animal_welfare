@@ -1,12 +1,10 @@
-import 'dart:convert';
+import 'package:animal_welfare/api/medical.dart';
 import 'package:animal_welfare/model/MedHis.dart';
 import 'package:animal_welfare/model/all_animals_with_role.dart';
-import 'package:http/http.dart' as http;
 import 'package:animal_welfare/constant.dart';
 import 'package:animal_welfare/haxColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UpdateMedical extends StatefulWidget {
   final Medical getMedical;
@@ -23,7 +21,6 @@ class _UpdateMedicalState extends State<UpdateMedical> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
-  
 
   @override
   void dispose() {
@@ -33,24 +30,7 @@ class _UpdateMedicalState extends State<UpdateMedical> {
     super.dispose();
   }
 
-  final storage = new FlutterSecureStorage();
-  String endPoint = Constant().endPoint;
-
-  Future<String?> uploadData(url, data) async {
-    String? token = await storage.read(key: 'token');
-    var request = http.put(Uri.parse(url),
-        headers: <String, String>{
-          "authorization": 'Bearer $token',
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        //   headers: {"authorization": 'Bearer $token'},
-        body: jsonEncode(<String, String>{
-          'medicalName': data['medicalName'],
-          'detail': data['detail'],
-        }));
-    print(data['scheduleName']);
-    print(' ${request}');
-  }
+  final MedicalApi medicalApi = MedicalApi();
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +191,7 @@ class _UpdateMedicalState extends State<UpdateMedical> {
                                         style: TextStyle(color: Colors.green),
                                       ),
                                       onPressed: () {
-                                        uploadData(
+                                        medicalApi.updateData(
                                                 '${Constant().endPoint}/api/updateMedicalData/${widget.getMedical.medicalID}?animalID=${widget.getanimal.animalID}',
                                                 data)
                                             .then((value) {

@@ -45,7 +45,10 @@ class _RepairNoticeState extends State<RepairNotice> {
   final storage = new FlutterSecureStorage();
 
   Future<String?> uploadImageAndData(filepath, url, data) async {
-    // print(file!.path);
+    if (file == null) {
+      return 'Not pick image';
+    }
+    print(file!.path);
     String? token = await storage.read(key: 'token');
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
@@ -57,8 +60,60 @@ class _RepairNoticeState extends State<RepairNotice> {
     request.headers
         .addAll(headers); //['authorization'] = data['Bearer $token'];
     var res = await request.send();
+    print('zxs');
+    print(res);
     print('${res.reasonPhrase}test');
     return res.reasonPhrase;
+  }
+
+  isChooseImage() {
+    if (file == null) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.lightGreen[400],
+                child: Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
+              ),
+              content: Text(
+                'กรุณาเลือกรูปภาพ',
+                style: TextStyle(fontSize: 16),
+              ),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(
+                    'ยกเลิก',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: Text(
+                    'ยืนยัน',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          });
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const RepairSuccessful()),
+      );
+    }
   }
 
   @override
@@ -190,24 +245,22 @@ class _RepairNoticeState extends State<RepairNotice> {
                                           'ยืนยัน',
                                           style: TextStyle(color: Colors.green),
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           print('before upload image');
-                                          uploadImageAndData(
-                                                  file!.path,
-                                                  '${Constant().endPoint}/api/postMaintenance',
-                                                  data);
+                                          await uploadImageAndData(
+                                              file?.path,
+                                              '${Constant().endPoint}/api/postMaintenance',
+                                              data);
+                                          await isChooseImage();
+
+                                          print('after upload image');
+
                                           //TODO : ตรงนี้เอา.then ออกป่ะ
                                           //     .then((value) {
                                           //   Navigator.of(context).pop();
                                           //   Navigator.of(context).pop();
                                           //   Navigator.of(context).pop();
                                           // });
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const RepairSuccessful()),
-                                          );
                                         })
                                   ],
                                 );
